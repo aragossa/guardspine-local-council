@@ -21,11 +21,15 @@ def get_ollama_models() -> list[str]:
         capture_output=True,
         text=True,
     )
+    seen_ids: set[str] = set()
     models = []
     for line in result.stdout.strip().splitlines()[1:]:  # skip header
-        name = line.split()[0]
-        if name:
-            models.append(name)
+        parts = line.split()
+        if len(parts) >= 2:
+            name, model_id = parts[0], parts[1]
+            if model_id not in seen_ids:
+                seen_ids.add(model_id)
+                models.append(name)
     return models
 
 
