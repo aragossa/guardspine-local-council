@@ -1,0 +1,146 @@
+Council models: ['qwen2.5-coder:7b', 'qwen3:8b', 'falcon3:7b']
+
+============================================================
+AUDITING: guardspine-kernel
+============================================================
+  Files: ['canonical.ts', 'errors.ts', 'index.ts', 'seal.ts', 'verify.ts']
+  Running deterministic rubric scan...
+    clarity: 2 violations
+    connascence: 0 violations
+    hipaa-safeguards: 0 violations
+    mece: 0 violations
+    nasa-safety: 0 violations
+    nomotic: 30 violations
+    pci-dss-requirements: 0 violations
+    safety-violations: 0 violations
+    six-sigma: 0 violations
+    soc2-controls: 0 violations
+    theater-detection: 0 violations
+  Starting: 3 models x 11 rubrics = 33 reviews
+  DONE: needs-review (33 votes)
+  Wrote: D:\Projects\guardspine-local-council\evidence-packs\guardspine-kernel-evidence.json
+
+============================================================
+AUDITING: guardspine-verify
+============================================================
+  Files: ['__init__.py', 'cli.py', 'verifier.py']
+  Running deterministic rubric scan...
+    clarity: 1 violations
+    connascence: 0 violations
+    hipaa-safeguards: 9 violations
+    mece: 0 violations
+    nasa-safety: 0 violations
+    nomotic: 2 violations
+    pci-dss-requirements: 8 violations
+    safety-violations: 1 violations
+    six-sigma: 0 violations
+    soc2-controls: 17 violations
+    theater-detection: 0 violations
+  Starting: 3 models x 11 rubrics = 33 reviews
+  DONE: reject (33 votes)
+  Wrote: D:\Projects\guardspine-local-council\evidence-packs\guardspine-verify-evidence.json
+
+============================================================
+AUDITING: guardspine-spec
+============================================================
+  Files: ['evidence-bundle.schema.json']
+  Running deterministic rubric scan...
+    clarity: 0 violations
+    connascence: 0 violations
+    hipaa-safeguards: 4 violations
+    mece: 0 violations
+    nasa-safety: 0 violations
+    nomotic: 0 violations
+    pci-dss-requirements: 3 violations
+    safety-violations: 0 violations
+    six-sigma: 0 violations
+    soc2-controls: 1 violations
+    theater-detection: 0 violations
+  Starting: 3 models x 11 rubrics = 33 reviews
+  DONE: reject (33 votes)
+  Wrote: D:\Projects\guardspine-local-council\evidence-packs\guardspine-spec-evidence.json
+
+============================================================
+AUDITING: guardspine-local-council
+============================================================
+  Files: ['__init__.py', 'aggregator.py', 'council.py', 'providers\\__init__.py', 'providers\\anthropic.py', 'providers\\hooks.py', 'providers\\mcp_client.py', 'providers\\ollama.py', 'providers\\openai.py', 'providers\\openrouter.py', 'types.py']
+  Running deterministic rubric scan...
+    clarity: 0 violations
+    connascence: 0 violations
+    hipaa-safeguards: 5 violations
+    mece: 0 violations
+    nasa-safety: 8 violations
+    nomotic: 3 violations
+    pci-dss-requirements: 26 violations
+    safety-violations: 2 violations
+    six-sigma: 0 violations
+    soc2-controls: 30 violations
+    theater-detection: 0 violations
+  Starting: 3 models x 11 rubrics = 33 reviews
+  DONE: reject (33 votes)
+  Wrote: D:\Projects\guardspine-local-council\evidence-packs\guardspine-local-council-evidence.json
+
+============================================================
+AUDITING: guardspine-adapter-webhook
+============================================================
+  Files: ['bundle-emitter.ts', 'index.ts', 'providers\\generic.ts', 'providers\\github.ts', 'providers\\gitlab.ts', 'types.ts', 'webhook-handler.ts']
+  Running deterministic rubric scan...
+    clarity: 8 violations
+    connascence: 0 violations
+    hipaa-safeguards: 1 violations
+    mece: 1 violations
+    nasa-safety: 0 violations
+    nomotic: 10 violations
+    pci-dss-requirements: 0 violations
+    safety-violations: 1 violations
+    six-sigma: 0 violations
+    soc2-controls: 30 violations
+    theater-detection: 0 violations
+  Starting: 3 models x 11 rubrics = 33 reviews
+  DONE: reject (33 votes)
+  Wrote: D:\Projects\guardspine-local-council\evidence-packs\guardspine-adapter-webhook-evidence.json
+
+============================================================
+AUDITING: rlm-docsync
+============================================================
+  Files: ['__init__.py', 'adapters\\__init__.py', 'adapters\\code.py', 'adapters\\markdown.py', 'claims.py', 'evidence.py', 'manifest.py', 'runner.py']
+  Running deterministic rubric scan...
+    clarity: 0 violations
+    connascence: 0 violations
+    hipaa-safeguards: 0 violations
+    mece: 0 violations
+    nasa-safety: 0 violations
+    nomotic: 5 violations
+    pci-dss-requirements: 13 violations
+    safety-violations: 0 violations
+    six-sigma: 0 violations
+    soc2-controls: 7 violations
+    theater-detection: 0 violations
+  Starting: 3 models x 11 rubrics = 33 reviews
+  DONE: reject (33 votes)
+  Wrote: D:\Projects\guardspine-local-council\evidence-packs\rlm-docsync-evidence.json
+
+============================================================
+AUDITING: n8n-nodes-guardspine
+============================================================
+  Files: ['ApprovalWait\\ApprovalWait.node.ts', 'BeadsCreate\\BeadsCreate.node.ts', 'BeadsUpdate\\BeadsUpdate.node.ts', 'CodeGuard\\CodeGuard.node.ts', 'CouncilVote\\CouncilVote.node.ts', 'EvidenceSeal\\EvidenceSeal.node.ts', 'GuardGate\\GuardGate.node.ts', 'GuardSpineCompress\\GuardSpineCompress.node.ts', 'GuardSpineImageGuard\\GuardSpineImageGuard.node.ts', 'GuardSpinePDFGuard\\GuardSpinePDFGuard.node.ts', 'GuardSpineSheetGuard\\GuardSpineSheetGuard.node.ts', 'types.ts']
+  Running deterministic rubric scan...
+    clarity: 11 violations
+    connascence: 0 violations
+    hipaa-safeguards: 0 violations
+    mece: 0 violations
+    nasa-safety: 0 violations
+    nomotic: 0 violations
+    pci-dss-requirements: 23 violations
+    safety-violations: 2 violations
+    six-sigma: 0 violations
+    soc2-controls: 30 violations
+    theater-detection: 0 violations
+  Starting: 3 models x 11 rubrics = 33 reviews
+  DONE: needs-review (33 votes)
+  Wrote: D:\Projects\guardspine-local-council\evidence-packs\n8n-nodes-guardspine-evidence.json
+
+============================================================
+ALL DONE. 7 repos audited.
+Evidence packs: D:\Projects\guardspine-local-council\evidence-packs
+Summary: D:\Projects\guardspine-local-council\evidence-packs\audit-summary.json

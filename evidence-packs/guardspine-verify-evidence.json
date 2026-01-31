@@ -1,0 +1,1174 @@
+{
+  "meta": {
+    "repo": "guardspine-verify",
+    "description": "Offline evidence bundle verification CLI",
+    "language": "python",
+    "timestamp": "2026-01-31T04:42:00.091499+00:00",
+    "models": [
+      "qwen2.5-coder:7b",
+      "qwen3:8b",
+      "falcon3:7b"
+    ],
+    "files_reviewed": [
+      "__init__.py",
+      "cli.py",
+      "verifier.py"
+    ],
+    "total_reviews": 33
+  },
+  "request_id": "6847d406fa77",
+  "overall_decision": "reject",
+  "summary": "FAIL: hipaa-safeguards, soc2-controls; NEEDS-REVIEW: nomotic, pci-dss-requirements",
+  "rubric_verdicts": [
+    {
+      "rubric": "clarity",
+      "decision": "pass",
+      "critical_findings_count": 1,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "abstain",
+          "confidence": 0.5,
+          "rationale": "The provided code snippets do not include the line mentioned in the violation (verifier.py:400). Additionally, without the full context of the `verify_hash_chain` function and its implementation details, it's difficult to determine if the complex boolean expression is indeed hard to reason about. Th",
+          "findings_count": 1
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The scanner found a high severity issue in verifier.py:400 with complex boolean logic. This is a true positive as the condition 'if algorithm not in supported_algorithms' is unclear. The code appears to be properly structured with clear functions and error handling. No other issues were found that w",
+          "findings_count": 1
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The high violation CLR-006 in verifier.py:400 indicates a complex boolean expression that may increase cognitive load. However, the overall code structure, readability, and adherence to best practices were deemed satisfactory.",
+          "findings_count": 1
+        }
+      ]
+    },
+    {
+      "rubric": "connascence",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The code does not contain any connascence coupling issues that would require fixing.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The codebase does not exhibit any connascence coupling issues. The scanner correctly identified no violations, and upon manual review, no violations were found. All components are decoupled and maintain low coupling.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "approve",
+          "confidence": 0.9,
+          "rationale": "The code under review adheres to best practices for cryptographic verification and data integrity checks. No violations were found by the deterministic scanner, suggesting that it effectively covered the codebase. The critical aspects of hash chain, root hash, content hashes, and signatures are hand",
+          "findings_count": 5
+        }
+      ]
+    },
+    {
+      "rubric": "hipaa-safeguards",
+      "decision": "fail",
+      "critical_findings_count": 13,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "reject",
+          "confidence": 0.8,
+          "rationale": "The scanner identified several potential HIPAA compliance issues in the code, primarily related to ePHI integrity mechanisms and cryptographic verification. The findings suggest that while the tool is attempting to address these areas, it may not be doing so entirely correctly or comprehensively.",
+          "findings_count": 6
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The code contains multiple HIPAA-312.c.1 violations related to ePHI integrity mechanisms. The scanner correctly identified critical issues in cli.py and verifier.py related to cryptographic signature verification and lack of proper cryptographic mechanisms. The code lacks proper cryptographic signat",
+          "findings_count": 7
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "mece",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "No violations found by scanner or through manual review.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "Failed to parse model output: {\"decision\":\"approve\",\"confidence\":1.0,\"rationale\":\"The scanner found no violations, and after thorough review, no MECE violations were detected. The code appears well-structured with no duplication o",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "approve",
+          "confidence": 0.85,
+          "rationale": "The deterministic scanner found no violations, suggesting no critical issues in the code coverage. The MECE analysis did not uncover any duplication or gaps based on the provided files. The lack of findings indicates a well-covered codebase. However, manual review is necessary to ensure comprehensiv",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "nasa-safety",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The scanner did not find any violations, and there are no indications of missing or incorrect severity ratings based on the provided code. The code appears to follow best practices for cryptographic verification and error handling.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The code adheres to NASA Power of 10 safety-critical development rules. No critical issues were found by the scanner. The code includes proper error handling, input validation, and cryptographic verification. All verification steps are clearly defined and documented. The code structure and modular d",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "approve",
+          "confidence": 0.85,
+          "rationale": "The audit found no scanner violations, suggesting the code adheres to NASA Power of 10 rules. The detailed review indicates all identified issues were correctly flagged or missed by the scanner, with proper severity assessment. The findings list below confirms that all critical and high-severity vul",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "nomotic",
+      "decision": "needs-review",
+      "critical_findings_count": 5,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The scanner identified a high severity issue in verifier.py that was not caught by the regular expression, but upon review, it appears to be a false positive due to the comment at the end of the root_hash_status line.",
+          "findings_count": 1
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "reject",
+          "confidence": 0.85,
+          "rationale": "The scanner identified valid issues, but missed critical governance and security concerns. The NOM-DOC-001 violation in cli.py hides business rules in implementation which is a documentation issue. The NOM-ARCH-001 violation in verifier.py shows poor module boundaries with cryptographic imports. How",
+          "findings_count": 5
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.9,
+          "rationale": "The audit found one false positive and no critical issues in the provided code excerpts. The verifier module correctly handles JSON parsing, zipfile reading, and SHA-256 computation. The main entry point `verifier.py` integrates these functionalities robustly, ensuring bundle verification is perform",
+          "findings_count": 1
+        }
+      ]
+    },
+    {
+      "rubric": "pci-dss-requirements",
+      "decision": "needs-review",
+      "critical_findings_count": 5,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "reject",
+          "confidence": 0.8,
+          "rationale": "The scanner identified multiple critical issues related to PCI DSS compliance, specifically the masking of PAN (Primary Account Number) when displayed in CLI output. However, it also missed a critical issue in `verifier.py` regarding configuration standards for network security controls. The severit",
+          "findings_count": 5
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "Failed to parse model output: {\"decision\": \"reject\", \"confidence\": 0.9, \"rationale\": \"The scanner found multiple critical violations related to PCI-3.3.1 (PAN masking) in cli.py and PCI-1.2.1 (network security configuration) in ve",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "safety-violations",
+      "decision": "pass",
+      "critical_findings_count": 2,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The deterministic scanner correctly identified an import with a deep module path in the 'verifier.py' file, which is considered a best practice violation.",
+          "findings_count": 1
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "reject",
+          "confidence": 0.85,
+          "rationale": "The scanner found a high severity violation in verifier.py for deep module imports. This is a true positive as importing from cryptography.hazmat.primitives.asymmetric is a deep path and could indicate potential security risks. However, the scanner missed critical violations such as lack of error ha",
+          "findings_count": 1
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "approve",
+          "confidence": 0.85,
+          "rationale": "The scanner found a violation SAF-008 in verifier.py at line 14, which is justified by the import from a deep cryptography module path. This indicates an unnecessary and potentially error-prone import that should be reviewed. Additionally, the code lacks evidence of cryptographic signature verificat",
+          "findings_count": 1
+        }
+      ]
+    },
+    {
+      "rubric": "six-sigma",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The code does not contain any obvious security vulnerabilities or performance issues that would warrant rejection according to the Six Sigma quality metrics for software development.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The codebase adheres to Six Sigma quality standards for software development. No critical issues were found, and the scanner's findings were accurate. The code demonstrates robust error handling, clear documentation, and proper cryptographic practices.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "approve",
+          "confidence": 0.9,
+          "rationale": "The audit of the GuardSpine Verify code against the six-sigma quality metrics indicates no deterministic scanner violations and a thorough validation of all provided files. The scanner's performance has been rated accurately, with a pass/fail for the rubric based on the absence of false positives an",
+          "findings_count": 3
+        }
+      ]
+    },
+    {
+      "rubric": "soc2-controls",
+      "decision": "fail",
+      "critical_findings_count": 18,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The scanner identified several critical and high severity issues related to input validation and handling of sensitive information, which are crucial for SOC2 compliance.",
+          "findings_count": 8
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The code has multiple critical and high severity issues related to input validation and cryptographic key management. The scanner correctly identified most of these as high severity, but there are critical issues with the handling of cryptographic keys. The code lacks proper validation of inputs and",
+          "findings_count": 10
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "theater-detection",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "abstain",
+          "confidence": 0.5,
+          "rationale": "The provided code does not contain any obvious security vulnerabilities or fake practices that appear valuable but aren't. However, the scanner did not find any violations, which may indicate either a false negative or missed issues due to the scanner's limitations.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The code appears to implement robust verification logic for evidence bundles, with clear separation of concerns and proper error handling. No critical security vulnerabilities or fake practices were found.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The audit found no issues detected by the scanner, leading to a thorough manual review. The script and its supporting modules demonstrate robust verification logic including support for both JSON files and ZIP archives. Critical checks are present, such as verifying hash chains, root hashes, content",
+          "findings_count": 1
+        }
+      ]
+    }
+  ],
+  "by_file": {
+    "verifier.py": {
+      "critical_count": 54,
+      "total_findings": 57,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code mentions 'Verify cryptographic signatures....' which indicates that cryptographic verification is being performed, but the tool might not be doing so correctly or comprehensively.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code includes '4. Signature verification (cryptographic if public...)' which suggests that cryptographic verification is being performed, but the tool might not be doing so correctly or comprehensively.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code explicitly mentions verifying cryptographic signatures but does not fully implement cryptographic verification mechanisms.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code mentions signature verification (cryptographic if public key provided) but does not enforce cryptographic verification unless a public key is provided.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code mentions 'Verify cryptographic signatures....' which indicates that cryptographic verification is being performed, but the tool might not be doing so correctly or comprehensively.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code includes '4. Signature verification (cryptographic if public...)' which suggests that cryptographic verification is being performed, but the tool might not be doing so correctly or comprehensively.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code explicitly mentions verifying cryptographic signatures but does not fully implement cryptographic verification mechanisms.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code mentions signature verification (cryptographic if public key provided) but does not enforce cryptographic verification unless a public key is provided.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "security",
+          "description": "Configuration standards for network security controls are not properly documented or enforced. Use of dataclasses and decorators without explicit configuration checks is a potential oversight.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "security",
+          "description": "Configuration standards for network security controls are not properly documented or enforced. Use of dataclasses and decorators without explicit configuration checks is a potential oversight.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "confidentiality",
+          "description": "The code does not properly classify and protect confidential information such as public keys, which could be exposed if not handled correctly.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code does not manage cryptographic keys properly, especially shared secrets for HMAC-SHA256, which are critical for maintaining cryptographic security.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic-key-management",
+          "description": "The code uses a hardcoded key for cryptographic operations, which is a significant security risk.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic-key-management",
+          "description": "The code does not properly handle or validate the public key input, which could allow malicious keys to be used in cryptographic operations.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic-key-management",
+          "description": "The code does not securely store or handle cryptographic keys, leading to potential exposure or misuse.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "confidentiality",
+          "description": "The code does not properly classify and protect confidential information such as public keys, which could be exposed if not handled correctly.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code does not manage cryptographic keys properly, especially shared secrets for HMAC-SHA256, which are critical for maintaining cryptographic security.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic-key-management",
+          "description": "The code uses a hardcoded key for cryptographic operations, which is a significant security risk.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic-key-management",
+          "description": "The code does not properly handle or validate the public key input, which could allow malicious keys to be used in cryptographic operations.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic-key-management",
+          "description": "The code does not securely store or handle cryptographic keys, leading to potential exposure or misuse.",
+          "line": null
+        },
+        {
+          "rubric": "clarity",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "readability",
+          "description": "The condition 'if algorithm not in supported_algorithms' is a complex boolean expression that could be simplified for better readability.",
+          "line": null
+        },
+        {
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "readability",
+          "description": "The condition 'if algorithm not in supported_algorithms' is a complex boolean expression that could be simplified for better readability.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "module-boundary",
+          "description": "Modules must have clear boundaries with explicit contracts, but there is a commented-out line that suggests a potential oversight in handling the root hash status.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "security",
+          "description": "Cryptographic imports from 'cryptography.hazmat.primitives.asymmetric' should be restricted to module boundaries, violating NOM-ARCH-001",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "security",
+          "description": "Missing input validation for cryptographic operations could lead to vulnerabilities",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "security",
+          "description": "Insufficient error handling for cryptographic operations could expose sensitive information",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "security",
+          "description": "Missing cryptographic key validation could allow invalid key usage",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "high",
+          "category": "module-boundary",
+          "description": "Modules must have clear boundaries with explicit contracts, but there is a commented-out line that suggests a potential oversight in handling the root hash status.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "security",
+          "description": "Cryptographic imports from 'cryptography.hazmat.primitives.asymmetric' should be restricted to module boundaries, violating NOM-ARCH-001",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "security",
+          "description": "Missing input validation for cryptographic operations could lead to vulnerabilities",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "security",
+          "description": "Insufficient error handling for cryptographic operations could expose sensitive information",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "security",
+          "description": "Missing cryptographic key validation could allow invalid key usage",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Imports with deep module paths: 'from cryptography.hazmat.primitives.asymmetric imp...'",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "import",
+          "description": "Deep module import from cryptography.hazmat.primitives.asymmetric. Consider using more specific imports or splitting into multiple import statements for better readability and security.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Imports with deep module paths: 'from cryptography.hazmat.primitives.asymmetric imp...'",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "import",
+          "description": "Deep module import from cryptography.hazmat.primitives.asymmetric. Consider using more specific imports or splitting into multiple import statements for better readability and security.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the concatenated hash values, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the public key PEM encoded data, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the public key PEM encoded data, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the hash chain entries, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code encodes data to UTF-8 without checking if the input is valid or properly formatted, which could lead to data integrity issues.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The public key parameter is not validated for format or content, which could allow invalid or malicious keys to be processed.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The public key parameter is again not validated, leading to potential processing of invalid keys.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code concatenates hash values and encodes them without validating the input data, which could lead to incorrect hash computations.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code validates signature format but does not perform thorough input validation, which could allow invalid signatures to be processed.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the concatenated hash values, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the public key PEM encoded data, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the public key PEM encoded data, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the hash chain entries, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code encodes data to UTF-8 without checking if the input is valid or properly formatted, which could lead to data integrity issues.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The public key parameter is not validated for format or content, which could allow invalid or malicious keys to be processed.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The public key parameter is again not validated, leading to potential processing of invalid keys.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code concatenates hash values and encodes them without validating the input data, which could lead to incorrect hash computations.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code validates signature format but does not perform thorough input validation, which could allow invalid signatures to be processed.",
+          "line": null
+        },
+        {
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "medium",
+          "category": "clarity",
+          "description": "Complex boolean expressions are hard to reason about. The specific line in question is not available for review.",
+          "line": null
+        },
+        {
+          "rubric": "clarity",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "unknown",
+          "category": "",
+          "description": "Complex boolean expression in the hash chain verification logic.",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "unknown",
+          "category": "",
+          "description": "",
+          "line": null
+        }
+      ]
+    },
+    "cli.py": {
+      "critical_count": 34,
+      "total_findings": 36,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code mentions 'Path to PEM public key for cryptographic sig...', which indicates the presence of a public key but does not specify its use in verification. This could be a false positive if the key is not actually used in the signature process.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code includes 'cryptographically_verified': result.details.get('...', False) multiple times. This suggests that the verification results might not be accurately reflecting cryptographic integrity if the key is not being used.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code has 'crypto_verified = result.details.get('signatures', {}).get('cryptographically_verified', False)'. This line seems to be checking for cryptographic verification, but the tool might not be correctly identifying it.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code includes '[yellow]Note: Signatures validated format only. Provide --public-key for cryptographic verification.[/yellow]' which suggests that the tool might not be verifying signatures cryptographically without the public key.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The public key option is described as for cryptographic signature verification but the implementation does not enforce cryptographic verification unless explicitly provided.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The result details are being accessed without proper validation, which could lead to insecure handling of cryptographic data.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The crypto_verified variable is being set without proper cryptographic validation, which could lead to insecure handling of cryptographic data.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code mentions cryptographic signatures but does not properly implement cryptographic verification mechanisms.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The note about signature validation format only suggests incomplete cryptographic verification, which is a HIPAA violation.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code mentions 'Path to PEM public key for cryptographic sig...', which indicates the presence of a public key but does not specify its use in verification. This could be a false positive if the key is not actually used in the signature process.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code includes 'cryptographically_verified': result.details.get('...', False) multiple times. This suggests that the verification results might not be accurately reflecting cryptographic integrity if the key is not being used.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code has 'crypto_verified = result.details.get('signatures', {}).get('cryptographically_verified', False)'. This line seems to be checking for cryptographic verification, but the tool might not be correctly identifying it.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code includes '[yellow]Note: Signatures validated format only. Provide --public-key for cryptographic verification.[/yellow]' which suggests that the tool might not be verifying signatures cryptographically without the public key.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The public key option is described as for cryptographic signature verification but the implementation does not enforce cryptographic verification unless explicitly provided.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The result details are being accessed without proper validation, which could lead to insecure handling of cryptographic data.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The crypto_verified variable is being set without proper cryptographic validation, which could lead to insecure handling of cryptographic data.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The code mentions cryptographic signatures but does not properly implement cryptographic verification mechanisms.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The note about signature validation format only suggests incomplete cryptographic verification, which is a HIPAA violation.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "security",
+          "description": "Potential exposure of PAN data when displayed in CLI output. Rich library should be used with caution to prevent sensitive information from being exposed.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "security",
+          "description": "Potential exposure of PAN data when displayed in CLI output. Rich library should be used with caution to prevent sensitive information from being exposed.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "security",
+          "description": "Potential exposure of PAN data when displayed in CLI output. Rich library should be used with caution to prevent sensitive information from being exposed.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "security",
+          "description": "Potential exposure of PAN data when displayed in CLI output. Rich library should be used with caution to prevent sensitive information from being exposed.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "security",
+          "description": "Potential exposure of PAN data when displayed in CLI output. Rich library should be used with caution to prevent sensitive information from being exposed.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "security",
+          "description": "Potential exposure of PAN data when displayed in CLI output. Rich library should be used with caution to prevent sensitive information from being exposed.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "security",
+          "description": "Potential exposure of PAN data when displayed in CLI output. Rich library should be used with caution to prevent sensitive information from being exposed.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "security",
+          "description": "Potential exposure of PAN data when displayed in CLI output. Rich library should be used with caution to prevent sensitive information from being exposed.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the number of cryptographically verified signatures, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the total number of checked signatures, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The message indicates that signature validation is only format-based, but there's no explicit validation of input data types or lengths, which could allow invalid inputs.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The output string does not validate the data types or ranges of the values being formatted, which could lead to incorrect or malicious data being processed.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the number of cryptographically verified signatures, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code does not provide proper input validation for the total number of checked signatures, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The message indicates that signature validation is only format-based, but there's no explicit validation of input data types or lengths, which could allow invalid inputs.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The output string does not validate the data types or ranges of the values being formatted, which could lead to incorrect or malicious data being processed.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "medium",
+          "category": "documentation",
+          "description": "Business rule 'if crypto_count > 0:...' is implemented but not explicitly documented, violating NOM-DOC-001",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "unknown",
+          "category": "",
+          "description": "",
+          "line": null
+        }
+      ]
+    },
+    "_unknown": {
+      "critical_count": 0,
+      "total_findings": 8,
+      "findings": [
+        {
+          "rubric": "connascence",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "Critical",
+          "category": "",
+          "description": "VerificationResult dataclass manages bundle verification results with detailed status information.",
+          "line": null
+        },
+        {
+          "rubric": "connascence",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "Important",
+          "category": "",
+          "description": "canonical_json method converts objects to RFC 8785 style JSON.",
+          "line": null
+        },
+        {
+          "rubric": "connascence",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "Important",
+          "category": "",
+          "description": "compute_sha256 function computes SHA-256 hash for bundle integrity checks.",
+          "line": null
+        },
+        {
+          "rubric": "connascence",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "Important",
+          "category": "",
+          "description": "verify_bundle checks path and loads data from either JSON or ZIP format.",
+          "line": null
+        },
+        {
+          "rubric": "connascence",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "Important",
+          "category": "",
+          "description": "Signature verification supports both cryptographic and format-only checks based on public key availability.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "unknown",
+          "category": "",
+          "description": "False Positive in Signature Verification Logic",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "unknown",
+          "category": "",
+          "description": "Import from deeply nested cryptography module path.",
+          "line": null
+        },
+        {
+          "rubric": "theater-detection",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "unknown",
+          "category": "",
+          "description": "The `verifier.py` script includes comprehensive methods for verifying the integrity of GuardSpine evidence bundles, supporting both JSON files and ZIP archives. Verification steps cover hash chains, root hashes, content hashes, and signatures, with clear handling for errors and warnings.",
+          "line": null
+        }
+      ]
+    },
+    "__init__.py": {
+      "critical_count": 0,
+      "total_findings": 1,
+      "findings": [
+        {
+          "rubric": "six-sigma",
+          "reviewer": "ollama-falcon3:7b-8d2484",
+          "severity": "unknown",
+          "category": "",
+          "description": "",
+          "line": null
+        }
+      ]
+    }
+  }
+}

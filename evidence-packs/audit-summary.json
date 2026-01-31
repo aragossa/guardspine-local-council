@@ -1,0 +1,46 @@
+{
+  "timestamp": "2026-01-31T05:34:36.895230+00:00",
+  "models": [
+    "qwen2.5-coder:7b",
+    "qwen3:8b",
+    "falcon3:7b"
+  ],
+  "repos_audited": 7,
+  "results": [
+    {
+      "repo": "guardspine-kernel",
+      "decision": "needs-review",
+      "total_reviews": 33
+    },
+    {
+      "repo": "guardspine-verify",
+      "decision": "reject",
+      "total_reviews": 33
+    },
+    {
+      "repo": "guardspine-spec",
+      "decision": "reject",
+      "total_reviews": 33
+    },
+    {
+      "repo": "guardspine-local-council",
+      "decision": "reject",
+      "total_reviews": 33
+    },
+    {
+      "repo": "guardspine-adapter-webhook",
+      "decision": "reject",
+      "total_reviews": 33
+    },
+    {
+      "repo": "rlm-docsync",
+      "decision": "reject",
+      "total_reviews": 33
+    },
+    {
+      "repo": "n8n-nodes-guardspine",
+      "decision": "needs-review",
+      "total_reviews": 33
+    }
+  ]
+}

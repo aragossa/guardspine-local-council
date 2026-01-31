@@ -1,0 +1,546 @@
+{
+  "meta": {
+    "repo": "guardspine-spec",
+    "description": "Evidence bundle specification and JSON schemas",
+    "language": "json-schema",
+    "timestamp": "2026-01-31T04:51:11.857406+00:00",
+    "models": [
+      "qwen2.5-coder:7b",
+      "qwen3:8b",
+      "falcon3:7b"
+    ],
+    "files_reviewed": [
+      "evidence-bundle.schema.json"
+    ],
+    "total_reviews": 33
+  },
+  "request_id": "213823906e30",
+  "overall_decision": "reject",
+  "summary": "FAIL: hipaa-safeguards, pci-dss-requirements; NEEDS-REVIEW: soc2-controls",
+  "rubric_verdicts": [
+    {
+      "rubric": "clarity",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The JSON schema provided is well-structured and follows best practices for readability and clarity. All properties, types, and references are clearly defined, making it easy to understand the structure of the evidence bundle. There are no identified issues that would suggest this schema is not clear",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The schema is well-structured with clear naming conventions and consistent formatting. All properties and definitions are logically organized, making it easy to understand and maintain. There are no ambiguous or overly complex sections that would increase cognitive load. The use of enums and pattern",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "connascence",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The evidence-bundle.schema.json file does not contain any apparent violations of connascence coupling. The schema is well-structured and uses clear, consistent naming conventions throughout.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The schema appears to have no connascence coupling issues. The scanner correctly found no violations. The schema uses references and enums appropriately without introducing unnecessary dependencies or shared state. All type definitions are self-contained or properly referenced, minimizing coupling. ",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "hipaa-safeguards",
+      "decision": "fail",
+      "critical_findings_count": 6,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The scanner missed the following critical issues: (1) missing encryption for ePHI at rest, and (2) lack of specific provisions for securing data during storage.",
+          "findings_count": 2
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The evidence-bundle.schema.json file contains critical HIPAA violations. The scanner found issues with cryptographic signatures (HIPAA-312.c.1) and encryption for ePHI in transit (HIPAA-312.e.1). The file's $schema and $id fields are not encrypted, and the certificate_chain field in the Signature de",
+          "findings_count": 4
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "mece",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The JSON schema provided appears to be well-structured and does not contain any obvious issues that would lead to duplication or gaps in code coverage, according to the MECE (Mutually Exclusive, Collectively Exhaustive) rubric.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The scanner found no violations, and upon review, the schema appears to be well-structured and compliant with MECE principles. No duplication or gaps were identified in the code coverage. The schema defines clear, non-overlapping properties and required fields, ensuring comprehensive coverage withou",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "nasa-safety",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The schema does not contain any obvious violations of the NASA Power of 10 rules for safety-critical code development.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The schema appears to comply with NASA Power of 10 safety-critical code development principles. No scanner violations were found, and no critical safety issues were identified. The schema includes cryptographic elements (signatures, hash chains) and integrity controls which align with safety-critica",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "nomotic",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The evidence-bundle.schema.json file appears to be a comprehensive JSON schema for a verifiable evidence bundle, which aligns with the principles of Nomotic philosophy and AI governance rules. The schema is well-structured, includes clear definitions, and ensures data integrity through various check",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The schema adheres to the nomotic rubric principles with no scanner violations found. The schema includes cryptographic signatures, immutability proofs, audit trails, and proper data retention configurations. All required fields for governance and AI oversight are present. The schema enforces strong",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "pci-dss-requirements",
+      "decision": "fail",
+      "critical_findings_count": 6,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "reject",
+          "confidence": 0.9,
+          "rationale": "The scanner appears to have identified potential violations of PCI DSS requirement 4.2.1, which requires protecting PAN (Primary Account Number) with strong cryptography during transmission. However, the JSON schema provided does not explicitly contain any fields or properties related to PAN handlin",
+          "findings_count": 3
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The scanner incorrectly flagged the schema file for PAN protection issues. The file contains no actual PAN data but defines a schema for evidence bundles. The critical findings are false positives. However, the scanner missed the 'certificate_chain' field in the 'Signature' definition which could po",
+          "findings_count": 3
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "safety-violations",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The schema provided appears to be a well-structured JSON Schema, following best practices for data validation and documentation. It includes clear definitions and constraints for each property, which reduces the risk of errors and misuse.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The scanner did not find any violations, and upon review, no dangerous code patterns such as god objects, parameter bombs, or critical violations are present. The schema appears to be well-structured with proper validation and cryptographic elements.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "six-sigma",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The schema appears to be well-structured and adheres to best practices for JSON schemas, including the use of unique identifiers, proper data types, and meaningful descriptions. There are no apparent issues that would negatively impact the reliability or security of the software being developed.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The schema demonstrates robust design with cryptographic signatures, hash chains, and audit trails. No critical vulnerabilities were found. The scanner's findings are accurate as there are no obvious Six Sigma quality issues in the schema structure.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "soc2-controls",
+      "decision": "needs-review",
+      "critical_findings_count": 1,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The schema correctly defines cryptographic keys and their management, including the certificate chain.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The scanner incorrectly flagged the 'certificate_chain' field in the Signature definition as a violation of SOC2-C1.2. This field is explicitly designed to store cryptographic certificate chains for signature verification, which is a required aspect of cryptographic key management. The scanner's reg",
+          "findings_count": 1
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
+        }
+      ]
+    },
+    {
+      "rubric": "theater-detection",
+      "decision": "pass",
+      "critical_findings_count": 0,
+      "votes": [
+        {
+          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The schema file evidence-bundle.schema.json does not contain any issues that could be classified as theater-detection violations based on the provided rules. The JSON schema is well-structured, all required fields are present, and there are no obvious signs of false positives or missed violations.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The schema appears to implement robust evidence management with cryptographic signatures, hash chains, and audit trails. No scanner violations were found, and the schema avoids common fake practices by enforcing strict data formats and validation rules. The schema's structure supports verifiable, im",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "Failed to parse model output: {\n  \"assistant_response\": \"Based on the provided schema for the JSON object, it appears to define a structured format for storing metadata and related information about cryptographic signatures, hash ",
+          "findings_count": 0
+        }
+      ]
+    }
+  ],
+  "by_file": {
+    "evidence-bundle.schema.json": {
+      "critical_count": 26,
+      "total_findings": 26,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "Missing encryption for ePHI at rest. The schema does not include any requirements for encrypting data stored on disk.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "storage-security",
+          "description": "Lack of specific provisions for securing data during storage. The schema does not include any requirements for securing evidence bundles in long-term storage.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The description field for cryptographic signatures lacks explicit encryption mechanisms for ePHI integrity as required by HIPAA-312.c.1",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "The $schema field contains unencrypted data in transit, violating HIPAA-312.e.1 requirements for ePHI encryption",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "The $id field contains unencrypted data in transit, violating HIPAA-312.e.1 requirements for ePHI encryption",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "The certificate_chain field in the Signature definition lacks proper encryption mechanisms for ePHI in transit, violating HIPAA-312.e.1",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "Missing encryption for ePHI at rest. The schema does not include any requirements for encrypting data stored on disk.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "storage-security",
+          "description": "Lack of specific provisions for securing data during storage. The schema does not include any requirements for securing evidence bundles in long-term storage.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The description field for cryptographic signatures lacks explicit encryption mechanisms for ePHI integrity as required by HIPAA-312.c.1",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "The $schema field contains unencrypted data in transit, violating HIPAA-312.e.1 requirements for ePHI encryption",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "The $id field contains unencrypted data in transit, violating HIPAA-312.e.1 requirements for ePHI encryption",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "The certificate_chain field in the Signature definition lacks proper encryption mechanisms for ePHI in transit, violating HIPAA-312.e.1",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "Potential regex match for strong cryptography during transmission, possibly related to certificates.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "Potential regex match for strong cryptography during transmission, possibly related to certificates.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "Potential regex match for strong cryptography during transmission, possibly related to certificates.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The \"$schema\" field in the JSON schema file contains a URL that appears to be a PAN. This is a false positive as the file itself does not contain actual PAN data.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The \"$id\" field in the JSON schema file contains a URL that appears to be a PAN. This is a false positive as the file itself does not contain actual PAN data.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The \"certificate_chain\" field in the \"Signature\" definition could potentially store cryptographic material. This requires verification to ensure it's not used to store PANs or other sensitive data during transmission.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "Potential regex match for strong cryptography during transmission, possibly related to certificates.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "Potential regex match for strong cryptography during transmission, possibly related to certificates.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "Potential regex match for strong cryptography during transmission, possibly related to certificates.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The \"$schema\" field in the JSON schema file contains a URL that appears to be a PAN. This is a false positive as the file itself does not contain actual PAN data.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The \"$id\" field in the JSON schema file contains a URL that appears to be a PAN. This is a false positive as the file itself does not contain actual PAN data.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The \"certificate_chain\" field in the \"Signature\" definition could potentially store cryptographic material. This requires verification to ensure it's not used to store PANs or other sensitive data during transmission.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The scanner incorrectly flagged the 'certificate_chain' field in the Signature definition as a violation of SOC2-C1.2. This field is explicitly designed to store cryptographic certificate chains for signature verification, which is a required aspect of cryptographic key management.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-44436d",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The scanner incorrectly flagged the 'certificate_chain' field in the Signature definition as a violation of SOC2-C1.2. This field is explicitly designed to store cryptographic certificate chains for signature verification, which is a required aspect of cryptographic key management.",
+          "line": null
+        }
+      ]
+    }
+  }
+}
