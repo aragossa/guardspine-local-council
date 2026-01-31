@@ -4,10 +4,16 @@ from __future__ import annotations
 
 import asyncio
 import json
-from typing import Protocol
+import logging
+from typing import TYPE_CHECKING, Protocol
 
 from .aggregator import SimpleAggregator
 from .types import AuditResult, CouncilResult, ReviewRequest, ReviewVote, RubricContext, RubricVerdict
+
+if TYPE_CHECKING:
+    from .providers.hooks import HookContext, ReviewHook
+
+logger = logging.getLogger(__name__)
 
 
 class ReviewProvider(Protocol):
@@ -24,10 +30,12 @@ class LocalCouncil:
     def __init__(
         self,
         providers: list[ReviewProvider],
+        hooks: list[ReviewHook] | None = None,
         quorum: int = 3,
         consensus_threshold: float = 0.66,
     ) -> None:
         self.providers = providers
+        self.hooks = hooks or []
         self.quorum = quorum
         self.consensus_threshold = consensus_threshold
         self.aggregator = SimpleAggregator()
@@ -76,6 +84,19 @@ class LocalCouncil:
             quorum_met=quorum_met,
         )
 
+    async def start_hooks(self) -> None:
+        """Initialize all hooks (e.g. spawn MCP servers). Call before audits."""
+        for hook in self.hooks:
+            await hook.start()
+
+    async def close_hooks(self) -> None:
+        """Shut down all hooks. Call when done."""
+        for hook in self.hooks:
+            try:
+                await hook.close()
+            except Exception as exc:
+                logger.warning("Error closing hook %s: %s", hook.name, exc)
+
     async def rubric_review(
         self,
         request: ReviewRequest,
@@ -83,22 +104,42 @@ class LocalCouncil:
     ) -> list[ReviewVote]:
         """Review code focused on a single rubric. Returns one vote per provider."""
         prompt = self._build_rubric_prompt(request, rubric)
+
+        # Run pre-hooks once per rubric to enrich the shared prompt
+        if self.hooks:
+            from .providers.hooks import HookContext
+            ctx = HookContext(request=request, rubric=rubric)
+            for hook in self.hooks:
+                try:
+                    prompt = await hook.pre_review(prompt, ctx)
+                except Exception as exc:
+                    logger.warning("Pre-hook %s failed: %s", hook.name, exc)
+
         votes: list[ReviewVote] = []
         # Sequential per provider (VRAM constraint -- one model at a time)
         for provider in self.providers:
             try:
                 vote = await provider.review(prompt)
-                votes.append(vote)
             except Exception as exc:
-                votes.append(
-                    ReviewVote(
-                        reviewer_id=provider.reviewer_id,
-                        decision="abstain",
-                        confidence=0.0,
-                        rationale=f"Provider error: {exc}",
-                        findings=[],
-                    )
+                vote = ReviewVote(
+                    reviewer_id=provider.reviewer_id,
+                    decision="abstain",
+                    confidence=0.0,
+                    rationale=f"Provider error: {exc}",
+                    findings=[],
                 )
+
+            # Run post-hooks per vote
+            if self.hooks:
+                from .providers.hooks import HookContext
+                ctx = HookContext(request=request, rubric=rubric)
+                for hook in self.hooks:
+                    try:
+                        vote = await hook.post_review(vote, ctx)
+                    except Exception as exc:
+                        logger.warning("Post-hook %s failed: %s", hook.name, exc)
+
+            votes.append(vote)
         return votes
 
     async def full_audit(

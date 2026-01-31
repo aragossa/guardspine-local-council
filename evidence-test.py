@@ -12,6 +12,7 @@ sys.path.insert(0, r"D:\Projects\GuardSpine")
 
 from guardspine_local_council.council import LocalCouncil
 from guardspine_local_council.providers.ollama import OllamaProvider
+from guardspine_local_council.providers.hooks import SequentialThinkingHook
 from guardspine_local_council.types import ReviewRequest, RubricContext
 
 from codeguard.rubrics.loader import load_rubric
@@ -123,10 +124,17 @@ async def main() -> None:
 
     # Step 4: Rubric-aware council audit (3 models x 11 rubrics = 33 reviews)
     providers = [OllamaProvider(model=m) for m in models[:3]]
-    council = LocalCouncil(providers=providers, quorum=min(len(providers), 3))
+    hooks = [SequentialThinkingHook()]
+    council = LocalCouncil(providers=providers, hooks=hooks, quorum=min(len(providers), 3))
 
     print(f"\nStarting rubric-aware audit: {len(providers)} models x {len(rubric_contexts)} rubrics = {len(providers) * len(rubric_contexts)} reviews", file=sys.stderr)
-    audit = await council.full_audit(request, rubric_contexts)
+    print("Hooks enabled: sequential-thinking", file=sys.stderr)
+
+    await council.start_hooks()
+    try:
+        audit = await council.full_audit(request, rubric_contexts)
+    finally:
+        await council.close_hooks()
 
     # Step 5: Output structured result
     output = {
