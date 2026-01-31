@@ -40,3 +40,90 @@ class CouncilResult:
     consensus_confidence: float
     dissenting_opinions: list[ReviewVote]
     quorum_met: bool
+
+
+@dataclass
+class RubricContext:
+    """Context from a deterministic rubric scan to focus an LLM review."""
+
+    rubric_name: str
+    description: str
+    violations: list[dict] = field(default_factory=list)
+
+
+@dataclass
+class RubricVerdict:
+    """Per-rubric aggregated result from 3 model votes."""
+
+    rubric_name: str
+    votes: list[ReviewVote]
+    decision: str  # "pass" | "fail" | "needs-review"
+    critical_findings: list[dict] = field(default_factory=list)
+
+
+@dataclass
+class FileFinding:
+    """A single finding attributed to a specific file."""
+
+    rubric: str
+    reviewer_id: str
+    severity: str
+    category: str
+    description: str
+    line_number: int | str | None = None
+
+
+@dataclass
+class FileReport:
+    """All findings for a single file, gathered across all 33 reviews."""
+
+    filename: str
+    findings: list[FileFinding] = field(default_factory=list)
+
+    @property
+    def critical_count(self) -> int:
+        return sum(1 for f in self.findings if f.severity in ("critical", "high"))
+
+
+@dataclass
+class AuditResult:
+    """Full audit result: 11 rubric verdicts + overall decision."""
+
+    request_id: str
+    rubric_verdicts: list[RubricVerdict]
+    overall_decision: str  # "approve" | "reject" | "needs-review"
+    total_votes: int
+    summary: str
+
+    def by_file(self) -> dict[str, FileReport]:
+        """Pivot all findings from rubric-oriented to file-oriented view."""
+        reports: dict[str, FileReport] = {}
+        for verdict in self.rubric_verdicts:
+            # Scanner violations (deterministic) are already in critical_findings
+            for cf in verdict.critical_findings:
+                fname = cf.get("file", "_unknown")
+                if fname not in reports:
+                    reports[fname] = FileReport(filename=fname)
+                reports[fname].findings.append(FileFinding(
+                    rubric=verdict.rubric_name,
+                    reviewer_id="scanner",
+                    severity=cf.get("severity", "unknown"),
+                    category=cf.get("category", cf.get("rule_id", "")),
+                    description=cf.get("description", ""),
+                    line_number=cf.get("line_number"),
+                ))
+            # LLM findings from each vote
+            for vote in verdict.votes:
+                for f in vote.findings:
+                    fname = f.get("file", "_unknown")
+                    if fname not in reports:
+                        reports[fname] = FileReport(filename=fname)
+                    reports[fname].findings.append(FileFinding(
+                        rubric=verdict.rubric_name,
+                        reviewer_id=vote.reviewer_id,
+                        severity=f.get("severity", "unknown"),
+                        category=f.get("category", ""),
+                        description=f.get("description", ""),
+                        line_number=f.get("line_number"),
+                    ))
+        return reports
