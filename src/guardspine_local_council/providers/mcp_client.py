@@ -4,7 +4,11 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 from typing import Any
+
+# Maximum number of framing iterations to prevent infinite loops (NASA-002).
+_MAX_READ_ITERATIONS = 10_000
 
 
 class MCPClient:
@@ -15,8 +19,22 @@ class MCPClient:
         self._request_id = 0
         self._read_lock = asyncio.Lock()
 
+    # Allowed characters in command tokens: alphanumeric, hyphens, dots,
+    # underscores, forward/back slashes, colons, @, and equals.
+    _SAFE_TOKEN_RE = re.compile(r"^[\w.\-/@:=+]+$")
+
     async def connect(self, command: list[str], env: dict[str, str] | None = None) -> None:
-        """Spawn the MCP server subprocess and complete the initialize handshake."""
+        """Spawn the MCP server subprocess and complete the initialize handshake.
+
+        Each token in *command* is validated against a safe-character allowlist
+        to prevent command-injection via malicious arguments (SAF-014).
+        """
+        for token in command:
+            if not self._SAFE_TOKEN_RE.match(token):
+                raise ValueError(
+                    f"Unsafe character in command token: {token!r}. "
+                    "Only alphanumeric, -, _, ., /, \\, :, @, = are allowed."
+                )
         self._process = await asyncio.create_subprocess_exec(
             *command,
             stdin=asyncio.subprocess.PIPE,
@@ -82,13 +100,18 @@ class MCPClient:
         await self._process.stdin.drain()
 
     async def _read_response(self, expected_id: int) -> Any:
-        """Read Content-Length framed messages until we get our response."""
+        """Read Content-Length framed messages until we get our response.
+
+        Both the outer message loop and the inner header-parsing loop are
+        bounded by ``_MAX_READ_ITERATIONS`` to satisfy NASA Power-of-10
+        rule 2 (all loops must have a fixed upper bound).
+        """
         assert self._process and self._process.stdout
         async with self._read_lock:
-            while True:
+            for _msg_iter in range(_MAX_READ_ITERATIONS):
                 # Read headers until empty line
                 content_length = 0
-                while True:
+                for _hdr_iter in range(_MAX_READ_ITERATIONS):
                     line = await self._process.stdout.readline()
                     if not line:
                         raise ConnectionError("MCP server closed stdout")
@@ -97,7 +120,12 @@ class MCPClient:
                         break
                     if text.lower().startswith("content-length:"):
                         content_length = int(text.split(":", 1)[1].strip())
+                else:
+                    raise RuntimeError("Header parsing exceeded maximum iterations")
 
+                # Business rule: skip empty frames (content_length == 0).
+                # An MCP server may send keep-alive or empty-body frames;
+                # these carry no JSON-RPC payload and are safely ignored.
                 if content_length == 0:
                     continue
 
@@ -113,3 +141,5 @@ class MCPClient:
                         err = data["error"]
                         raise RuntimeError(f"MCP error {err.get('code')}: {err.get('message')}")
                     return data.get("result")
+            else:
+                raise RuntimeError("Response reading exceeded maximum iterations")

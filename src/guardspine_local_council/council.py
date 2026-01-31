@@ -192,11 +192,19 @@ class LocalCouncil:
 
     @staticmethod
     def _rubric_majority(votes: list[ReviewVote]) -> str:
-        """Derive pass/fail/needs-review from 3 model votes on one rubric."""
+        """Derive pass/fail/needs-review from 3 model votes on one rubric.
+
+        Business rules (simple-majority with 3 reviewers):
+        - FAIL when 2+ reviewers vote "reject" (majority rejects).
+        - PASS when 2+ reviewers vote "approve" (majority approves).
+        - NEEDS-REVIEW otherwise (no clear majority, or mixed abstains).
+        """
         reject_count = sum(1 for v in votes if v.decision == "reject")
         approve_count = sum(1 for v in votes if v.decision == "approve")
+        # Rule: 2-of-3 reject -> rubric fails
         if reject_count >= 2:
             return "fail"
+        # Rule: 2-of-3 approve -> rubric passes
         if approve_count >= 2:
             return "pass"
         return "needs-review"

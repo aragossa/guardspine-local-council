@@ -7,6 +7,7 @@ Instead, hooks enrich prompts before the model sees them, and validate output af
 from __future__ import annotations
 
 import logging
+import sys
 from dataclasses import dataclass
 from typing import Any, Protocol, runtime_checkable
 
@@ -62,9 +63,12 @@ class SequentialThinkingHook:
         server_command: list[str] | None = None,
         num_steps: int = 5,
     ) -> None:
-        self._command = server_command or [
-            "npx", "-y", "@modelcontextprotocol/server-sequential-thinking",
-        ]
+        if server_command:
+            self._command = server_command
+        else:
+            # Windows requires npx.cmd for subprocess spawning
+            npx = "npx.cmd" if sys.platform == "win32" else "npx"
+            self._command = [npx, "-y", "@modelcontextprotocol/server-sequential-thinking"]
         self._num_steps = num_steps
         self._client: MCPClient | None = None
 
