@@ -3,12 +3,26 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import logging
+import uuid
+from datetime import datetime, timezone
 from typing import TYPE_CHECKING, Protocol
 
 from .aggregator import SimpleAggregator
-from .types import AuditResult, CouncilResult, ReviewRequest, ReviewVote, RubricContext, RubricVerdict
+from .types import (
+    AuditResult,
+    CouncilResult,
+    EvidenceBundle,
+    EvidenceItem,
+    HashChainLink,
+    ImmutabilityProof,
+    ReviewRequest,
+    ReviewVote,
+    RubricContext,
+    RubricVerdict,
+)
 
 if TYPE_CHECKING:
     from .providers.hooks import HookContext, ReviewHook
@@ -65,6 +79,25 @@ class LocalCouncil:
                 )
 
         quorum_met = self._check_quorum(votes)
+
+        # Enforce quorum: if not enough non-abstain votes, return abstain
+        if not quorum_met:
+            consensus = {
+                "decision": "abstain",
+                "confidence": 0.0,
+                "quorum_met": False,
+            }
+            bundle = self._build_evidence_bundle(votes, consensus)
+            return CouncilResult(
+                request_id=request.request_id,
+                votes=votes,
+                consensus_decision="abstain",
+                consensus_confidence=0.0,
+                dissenting_opinions=[],
+                quorum_met=False,
+                evidence_bundle=bundle,
+            )
+
         decision, confidence = self.aggregator.aggregate(votes)
 
         # If consensus confidence is below threshold, mark as abstain
@@ -75,6 +108,13 @@ class LocalCouncil:
 
         dissenting = [v for v in votes if v.decision != consensus_decision]
 
+        consensus = {
+            "decision": consensus_decision,
+            "confidence": confidence,
+            "quorum_met": quorum_met,
+        }
+        bundle = self._build_evidence_bundle(votes, consensus)
+
         return CouncilResult(
             request_id=request.request_id,
             votes=votes,
@@ -82,6 +122,7 @@ class LocalCouncil:
             consensus_confidence=confidence,
             dissenting_opinions=dissenting,
             quorum_met=quorum_met,
+            evidence_bundle=bundle,
         )
 
     async def start_hooks(self) -> None:
@@ -273,6 +314,80 @@ class LocalCouncil:
             f"\n--- ARTIFACT CONTENT ---\n{safe_content}\n--- END ---\n"
         )
 
+    @staticmethod
+    def _content_hash(obj: dict) -> str:
+        """SHA-256 hash of canonicalized JSON."""
+        raw = json.dumps(obj, sort_keys=True, separators=(",", ":"))
+        return "sha256:" + hashlib.sha256(raw.encode()).hexdigest()
+
+    @staticmethod
+    def _build_evidence_bundle(
+        votes: list[ReviewVote],
+        consensus: dict,
+    ) -> EvidenceBundle:
+        """Build a v0.2.0 evidence bundle from votes and consensus."""
+        items: list[EvidenceItem] = []
+
+        for i, vote in enumerate(votes):
+            vote_content = {
+                "reviewer_id": vote.reviewer_id,
+                "decision": vote.decision,
+                "confidence": vote.confidence,
+                "rationale": vote.rationale,
+                "findings": vote.findings,
+            }
+            items.append(
+                EvidenceItem(
+                    item_id=uuid.uuid4().hex,
+                    content_type="guardspine/council-vote",
+                    content=vote_content,
+                    content_hash=LocalCouncil._content_hash(vote_content),
+                    sequence=i,
+                )
+            )
+
+        consensus_seq = len(votes)
+        items.append(
+            EvidenceItem(
+                item_id=uuid.uuid4().hex,
+                content_type="guardspine/council-consensus",
+                content=consensus,
+                content_hash=LocalCouncil._content_hash(consensus),
+                sequence=consensus_seq,
+            )
+        )
+
+        # Build hash chain with full link dicts (v0.2.0 format)
+        previous = "genesis"
+        chain: list[HashChainLink] = []
+        for item in items:
+            preimage = f"{item.sequence}|{item.item_id}|{item.content_type}|{item.content_hash}|{previous}"
+            chain_hash = "sha256:" + hashlib.sha256(preimage.encode()).hexdigest()
+            chain.append(HashChainLink(
+                sequence=item.sequence,
+                item_id=item.item_id,
+                content_type=item.content_type,
+                content_hash=item.content_hash,
+                previous_hash=previous,
+                chain_hash=chain_hash,
+            ))
+            previous = chain_hash
+
+        # Root hash = SHA-256 of concatenated chain hashes
+        concat = "".join(link.chain_hash for link in chain)
+        root_hash = "sha256:" + hashlib.sha256(concat.encode()).hexdigest()
+
+        return EvidenceBundle(
+            bundle_id=uuid.uuid4().hex,
+            version="0.2.0",
+            created_at=datetime.now(timezone.utc).isoformat(),
+            items=items,
+            immutability_proof=ImmutabilityProof(
+                hash_chain=chain,
+                root_hash=root_hash,
+            ),
+        )
+
     def _check_quorum(self, votes: list[ReviewVote]) -> bool:
         """Check if enough non-abstain votes were collected."""
         active = [v for v in votes if v.decision != "abstain"]
@@ -280,14 +395,37 @@ class LocalCouncil:
 
     @staticmethod
     def _sanitize_for_prompt(text: str) -> str:
-        """Strip prompt-boundary markers from untrusted content.
+        """Strip prompt-boundary markers and injection patterns from untrusted content.
 
         Prevents artifact content from closing the content fence and
         injecting instructions into the system portion of the prompt.
         """
+        import re
+
         # Remove any sequence that could mimic our content delimiters
         sanitized = text.replace("--- END ---", "~~~ END ~~~")
         sanitized = sanitized.replace("--- ARTIFACT CONTENT ---", "~~~ ARTIFACT CONTENT ~~~")
+
+        # Neutralize common prompt injection patterns (case-insensitive)
+        _INJECTION_PATTERNS = [
+            (re.compile(r"ignore\s+(all\s+)?previous\s+instructions", re.IGNORECASE), "[SANITIZED-INJECTION]"),
+            (re.compile(r"ignore\s+(all\s+)?above\s+instructions", re.IGNORECASE), "[SANITIZED-INJECTION]"),
+            (re.compile(r"disregard\s+(all\s+)?previous\s+instructions", re.IGNORECASE), "[SANITIZED-INJECTION]"),
+            (re.compile(r"forget\s+(all\s+)?(your\s+)?instructions", re.IGNORECASE), "[SANITIZED-INJECTION]"),
+            (re.compile(r"you\s+are\s+now\s+", re.IGNORECASE), "[SANITIZED-INJECTION] "),
+            (re.compile(r"new\s+instructions?\s*:", re.IGNORECASE), "[SANITIZED-INJECTION]:"),
+            (re.compile(r"^system\s*:", re.IGNORECASE | re.MULTILINE), "[SANITIZED-ROLE]:"),
+            (re.compile(r"^assistant\s*:", re.IGNORECASE | re.MULTILINE), "[SANITIZED-ROLE]:"),
+            (re.compile(r"^user\s*:", re.IGNORECASE | re.MULTILINE), "[SANITIZED-ROLE]:"),
+            (re.compile(r"^human\s*:", re.IGNORECASE | re.MULTILINE), "[SANITIZED-ROLE]:"),
+        ]
+        for pattern, replacement in _INJECTION_PATTERNS:
+            sanitized = pattern.sub(replacement, sanitized)
+
+        # Neutralize markdown code fences that could break prompt structure
+        # (triple backticks with optional language tags)
+        sanitized = sanitized.replace("```", "'''")
+
         return sanitized
 
     def _build_prompt(self, request: ReviewRequest) -> str:

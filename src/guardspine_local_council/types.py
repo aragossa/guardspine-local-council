@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, Any
 
 
 @dataclass
@@ -31,6 +31,48 @@ class ReviewVote:
 
 
 @dataclass
+class EvidenceItem:
+    """A single item in an evidence bundle."""
+
+    item_id: str
+    content_type: str  # "guardspine/council-vote" | "guardspine/council-consensus"
+    content: dict[str, Any]
+    content_hash: str  # "sha256:..."
+    sequence: int
+
+
+@dataclass
+class HashChainLink:
+    """A single link in the hash chain."""
+
+    sequence: int
+    item_id: str
+    content_type: str
+    content_hash: str  # "sha256:..."
+    previous_hash: str
+    chain_hash: str  # "sha256:..."
+
+
+@dataclass
+class ImmutabilityProof:
+    """Hash-chain proof for an evidence bundle."""
+
+    hash_chain: list[HashChainLink]
+    root_hash: str  # "sha256:..."
+
+
+@dataclass
+class EvidenceBundle:
+    """v0.2.0 evidence bundle emitted after council review."""
+
+    bundle_id: str
+    version: str  # "0.2.0"
+    created_at: str  # ISO 8601
+    items: list[EvidenceItem]
+    immutability_proof: ImmutabilityProof
+
+
+@dataclass
 class CouncilResult:
     """Aggregated result from all council reviewers."""
 
@@ -40,6 +82,7 @@ class CouncilResult:
     consensus_confidence: float
     dissenting_opinions: list[ReviewVote]
     quorum_met: bool
+    evidence_bundle: Optional[EvidenceBundle] = None
 
 
 @dataclass
