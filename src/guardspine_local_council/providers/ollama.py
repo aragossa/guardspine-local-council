@@ -76,6 +76,19 @@ class OllamaProvider:
         if not isinstance(findings, list):
             findings = []
 
+        # Validate each finding has required fields; drop malformed entries
+        _REQUIRED_FINDING_KEYS = {"severity", "description"}
+        validated: list[dict] = []
+        for item in findings:
+            if not isinstance(item, dict):
+                continue
+            if not _REQUIRED_FINDING_KEYS.issubset(item.keys()):
+                continue
+            if item.get("severity") not in ("critical", "high", "medium", "low"):
+                item["severity"] = "medium"
+            validated.append(item)
+        findings = validated
+
         return ReviewVote(
             reviewer_id=self.reviewer_id,
             decision=decision,

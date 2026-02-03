@@ -24,6 +24,15 @@ from .types import (
     RubricVerdict,
 )
 
+# Import canonical hash functions from guardspine-kernel-py
+# This ensures cross-language parity with @guardspine/kernel (TypeScript)
+try:
+    from guardspine_kernel import canonical_json, compute_content_hash
+    _HAS_KERNEL = True
+except ImportError:
+    _HAS_KERNEL = False
+    # Fallback to local implementation (DEPRECATED - will be removed)
+
 if TYPE_CHECKING:
     from .providers.hooks import HookContext, ReviewHook
 
@@ -316,9 +325,50 @@ class LocalCouncil:
 
     @staticmethod
     def _content_hash(obj: dict) -> str:
-        """SHA-256 hash of canonicalized JSON."""
-        raw = json.dumps(obj, sort_keys=True, separators=(",", ":"))
-        return "sha256:" + hashlib.sha256(raw.encode()).hexdigest()
+        """SHA-256 hash of canonicalized JSON (RFC 8785-compatible subset).
+
+        Uses guardspine-kernel-py when available for cross-language parity.
+        """
+        if _HAS_KERNEL:
+            return compute_content_hash(obj)
+        else:
+            # DEPRECATED fallback - will be removed in future version
+            import math
+
+            def _serialize_value(value: object) -> str:
+                if value is None:
+                    return "null"
+                if isinstance(value, bool):
+                    return "true" if value else "false"
+                if isinstance(value, (int, float)):
+                    return _serialize_number(value)
+                if isinstance(value, str):
+                    return json.dumps(value, ensure_ascii=False)
+                if isinstance(value, list):
+                    return "[" + ",".join(_serialize_value(v) for v in value) + "]"
+                if isinstance(value, dict):
+                    items = []
+                    for key in sorted(value.keys()):
+                        items.append(json.dumps(str(key), ensure_ascii=False) + ":" + _serialize_value(value[key]))
+                    return "{" + ",".join(items) + "}"
+                return "null"
+
+            def _serialize_number(num: float) -> str:
+                if isinstance(num, bool):
+                    return "true" if num else "false"
+                if isinstance(num, int):
+                    return str(num)
+                if not isinstance(num, float):
+                    return "null"
+                if not math.isfinite(num):
+                    return "null"
+                if num.is_integer():
+                    if abs(num) < 9_007_199_254_740_991 and abs(num) < 1e20:
+                        return str(int(num))
+                return json.dumps(num, ensure_ascii=False)
+
+            raw = _serialize_value(obj)
+            return "sha256:" + hashlib.sha256(raw.encode()).hexdigest()
 
     @staticmethod
     def _build_evidence_bundle(
@@ -378,7 +428,7 @@ class LocalCouncil:
         root_hash = "sha256:" + hashlib.sha256(concat.encode()).hexdigest()
 
         return EvidenceBundle(
-            bundle_id=uuid.uuid4().hex,
+            bundle_id=str(uuid.uuid4()),
             version="0.2.0",
             created_at=datetime.now(timezone.utc).isoformat(),
             items=items,
