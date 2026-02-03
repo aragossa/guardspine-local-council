@@ -3,7 +3,7 @@
     "repo": "n8n-nodes-guardspine",
     "description": "n8n community nodes for AI governance workflows",
     "language": "typescript",
-    "timestamp": "2026-01-31T05:34:36.881264+00:00",
+    "timestamp": "2026-01-31T07:22:00.299482+00:00",
     "models": [
       "qwen2.5-coder:7b",
       "qwen3:8b",
@@ -25,34 +25,34 @@
     ],
     "total_reviews": 33
   },
-  "request_id": "c329fdac033c",
+  "request_id": "39e0b66d2cf7",
   "overall_decision": "needs-review",
-  "summary": "NEEDS-REVIEW: clarity, connascence, mece, nasa-safety, pci-dss-requirements, safety-violations, six-sigma, soc2-controls",
+  "summary": "NEEDS-REVIEW: clarity, connascence, hipaa-safeguards, mece, nasa-safety, nomotic, pci-dss-requirements, safety-violations, six-sigma, soc2-controls, theater-detection",
   "rubric_verdicts": [
     {
       "rubric": "clarity",
       "decision": "needs-review",
-      "critical_findings_count": 3,
+      "critical_findings_count": 2,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "All findings identified by the scanner are valid issues and accurately reflect cognitive load and readability concerns in the code. The use of loop counters like 'i' is indeed less self-documenting compared to descriptive variable names, and the numerous parameters passed to HTTP request functions i",
-          "findings_count": 6
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "reject",
-          "confidence": 0.9,
-          "rationale": "The scanner identified several issues with variable/function naming and excessive parameters. The 'for (let i = 0; i < items.length; i++)' pattern is common in array iteration and while it's not ideal, it's not a critical issue. However, the high severity rating for parameter count in ApprovalWait.n",
-          "findings_count": 6
-        },
-        {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n  \"response\": {\n    \"code\": 200,\n    \"message\": \"Success\",\n    \"results\": {\n      \"BeadsCreate.node.ts\": {\n        \"description\": {\n          \"name\": \"Beads Create\",\n          \"subtitle\": \"Create be",
+          "rationale": "Provider error: ",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "reject",
+          "confidence": 0.85,
+          "rationale": "The scanner identified multiple instances of unclear loop structures (CLR-001) across various files, indicating poor readability. The high severity finding in GuardGate.node.ts (CLR-003) about deeply nested code blocks is valid, but the scanner's severity rating for the parameter-heavy httpRequest c",
+          "findings_count": 6
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
           "findings_count": 0
         }
       ]
@@ -60,24 +60,24 @@
     {
       "rubric": "connascence",
       "decision": "needs-review",
-      "critical_findings_count": 3,
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
-          "confidence": 0.9,
-          "rationale": "The scanner did not find any violations, but there are several potential connascence coupling issues in the provided code that could be missed by regex-based scanners. These include implicit coupling through shared state (e.g., use of global variables or context), tight coupling between components d",
-          "findings_count": 9
+          "confidence": 0.95,
+          "rationale": "The scanner did not detect any violations, but upon review, several potential connascence issues were identified that the scanner might have missed.",
+          "findings_count": 4
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The codebase appears to have no connascence coupling issues. The scanner did not find any violations, and upon review, there are no obvious instances of the 9 types of connascence coupling. The code is structured with clear separation of concerns and uses well-defined interfaces, which minimizes cou",
+          "rationale": "The scanner found no violations, and after review, no connascence coupling issues were identified. All code appears to be well-structured with clear separation of concerns and minimal coupling between components.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -87,28 +87,28 @@
     },
     {
       "rubric": "hipaa-safeguards",
-      "decision": "pass",
-      "critical_findings_count": 0,
+      "decision": "needs-review",
+      "critical_findings_count": 15,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "abstain",
+          "confidence": 0.5,
+          "rationale": "The provided code snippets are TypeScript files for custom nodes in n8n workflows that interact with a GuardSpine API. The code appears to handle various operations such as approvals, creating and updating tasks, and adding evidence to those tasks. However, without more context about the specific re",
+          "findings_count": 15
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The scanner did not find any violations, and the code appears to be following HIPAA guidelines for creating, updating, and approving work items in a GuardSpine spine. There are no apparent issues related to input validation, error handling, or cryptographic practices.",
+          "rationale": "The scanner found no violations, and after review, no HIPAA compliance issues were identified. All code appears to handle data securely, with proper encryption, access controls, and audit logging. The code follows best practices for handling sensitive information, and there are no clear vulnerabilit",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The codebase appears to comply with HIPAA safeguards as no violations were found by the scanner. The implementation includes secure practices such as encryption in transit (HTTPS), proper handling of sensitive data, and secure credential management. There are no clear vulnerabilities or misconfigura",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n  \"assistant_response\": {\n    \"explanation\": \"The request involves analyzing three TypeScript node.js workflows, each implementing a specific API interaction with GuardSpine. These tasks are part of",
+          "rationale": "Failed to parse model output: {\n  \"assistant\": \"I can help with analyzing these code snippets for security vulnerabilities and suggesting improvements. However, it's crucial to have access to the actual code for a detailed analysi",
           "findings_count": 0
         }
       ]
@@ -119,24 +119,24 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "abstain",
-          "confidence": 0.5,
-          "rationale": "The scanner did not find any violations, but I cannot validate this as true or false without further analysis of the code and its intended functionality.",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The deterministic scanner found no violations, and the code appears to be well-structured and compliant with MECE principles. Each file handles distinct functionalities without duplication or gaps. The code includes proper error handling, input validation, and clear separation of concerns. No MECE v",
+          "rationale": "The code has been reviewed for MECE (Mutually Exclusive, Collectively Exhaustive) principles and does not exhibit any duplication or gaps in code coverage that would require further investigation.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n  \"assistant_id\": \"0\",\n  \"assistant_response\": \"```plaintext\"\n\n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  \n  ",
+          "rationale": "Failed to parse model output: {\"decision\":\"approve\",\"confidence\":1.0,\"rationale\":\"The scanner found no violations, and after reviewing the code, there are no MECE issues detected. The code appears to be well-structured with no dup",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 1.0,
+          "rationale": "",
           "findings_count": 0
         }
       ]
@@ -144,55 +144,55 @@
     {
       "rubric": "nasa-safety",
       "decision": "needs-review",
-      "critical_findings_count": 3,
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.8,
-          "rationale": "The scanner did not find any violations, but based on the review of the provided code snippets, there are several potential issues that could be considered as true positives. The code does not include any error handling for HTTP requests, which could lead to unhandled exceptions if the API call fail",
-          "findings_count": 6
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The scanner did not find any violations, and the code appears to comply with NASA Power of 10 safety-critical code development practices. All code is well-structured, handles errors gracefully, and uses secure practices such as proper input validation, error handling, and secure API communication. T",
+          "rationale": "The code reviewed does not contain any obvious violations of the NASA Power of 10 rules for safety-critical code development as per the provided rubric. The code appears to be well-structured, with proper error handling, input validation, and security considerations such as using HTTPS requests and ",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "",
+          "rationale": "Failed to parse model output: {\"decision\":\"approve\",\"confidence\":1.0,\"rationale\":\"The codebase adheres to NASA Power of 10 safety rules. The deterministic scanner found no violations, and the manual review confirms no critical iss",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "Failed to parse model output: {\n  \"solution\": {\n    \"summary\": \"No errors found in the provided code snippets.\",\n    \"analysis\": {\n      \"BeadsCreate\\\": BeadsCreate.node.ts\\\" summary: This node type handles the creation of bead ta",
           "findings_count": 0
         }
       ]
     },
     {
       "rubric": "nomotic",
-      "decision": "pass",
-      "critical_findings_count": 0,
+      "decision": "needs-review",
+      "critical_findings_count": 2,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "approve",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "reject",
           "confidence": 0.95,
-          "rationale": "The provided code snippets do not contain any obvious vulnerabilities or misconfigurations that would violate the Nomotic rubric. The code appears to be correctly implementing a workflow for approval and task management using GuardSpine, following the principles of AI governance rules.",
-          "findings_count": 0
+          "rationale": "The scanner missed a critical violation in GuardGate.node.ts where explicit and enforced contracts between components are not being followed. The code does not include error handling or validation for the HTTP response received from the external service.",
+          "findings_count": 1
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The scanner did not find any violations, and after reviewing the code, no violations of the nomotic rubric were identified. The code follows the unified nomotic philosophy and AI governance rules as outlined by Chris Hood. All files appear to handle data securely, enforce proper input validation, an",
-          "findings_count": 0
+          "rationale": "The scanner found one high severity violation in GuardGate.node.ts:96 related to explicit contracts between components. Upon review, this is a true positive as the code uses an HTTP request without clear contract definitions. No other violations were found, and the scanner's severity assessment appe",
+          "findings_count": 1
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n  \"assistant\": \"Based on the code and context provided, here's an assessment of the TypeScript nodes in the n8n workflow, focusing on their security aspects and adherence to best practices:\"\n\n  \n  \n",
+          "rationale": "",
           "findings_count": 0
         }
       ]
@@ -203,24 +203,24 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "abstain",
-          "confidence": 0.0,
-          "rationale": "",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "Provider error: ",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
           "findings_count": 0
         }
       ]
@@ -228,27 +228,27 @@
     {
       "rubric": "safety-violations",
       "decision": "needs-review",
-      "critical_findings_count": 4,
+      "critical_findings_count": 2,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "approve",
-          "confidence": 0.8,
-          "rationale": "The scanner correctly identified two functions with too many parameters, which is a high severity issue according to the rubric. There are no indications of false positives in these cases.",
-          "findings_count": 2
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
           "confidence": 0.95,
-          "rationale": "The scanner identified high-severity parameter bomb issues in ApprovalWait.node.ts and GuardGate.node.ts, which are valid. However, there are potential missed violations in other files. For example, the code in BeadsCreate.node.ts and BeadsUpdate.node.ts has complex logic and multiple conditional br",
-          "findings_count": 4
+          "rationale": "The scanner identified a function with too many parameters in GuardGate.node.ts, which is a valid concern. However, the artifact content provided does not include the full file for further analysis. The artifact appears to be incomplete and may contain errors or omissions that could affect the accur",
+          "findings_count": 1
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The scanner found one high-severity violation in GuardGate.node.ts:96 for a function with too many parameters. Upon review, this is a true positive as the httpRequest call has a large payload with multiple parameters. No other violations were found, and the scanner's severity assessment appears accu",
+          "findings_count": 1
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n  \"assistant\": {\n    \"assistant_name\": \"doc-assistant\",\n    \"role\": \"AI assistant\",\n    \"response\": {\n      \"assistant_message\": \"The provided code snippets do not exhibit any immediate issues with ",
+          "rationale": "",
           "findings_count": 0
         }
       ]
@@ -259,24 +259,24 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.9,
-          "rationale": "The provided code does not contain any explicit security vulnerabilities that would be caught by the deterministic scanner. However, the scanner might have missed some potential issues due to its regex blind spots or limited scope. The code appears to be performing HTTP requests and handling webhook",
-          "findings_count": 3
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The scanner found no violations, and after review, no Six Sigma quality issues were identified. All code adheres to best practices for software development, with proper error handling, input validation, and structured logic. The codebase is well-organized, with clear separation of concerns and robus",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "The provided code snippet is incomplete and lacks the content of the last part, specifically from the 'addEvidence' fields onwards. Therefore, it's not possible to conduct a thorough analysis based on the given information.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The deterministic scanner found no violations, and upon review, there are no obvious Six Sigma quality issues. All code appears to be well-structured with proper error handling, input validation, and clear documentation. The code adheres to best practices for maintainability and reliability.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n  \"assistant_id\": \"assistant_123456789\",\n  \"assistant_response\": {\n    \"explanation\": \"To analyze the provided code snippets, we need to check if there are any potential security vulnerabilities, mi",
+          "rationale": "",
           "findings_count": 0
         }
       ]
@@ -287,21 +287,21 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -311,84 +311,100 @@
     },
     {
       "rubric": "theater-detection",
-      "decision": "pass",
+      "decision": "needs-review",
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The provided code does not contain any obvious issues that would suggest it is a false positive. The scanner did not find any violations, and the code appears to be well-structured and follows best practices.",
-          "findings_count": 0
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "abstain",
+          "confidence": 0.5,
+          "rationale": "The scanner did not find any violations, but manual review is required due to the complexity of the code and the lack of specific patterns or behaviors that could indicate false positives.",
+          "findings_count": 3
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The deterministic scanner found no violations, and after thorough review, no issues were identified that fall under the theater-detection rubric. All code appears to handle GuardSpine operations correctly without fake practices that appear valuable but aren't. The code includes proper error handling",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n  \"assistant\": {\n    \"assistant_id\": \"A001\",\n    \"assistant_version\": \"V1.1.0\",\n    \"timestamp\": \"2023-10-15 14:30:00\",\n    \"response\": {\n      \"status\": \"completed\",\n      \"message\": \"The system ha",
+          "rationale": "Failed to parse model output: {\"decision\":\"approve\",\"confidence\":1.0,\"rationale\":\"The deterministic scanner found no violations, and upon manual review, no quality theater practices were identified. The code appears to implement s",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
           "findings_count": 0
         }
       ]
     }
   ],
   "by_file": {
-    "ApprovalWait\\ApprovalWait.node.ts": {
-      "critical_count": 8,
+    "GuardGate.node.ts": {
+      "critical_count": 12,
       "total_findings": 12,
       "findings": [
         {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "error-handling",
+          "description": "The code does not handle errors or validate the response from the HTTP request, which is a critical violation according to NOM-ARCH-002.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "error-handling",
+          "description": "The code does not handle errors or validate the response from the HTTP request, which is a critical violation according to NOM-ARCH-002.",
+          "line": null
+        },
+        {
           "rubric": "clarity",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "readability",
-          "description": "Refactor by breaking down the function into smaller, more manageable parts and using descriptive parameter names.",
+          "category": "complexity",
+          "description": "The deeply nested conditional structure in GuardGate.node.ts increases cognitive load and should be refactored into smaller, focused functions.",
           "line": null
         },
         {
           "rubric": "clarity",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "readability",
-          "description": "Refactor by breaking down the function into smaller, more manageable parts and using descriptive parameter names.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "code-structure",
-          "description": "Implicit coupling through shared state: The use of `this.getExecutionId()` and `this.getNode().id` could lead to unexpected behavior if the execution context is modified.",
+          "category": "parameters",
+          "description": "The httpRequest call in GuardGate.node.ts has multiple parameters that could be simplified or grouped into a single object for better readability and maintainability.",
           "line": null
         },
         {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "high",
-          "category": "code-structure",
-          "description": "Implicit coupling through shared state: The use of `this.getExecutionId()` and `this.getNode().id` could lead to unexpected behavior if the execution context is modified.",
+          "category": "complexity",
+          "description": "The deeply nested conditional structure in GuardGate.node.ts increases cognitive load and should be refactored into smaller, focused functions.",
           "line": null
         },
         {
-          "rubric": "nasa-safety",
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "parameters",
+          "description": "The httpRequest call in GuardGate.node.ts has multiple parameters that could be simplified or grouped into a single object for better readability and maintainability.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "error-handling",
-          "description": "Lack of error handling for HTTP requests in the `execute` method. If the API call fails, an unhandled exception could be thrown.",
+          "category": "contract",
+          "description": "Explicit contracts between components are required. The httpRequest call should be replaced with a defined interface or contract to enforce expected responses and data formats.",
           "line": null
         },
         {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "high",
-          "category": "error-handling",
-          "description": "Lack of error handling for HTTP requests in the `execute` method. If the API call fails, an unhandled exception could be thrown.",
+          "category": "contract",
+          "description": "Explicit contracts between components are required. The httpRequest call should be replaced with a defined interface or contract to enforce expected responses and data formats.",
           "line": null
         },
         {
@@ -396,279 +412,219 @@
           "reviewer": "scanner",
           "severity": "high",
           "category": "parameter-bomb",
-          "description": "Function 'execute' has too many parameters. It should ideally have a single parameter for the input data.",
+          "description": "Function with too many parameters: 'response = await this.helpers.httpRequest({...') - Consider refactoring to reduce parameter count.",
           "line": null
         },
         {
           "rubric": "safety-violations",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "parameter-passing",
+          "description": "The httpRequest function call has too many parameters. Consider refactoring to reduce parameter count for better maintainability and readability.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "high",
           "category": "parameter-bomb",
-          "description": "Function 'execute' has too many parameters. It should ideally have a single parameter for the input data.",
+          "description": "Function with too many parameters: 'response = await this.helpers.httpRequest({...') - Consider refactoring to reduce parameter count.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "parameter-passing",
+          "description": "The httpRequest function call has too many parameters. Consider refactoring to reduce parameter count for better maintainability and readability.",
+          "line": null
+        }
+      ]
+    },
+    "ApprovalWait\\ApprovalWait.node.ts": {
+      "critical_count": 2,
+      "total_findings": 4,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         },
         {
           "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "medium",
-          "category": "code-structure",
-          "description": "Tight coupling between components: Direct method calls like `this.putExecutionToWait()` and `this.helpers.httpRequest()` couple the class to specific implementations.",
+          "category": "configuration",
+          "description": "The 'guardType' parameter in ApprovalWait is hardcoded to 'generic', which may limit the flexibility of the workflow.",
           "line": null
         },
         {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "input-validation",
-          "description": "Lack of input validation for parameters. Parameters like `riskTier`, `guardType`, and others are not validated before being used in the HTTP request.",
-          "line": null
-        },
-        {
-          "rubric": "six-sigma",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "input-validation",
-          "description": "Ensure proper validation and sanitization of input parameters to prevent injection attacks.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "low",
-          "category": "code-structure",
-          "description": "Hardcoded dependencies: The API endpoint and parameters are hardcoded, making it difficult to change without modifying the codebase.",
-          "line": null
-        }
-      ]
-    },
-    "ApprovalWait.node.ts": {
-      "critical_count": 4,
-      "total_findings": 4,
-      "findings": [
-        {
-          "rubric": "clarity",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "code-structure",
-          "description": "The httpRequest call has too many parameters. Consider refactoring into a helper function to improve readability and maintainability.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "code-structure",
-          "description": "The httpRequest call has too many parameters. Consider refactoring into a helper function to improve readability and maintainability.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "parameter-bomb",
-          "description": "The httpRequest function has too many parameters. Consider refactoring to improve readability and maintainability.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "parameter-bomb",
-          "description": "The httpRequest function has too many parameters. Consider refactoring to improve readability and maintainability.",
-          "line": null
-        }
-      ]
-    },
-    "GuardGate.node.ts": {
-      "critical_count": 4,
-      "total_findings": 4,
-      "findings": [
-        {
-          "rubric": "clarity",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "code-structure",
-          "description": "The httpRequest call has too many parameters. Consider refactoring into a helper function to improve readability and maintainability.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "code-structure",
-          "description": "The httpRequest call has too many parameters. Consider refactoring into a helper function to improve readability and maintainability.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "parameter-bomb",
-          "description": "The httpRequest function has too many parameters. Consider refactoring to improve readability and maintainability.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "parameter-bomb",
-          "description": "The httpRequest function has too many parameters. Consider refactoring to improve readability and maintainability.",
+          "category": "code-coverage",
+          "description": "The ApprovalWait node does not include comprehensive unit tests to ensure all edge cases and error conditions are handled correctly.",
           "line": null
         }
       ]
     },
     "BeadsCreate\\BeadsCreate.node.ts": {
-      "critical_count": 4,
-      "total_findings": 9,
+      "critical_count": 2,
+      "total_findings": 4,
       "findings": [
         {
-          "rubric": "connascence",
+          "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "code-structure",
-          "description": "Implicit coupling through shared state: The use of `this.getInputData()` could lead to unexpected behavior if the input data structure is modified.",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         },
         {
           "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "code-structure",
-          "description": "Implicit coupling through shared state: The use of `this.getInputData()` could lead to unexpected behavior if the input data structure is modified.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "error-handling",
-          "description": "Lack of error handling for HTTP requests in the `execute` method. If the API call fails, an unhandled exception could be thrown.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "error-handling",
-          "description": "Lack of error handling for HTTP requests in the `execute` method. If the API call fails, an unhandled exception could be thrown.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "medium",
-          "category": "readability",
-          "description": "Replace 'i' with a more descriptive variable name in the loop for better readability.",
+          "category": "configuration",
+          "description": "The timeout for the HTTP request in BeadsCreate is hardcoded to 15000 milliseconds, which may not be suitable for all environments.",
           "line": null
         },
         {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "code-structure",
-          "description": "Tight coupling between components: Direct method calls like `this.helpers.httpRequest()` couple the class to specific implementations.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "input-validation",
-          "description": "Lack of input validation for parameters. Parameters like `title`, `description`, and others are not validated before being used in the HTTP request.",
-          "line": null
-        },
-        {
-          "rubric": "six-sigma",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "error-handling",
-          "description": "Consider adding more detailed error handling and logging for better debugging and security monitoring.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "low",
-          "category": "code-structure",
-          "description": "Hardcoded dependencies: The API endpoint and parameters are hardcoded, making it difficult to change without modifying the codebase.",
+          "category": "code-coverage",
+          "description": "The BeadsCreate node does not include comprehensive unit tests to ensure all edge cases and error conditions are handled correctly.",
           "line": null
         }
       ]
     },
     "BeadsUpdate\\BeadsUpdate.node.ts": {
-      "critical_count": 4,
-      "total_findings": 9,
+      "critical_count": 2,
+      "total_findings": 5,
       "findings": [
         {
-          "rubric": "connascence",
+          "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "code-structure",
-          "description": "Implicit coupling through shared state: The use of `this.getInputData()` could lead to unexpected behavior if the input data structure is modified.",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         },
         {
           "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "code-structure",
-          "description": "Implicit coupling through shared state: The use of `this.getInputData()` could lead to unexpected behavior if the input data structure is modified.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "error-handling",
-          "description": "Lack of error handling for HTTP requests in both `updateTask` and `addEvidence` methods. If the API call fails, an unhandled exception could be thrown.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "error-handling",
-          "description": "Lack of error handling for HTTP requests in both `updateTask` and `addEvidence` methods. If the API call fails, an unhandled exception could be thrown.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "medium",
-          "category": "readability",
-          "description": "Replace 'i' with a more descriptive variable name in the loop for better readability.",
+          "category": "configuration",
+          "description": "The 'operation' parameter in BeadsUpdate is hardcoded to 'updateTask', which may limit the flexibility of the workflow.",
           "line": null
         },
         {
           "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "medium",
-          "category": "code-structure",
-          "description": "Tight coupling between components: Direct method calls like `this.helpers.httpRequest()` couple the class to specific implementations.",
+          "category": "configuration",
+          "description": "The 'evidenceHash' parameter in BeadsUpdate is required for adding evidence, which may be inflexible if not always applicable.",
           "line": null
         },
         {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "input-validation",
-          "description": "Lack of input validation for parameters. Parameters like `taskId`, `status`, and others are not validated before being used in the HTTP request.",
-          "line": null
-        },
-        {
-          "rubric": "six-sigma",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "input-validation",
-          "description": "Ensure proper validation and sanitization of input parameters, especially when updating task statuses or adding evidence.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "low",
-          "category": "code-structure",
-          "description": "Hardcoded dependencies: The API endpoint and parameters are hardcoded, making it difficult to change without modifying the codebase.",
+          "category": "code-coverage",
+          "description": "The BeadsUpdate node does not include comprehensive unit tests to ensure all edge cases and error conditions are handled correctly.",
+          "line": null
+        }
+      ]
+    },
+    "CodeGuard\\CodeGuard.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        }
+      ]
+    },
+    "CouncilVote\\CouncilVote.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        }
+      ]
+    },
+    "EvidenceSeal\\EvidenceSeal.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         }
       ]
@@ -678,121 +634,251 @@
       "total_findings": 2,
       "findings": [
         {
-          "rubric": "safety-violations",
+          "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "parameter-bomb",
-          "description": "Function 'execute' has too many parameters. It should ideally have a single parameter for the input data.",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         },
         {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "high",
-          "category": "parameter-bomb",
-          "description": "Function 'execute' has too many parameters. It should ideally have a single parameter for the input data.",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         }
       ]
     },
-    "CodeGuard\\CodeGuard.node.ts": {
-      "critical_count": 0,
-      "total_findings": 1,
+    "GuardSpineCompress\\GuardSpineCompress.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
       "findings": [
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "readability",
-          "description": "Replace 'i' with a more descriptive variable name in the loop for better readability.",
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         }
       ]
     },
-    "GuardResultCreate\\GuardResultCreate.node.ts": {
-      "critical_count": 0,
-      "total_findings": 1,
+    "GuardSpineImageGuard\\GuardSpineImageGuard.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
       "findings": [
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "readability",
-          "description": "Replace 'i' with a more descriptive variable name in the loop for better readability.",
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         }
       ]
     },
-    "GuardResultUpdate\\GuardResultUpdate.node.ts": {
-      "critical_count": 0,
-      "total_findings": 1,
+    "GuardSpinePDFGuard\\GuardSpinePDFGuard.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
       "findings": [
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "readability",
-          "description": "Replace 'i' with a more descriptive variable name in the loop for better readability.",
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        }
+      ]
+    },
+    "GuardSpineTasks\\GuardSpineTasks.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        }
+      ]
+    },
+    "GuardSpineUpdate\\GuardSpineUpdate.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        }
+      ]
+    },
+    "GuardSpineTasksUpdate\\GuardSpineTasksUpdate.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        }
+      ]
+    },
+    "GuardSpineTasksAddEvidence\\GuardSpineTasksAddEvidence.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        }
+      ]
+    },
+    "GuardSpineTasksDelete\\GuardSpineTasksDelete.node.ts": {
+      "critical_count": 2,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "Ensure that all sensitive data (e.g., evidence hashes, API keys) is encrypted both at rest and in transit.",
           "line": null
         }
       ]
     },
     "BeadsCreate.node.ts": {
       "critical_count": 0,
-      "total_findings": 3,
+      "total_findings": 1,
       "findings": [
         {
           "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
-          "category": "naming-convention",
-          "description": "The 'for (let i = 0; i < items.length; i++)' loop uses unclear variable names. Consider renaming 'i' to something more descriptive like 'index' or 'itemIndex'.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "naming-convention",
-          "description": "The 'for (let i = 0; i < items.length; i++)' loop uses unclear variable names. Consider renaming 'i' to something more descriptive like 'index' or 'itemIndex'.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "complex-logic",
-          "description": "The execute function has complex logic with multiple conditional branches. Consider breaking down into smaller functions for better readability and maintainability.",
+          "category": "readability",
+          "description": "Replace the generic 'i' loop variable with a descriptive name like 'itemIndex' to improve readability of the loop structure.",
           "line": null
         }
       ]
     },
     "BeadsUpdate.node.ts": {
       "critical_count": 0,
-      "total_findings": 3,
+      "total_findings": 1,
       "findings": [
         {
           "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
-          "category": "naming-convention",
-          "description": "The 'for (let i = 0; i < items.length; i++)' loop uses unclear variable names. Consider renaming 'i' to something more descriptive like 'index' or 'itemIndex'.",
+          "category": "readability",
+          "description": "Rename the loop variable 'i' to a more descriptive name such as 'itemIndex' to enhance code clarity.",
           "line": null
-        },
+        }
+      ]
+    },
+    "CodeGuard.node.ts": {
+      "critical_count": 0,
+      "total_findings": 1,
+      "findings": [
         {
           "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
-          "category": "naming-convention",
-          "description": "The 'for (let i = 0; i < items.length; i++)' loop uses unclear variable names. Consider renaming 'i' to something more descriptive like 'index' or 'itemIndex'.",
+          "category": "readability",
+          "description": "Use a descriptive loop variable name instead of 'i' to make the loop's purpose clearer.",
           "line": null
-        },
+        }
+      ]
+    },
+    "ApprovalProcess.node.ts": {
+      "critical_count": 0,
+      "total_findings": 1,
+      "findings": [
         {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
-          "category": "complex-logic",
-          "description": "The execute function has complex logic with multiple conditional branches. Consider breaking down into smaller functions for better readability and maintainability.",
+          "category": "error_handling",
+          "description": "The scanner missed potential issues with insufficient error handling and complex conditionals in the approval process logic.",
           "line": null
         }
       ]

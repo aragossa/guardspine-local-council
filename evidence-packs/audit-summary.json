@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-31T05:34:36.895230+00:00",
+  "timestamp": "2026-01-31T07:22:00.352593+00:00",
   "models": [
     "qwen2.5-coder:7b",
     "qwen3:8b",
@@ -19,7 +19,7 @@
     },
     {
       "repo": "guardspine-spec",
-      "decision": "reject",
+      "decision": "needs-review",
       "total_reviews": 33
     },
     {
@@ -34,7 +34,7 @@
     },
     {
       "repo": "rlm-docsync",
-      "decision": "reject",
+      "decision": "needs-review",
       "total_reviews": 33
     },
     {

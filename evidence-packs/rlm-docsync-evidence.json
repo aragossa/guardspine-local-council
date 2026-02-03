@@ -3,7 +3,7 @@
     "repo": "rlm-docsync",
     "description": "Self-updating documentation with evidence proofs",
     "language": "python",
-    "timestamp": "2026-01-31T05:21:23.878223+00:00",
+    "timestamp": "2026-01-31T07:05:44.011064+00:00",
     "models": [
       "qwen2.5-coder:7b",
       "qwen3:8b",
@@ -21,9 +21,9 @@
     ],
     "total_reviews": 33
   },
-  "request_id": "005a0506c1b1",
-  "overall_decision": "reject",
-  "summary": "FAIL: pci-dss-requirements; NEEDS-REVIEW: nomotic, safety-violations",
+  "request_id": "82fec2398257",
+  "overall_decision": "needs-review",
+  "summary": "NEEDS-REVIEW: nomotic, pci-dss-requirements",
   "rubric_verdicts": [
     {
       "rubric": "clarity",
@@ -31,24 +31,24 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "abstain",
-          "confidence": 0.0,
-          "rationale": "The provided artifact content is incomplete and does not include the entire codebase being audited. Without the full context, it's impossible to accurately assess whether any findings are true positives or negatives.",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The code provided does not contain any obvious issues that would increase cognitive load or reduce readability. The files are structured in a clear manner, and the functions have descriptive names. There are no regex patterns that could lead to ReDoS vulnerabilities as the code mitigates this by lim",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
-          "confidence": 0.95,
-          "rationale": "The codebase demonstrates good clarity and readability with consistent naming, clear documentation, and well-structured classes. The scanner found no violations, and upon review, no significant issues were missed. The code follows Python best practices with proper error handling and type hints.",
+          "confidence": 1.0,
+          "rationale": "The codebase adheres to clarity standards with minimal cognitive load and high readability. No scanner violations were found, and no critical issues were missed.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "approve",
-          "confidence": 0.95,
-          "rationale": "The deterministic scanner found no violations, indicating that the code meets the clarity standards defined by the rubric. However, manual review did not reveal any additional issues beyond those already identified. The severity accuracy also aligns with the expected standards, suggesting that the s",
+          "confidence": 0.9,
+          "rationale": "The deterministic scanner found no violations, and a thorough manual inspection revealed no additional issues. The code appears well-structured and follows best practices, with clear separation of concerns and appropriate error handling. The use of regex to mitigate ReDoS is implemented correctly, a",
           "findings_count": 0
         }
       ]
@@ -56,56 +56,56 @@
     {
       "rubric": "connascence",
       "decision": "pass",
-      "critical_findings_count": 3,
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.95,
-          "rationale": "The scanner did not find any violations, but the codebase contains potential connascence issues that are not caught by the current regex patterns.",
-          "findings_count": 5
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The codebase appears to have minimal connascence coupling. The scanner found no violations, and a thorough review of the code does not reveal any significant coupling issues. The code is well-structured with clear separation of concerns between adapters, claims, and evidence handling.",
+          "rationale": "The scanner did not find any violations, and there are no obvious issues in the code that would be missed by a deterministic scan.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
-          "confidence": 0.85,
-          "rationale": "The audit found no issues reported by the deterministic scanner, indicating high confidence in its coverage. Manual review of the code confirmed no apparent violations beyond those reported, supporting the scanner's accuracy. The absence of false positives and missed critical issues suggests the sca",
+          "confidence": 1.0,
+          "rationale": "The codebase appears to be well-structured with minimal connascence coupling. The scanner found no violations, and upon review, there are no obvious issues that would introduce strong coupling. The code uses clear separation of concerns with adapters for different file types and maintains a consiste",
           "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "reject",
+          "confidence": 0.8,
+          "rationale": "The provided code review did not identify any connascence coupling violations, but lacks a comprehensive examination of the regex patterns used across various adapter classes, which might be blind to certain types of evidence or source formats. This oversight is critical, as connascence coupling inv",
+          "findings_count": 2
         }
       ]
     },
     {
       "rubric": "hipaa-safeguards",
       "decision": "pass",
-      "critical_findings_count": 0,
+      "critical_findings_count": 4,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "No violations found by the scanner and no manual analysis revealed any issues.",
+          "rationale": "No violations found by the scanner and no regex blind spots identified in the reviewed code.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
-          "confidence": 0.95,
-          "rationale": "The code appears to comply with HIPAA safeguards as there are no violations found by the scanner. The implementation includes secure practices such as cryptographic hashing with SHA-256 for the evidence pack, proper handling of sensitive data through structured claims and evidence references, and se",
+          "confidence": 1.0,
+          "rationale": "The codebase appears to be HIPAA-compliant with no violations found by the scanner. The code handles data securely, uses proper encryption, and has no vulnerabilities in input validation or error handling. The code also has appropriate access controls and data minimization practices.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
-          "decision": "abstain",
-          "confidence": 0.6,
-          "rationale": "While the deterministic scanner found no violations, manual review is necessary to ensure compliance with HIPAA safeguards. The absence of findings does not guarantee a pass, as certain nuances and specific requirements might not be covered by the scanner. Moreover, manual inspection is needed to ve",
-          "findings_count": 0
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "reject",
+          "confidence": 0.65,
+          "rationale": "The deterministic scanner reported no violations, suggesting potential blind spots in its regex patterns. Upon manual review, several critical and high-severity issues were identified that the scanner missed. These include improper handling of exceptions, insufficient input validation, and weak cryp",
+          "findings_count": 5
         }
       ]
     },
@@ -115,24 +115,24 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The scanner did not find any violations, and after a thorough review of the code, no apparent issues were found that could be categorized under MECE analysis for detecting duplication and gaps in code coverage.",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The deterministic scanner found no violations, and upon thorough review, there are no MECE violations detected. All code appears to be well-structured, with no duplication or gaps in coverage. The code adheres to MECE principles by clearly separating concerns and maintaining distinct functionalities",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "abstain",
           "confidence": 0.5,
-          "rationale": "The provided artifact does not contain any explicit violations found by the deterministic scanner or other issues that would clearly pass or fail the MECE analysis for detecting duplication and gaps in code coverage. Without concrete findings or a clear demonstration of missed violations, it's chall",
+          "rationale": "The deterministic scanner did not find any violations, but the reviewer must manually inspect the code for MECE analysis to detect duplication and gaps in code coverage.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The codebase adheres to MECE principles with no duplication or gaps detected. All code paths are distinct and cover necessary functionalities without overlap.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "approve",
+          "confidence": 0.85,
+          "rationale": "The deterministic scanner did not find any violations, indicating a strong level of code coverage and absence of duplication. The MECE analysis suggests that the code structure is well-organized and comprehensive, with no apparent gaps or overlaps. No critical issues were identified during the revie",
           "findings_count": 0
         }
       ]
@@ -140,28 +140,28 @@
     {
       "rubric": "nasa-safety",
       "decision": "pass",
-      "critical_findings_count": 2,
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The scanner did not find any violations and the code appears to follow the NASA Power of 10 rules for safety-critical code development.",
+          "rationale": "No security vulnerabilities or critical issues found in the code after reviewing against the NASA Power of 10 rules for safety-critical code development.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The code adheres to NASA Power of 10 safety-critical development practices. No violations were found by the scanner, and no critical issues were identified during manual review.",
+          "rationale": "The code adheres to NASA Power of 10 safety-critical rules. The scanner found no violations, and upon review, no critical or high severity issues are present. The code handles errors and edge cases, uses secure practices like input validation, and has proper documentation. The code is well-structure",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "reject",
-          "confidence": 0.85,
-          "rationale": "The audit found no violations reported by the deterministic scanner, suggesting either an oversight in the scanner's regex patterns or a lack of evident issues. Further inspection revealed potential blind spots in the scanner's pattern matching, leading to missed critical vulnerabilities. Severity w",
-          "findings_count": 3
+          "confidence": 0.7,
+          "rationale": "The audit found several issues related to the handling of regex patterns and evidence snippets, particularly in terms of input validation and error handling. The CodeAdapter and MarkdownAdapter classes should include robust checks for pattern validity and handle exceptions more gracefully. Additiona",
+          "findings_count": 4
         }
       ]
     },
@@ -171,49 +171,49 @@
       "critical_findings_count": 3,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.9,
-          "rationale": "The scanner missed several violations and did not accurately rate the severity of some findings.",
-          "findings_count": 5
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 0.95,
-          "rationale": "The scanner identified valid issues that align with the nomotic rubric. The side effects in code.py and markdown.py are not properly documented, and the evidence.py data structures could be more self-describing. The scanner's severity ratings are appropriate for these issues.",
-          "findings_count": 5
+          "rationale": "The scanner correctly identified violations for the NOM-OBS-002 and NOM-GOV-001 categories in several files, and the severity ratings were mostly accurate. There are no obvious false positives or missed issues based on the provided content.",
+          "findings_count": 8
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n    \"decision\": \"reject\",\n    \"confidence\": 0.85,\n    \"rationale\": \"The audit found multiple violations related to side effects and data structure self-documentation. These issues are critical for m",
+          "rationale": "Failed to parse model output: {\"decision\": \"reject\", \"confidence\": 0.95, \"rationale\": \"The rubric fails due to critical governance violations and side effect issues. The scanner correctly identified critical issues with hardcoded ",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "Failed to parse model output: {\n    \"assistant\": {\n        \"cache_timestamp\": 1665698831,\n        \"content_type\": \"application/json\",\n        \"data\": {\n            \"response\": {\n                \"Status\": \"OK\",\n                \"Inf",
           "findings_count": 0
         }
       ]
     },
     {
       "rubric": "pci-dss-requirements",
-      "decision": "fail",
-      "critical_findings_count": 20,
+      "decision": "needs-review",
+      "critical_findings_count": 3,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.9,
-          "rationale": "The scanner flagged critical issues in multiple files related to the use of dataclasses and their decorators, which are not directly related to network security controls as specified by PCI DSS requirement 1.2.1. These findings appear to be false positives given that dataclasses and their usage do n",
-          "findings_count": 10
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "abstain",
+          "confidence": 0.8,
+          "rationale": "The scanner identified multiple instances of using `dataclasses` and `@dataclass` decorators, which are not directly related to PCI-DSS requirements. The PCI-1.2.1 requirement refers to 'Configuration standards for network security controls,' which does not apply to the use of Python's dataclass fea",
+          "findings_count": 3
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "reject",
-          "confidence": 0.95,
-          "rationale": "The scanner has identified multiple critical violations related to dataclass usage in several files. These violations are likely false positives as dataclasses are commonly used for data modeling and do not inherently pose a security risk. However, the scanner's focus on network security controls mi",
-          "findings_count": 10
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "Failed to parse model output: {\"decision\": \"reject\", \"confidence\": 0.95, \"rationale\": \"The scanner incorrectly flagged dataclass imports and decorators as PCI DSS violations. These are standard Python constructs for data modeling ",
+          "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -223,28 +223,28 @@
     },
     {
       "rubric": "safety-violations",
-      "decision": "needs-review",
+      "decision": "pass",
       "critical_findings_count": 2,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
           "confidence": 0.8,
-          "rationale": "The scanner did not find any violations, but upon reviewing the code, several potential issues were identified that could be considered critical violations. Specifically, the use of regular expressions in a loop (in `CodeAdapter.search` and `MarkdownAdapter.search`) without proper input validation o",
-          "findings_count": 4
+          "rationale": "The code contains regex patterns that could be exploited for ReDoS attacks, particularly in the `_MAX_PATTERN_LEN` limit and the `search` methods in `code.py` and `markdown.py`. The scanner did not identify these as critical violations.",
+          "findings_count": 2
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The codebase does not contain any god objects, parameter bombs, or critical violations. All classes have focused responsibilities and the code adheres to clean architecture principles.",
+          "confidence": 0.95,
+          "rationale": "The scanner found no violations, and after review, no dangerous patterns were identified. The code adheres to best practices with clear separation of concerns, proper error handling, and safe input handling.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
-          "decision": "abstain",
-          "confidence": 0.5,
-          "rationale": "While the deterministic scanner has not found violations, manual code review is necessary to ensure no dangerous patterns such as god objects, parameter bombs, or critical violations are overlooked. The complexity of the code and the use of regex in scanning present challenges that require careful h",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "approve",
+          "confidence": 0.85,
+          "rationale": "The code appears to follow best practices and does not exhibit any detected dangerous code patterns such as god objects, parameter bombs, or critical violations. The regex-based scanner missed some minor issues that were identified manually, but these are considered low severity and do not pose a si",
           "findings_count": 0
         }
       ]
@@ -252,52 +252,52 @@
     {
       "rubric": "six-sigma",
       "decision": "pass",
-      "critical_findings_count": 0,
+      "critical_findings_count": 1,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The code under review appears to be a well-structured and functional implementation of a documentation synchronization tool. The Six Sigma quality metrics for software development, such as input-validation, error-handling, and cryptographic security, are not explicitly highlighted in the provided co",
+          "rationale": "The provided code does not contain any obvious issues that would fail the Six Sigma quality metrics for software development. The deterministic scanner found no violations, and there are no additional patterns that the regex scanner might have missed based on the content reviewed.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The codebase adheres to Six Sigma quality metrics for software development. There are no violations found by the scanner, and no missed violations due to the regex's comprehensive coverage. The code shows good error handling, input validation, and security practices.",
+          "confidence": 0.95,
+          "rationale": "The code appears to adhere to Six Sigma quality metrics for software development. No critical issues were found by the scanner. The code has proper error handling, input validation, and security measures. The regex length limit mitigates ReDoS vulnerabilities. The code uses dataclasses and type hint",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "reject",
-          "confidence": 0.75,
-          "rationale": "While the deterministic scanner reported no violations, there are several known limitations and areas where it might miss issues: \n\n1. **Regex Limitations**: The scanner relies on regular expressions for pattern matching, which can miss certain edge cases or complex patterns that a more sophisticate",
-          "findings_count": 0
+          "confidence": 0.7,
+          "rationale": "Audit found multiple instances where the deterministic scanner missed violations, indicating potential blind spots in its regex patterns. Additionally, the severity of some identified issues was misjudged by the scanner. The presence of these unaddressed issues and incorrect severity assessments sug",
+          "findings_count": 4
         }
       ]
     },
     {
       "rubric": "soc2-controls",
       "decision": "pass",
-      "critical_findings_count": 13,
+      "critical_findings_count": 18,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "All findings are valid and accurately reflect the code's input validation practices.",
-          "findings_count": 7
+          "rationale": "The scanner identified several instances where input validation ensures data integrity, which aligns with SOC2-PI1.1 requirements. There are no indications of false positives in the findings provided. The severity ratings are appropriate for the issues detected.",
+          "findings_count": 8
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 0.95,
-          "rationale": "The code demonstrates proper input validation and cryptographic practices for SOC2 compliance. The scanner's findings are mostly valid, but some may be false positives. The code uses re.escape() to prevent regex injection and hashlib.sha256 for hashing, which are appropriate for data integrity.",
-          "findings_count": 7
+          "rationale": "The code adheres to SOC2 controls with minimal issues. The scanner found several input validation issues, but most are addressed with proper escaping and length limits. The code uses cryptographic functions correctly and handles errors gracefully. The main concern is the potential for ReDoS attacks,",
+          "findings_count": 10
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -308,829 +308,613 @@
     {
       "rubric": "theater-detection",
       "decision": "pass",
-      "critical_findings_count": 1,
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The code reviewed does not appear to contain any fake practices that appear valuable but aren't. The artifacts are well-structured and follow best practices for Python programming, including the use of data classes, type hints, and exception handling.",
+          "rationale": "The code does not contain any apparent security vulnerabilities or anti-patterns that would indicate a false positive.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The codebase adheres to the theater-detection rubric by avoiding fake practices that appear valuable but aren't. The scanner found no violations, and upon review, no violations were missed. The code implements proper evidence gathering, secure hashing, and structured claim handling without any decep",
+          "confidence": 0.95,
+          "rationale": "The codebase appears to implement a robust system for detecting and verifying evidence in source code and documentation files. The scanner found no violations, and upon review, no significant issues were identified. The code includes proper input validation, secure handling of file I/O, and cryptogr",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
-          "decision": "abstain",
-          "confidence": 0.7,
-          "rationale": "While the provided code seems robust in detecting patterns within specified file types, there's limited context to evaluate the entire system comprehensively. The findings section includes potential critical issues, such as inadequate input validation and poor error handling, which, if present, woul",
-          "findings_count": 3
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "approve",
+          "confidence": 0.95,
+          "rationale": "The provided code appears to adhere to best practices and does not contain immediate violations that I could discern from the given files. The deterministic scanner did not find any issues, which, combined with a thorough review, suggests that this code meets the **theater-detection** rubric standar",
+          "findings_count": 0
         }
       ]
     }
   ],
   "by_file": {
-    "manifest.py": {
-      "critical_count": 28,
-      "total_findings": 29,
-      "findings": [
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "The use of 'from dataclasses import dataclass, field...' does not indicate a network security configuration issue.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Import of dataclasses module used for data modeling, not directly related to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass(frozen=True) decorator for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass(frozen=True) decorator for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass(frozen=True) decorator for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass(frozen=True) decorator for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "The use of 'from dataclasses import dataclass, field...' does not indicate a network security configuration issue.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Import of dataclasses module used for data modeling, not directly related to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass(frozen=True) decorator for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass(frozen=True) decorator for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass(frozen=True) decorator for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass(frozen=True) decorator for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by loading and validating the manifest file content.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by loading and validating the manifest file content.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by validating the manifest content.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The code validates the manifest file, which is good for input validation.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The code validates the manifest file, which is good for input validation.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by validating the manifest content.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The code validates the manifest file, which is good for input validation.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The code validates the manifest file, which is good for input validation.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "medium",
-          "category": "logging",
-          "description": "The manifest.py file lacks proper logging configurations, making it difficult to track audit activities and errors.",
-          "line": null
-        }
-      ]
-    },
-    "evidence.py": {
-      "critical_count": 18,
-      "total_findings": 21,
-      "findings": [
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "The use of 'from dataclasses import dataclass, field...' does not indicate a network security configuration issue.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass is used to define mutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Import of dataclasses module used for data modeling, not directly related to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass decorator for data modeling purposes.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "The use of 'from dataclasses import dataclass, field...' does not indicate a network security configuration issue.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass is used to define mutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Import of dataclasses module used for data modeling, not directly related to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass decorator for data modeling purposes.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "nom-doc",
-          "description": "The data structure entry_json is not self-describing, as it lacks necessary metadata or comments.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "nom-doc",
-          "description": "The data structure 'results' in evidence.py does not provide enough context to understand its purpose or content.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "nom-doc",
-          "description": "The data structure entry_json is not self-describing, as it lacks necessary metadata or comments.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "nom-doc",
-          "description": "The data structure entry_json is not self-describing, as it lacks necessary metadata or comments.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "nom-doc",
-          "description": "The data structure 'results' in evidence.py does not provide enough context to understand its purpose or content.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "nom-doc",
-          "description": "The data structure entry_json is not self-describing, as it lacks necessary metadata or comments.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "cryptographic",
-          "description": "SHA-256 hash function is used to ensure data integrity.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "cryptographic",
-          "description": "The code uses hashlib.sha256 to generate hashes for data integrity, which is appropriate for SOC2 compliance.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "cryptographic",
-          "description": "SHA-256 hash function is used to ensure data integrity.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "cryptographic",
-          "description": "The code uses hashlib.sha256 to generate hashes for data integrity, which is appropriate for SOC2 compliance.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "data-structure",
-          "description": "The entry_json variable uses json.dumps with sort_keys, which could lead to non-self-describing data structures.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "data-structure",
-          "description": "The results list uses to_dict() which may not be self-describing enough for the data structures.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "data-structure",
-          "description": "The entry_json variable uses json.dumps with sort_keys, which could lead to non-self-describing data structures.",
-          "line": null
-        }
-      ]
-    },
     "claims.py": {
-      "critical_count": 16,
-      "total_findings": 16,
+      "critical_count": 12,
+      "total_findings": 14,
       "findings": [
         {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The `EvidenceRef` class lacks proper handling for cryptographic keys or sensitive data, which could expose them to potential leaks if not properly secured.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "data-management",
+          "description": "The `ClaimResult` class does not adequately handle the secure transmission of claim evidence, potentially exposing sensitive information.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The `EvidenceRef` class lacks proper handling for cryptographic keys or sensitive data, which could expose them to potential leaks if not properly secured.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "critical",
+          "category": "data-management",
+          "description": "The `ClaimResult` class does not adequately handle the secure transmission of claim evidence, potentially exposing sensitive information.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "governance",
+          "description": "Changes to rubrics/policies require multi-party approval and version control.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "governance",
+          "description": "Changes to rubrics/policies require multi-party approval and version control.",
+          "line": null
+        },
+        {
           "rubric": "pci-dss-requirements",
           "reviewer": "scanner",
           "severity": "critical",
-          "category": "data-structure",
-          "description": "The use of 'from dataclasses import dataclass, field...' does not indicate a network security configuration issue.",
+          "category": "code",
+          "description": "Usage of 'from dataclasses import dataclass, field...' in claims.py is not directly related to PCI-DSS requirements.",
           "line": null
         },
         {
           "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "code",
+          "description": "Usage of 'from dataclasses import dataclass, field...' in claims.py is not directly related to PCI-DSS requirements.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
           "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by validating required keys and field types to guard against malformed or maliciously crafted input.",
           "line": null
         },
         {
-          "rubric": "pci-dss-requirements",
+          "rubric": "soc2-controls",
           "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass is used to define mutable data structures, which does not directly relate to network security controls.",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The from_dict method validates required keys and field types, which is good input validation, but could be more comprehensive.",
           "line": null
         },
         {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Import of dataclasses module used for data modeling, not directly related to network security controls.",
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by validating required keys and field types to guard against malformed or maliciously crafted input.",
           "line": null
         },
         {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass decorator with frozen=True for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass decorator for data modeling purposes.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "The use of 'from dataclasses import dataclass, field...' does not indicate a network security configuration issue.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass(frozen=True) is used to define immutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "data-structure",
-          "description": "@dataclass is used to define mutable data structures, which does not directly relate to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Import of dataclasses module used for data modeling, not directly related to network security controls.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass decorator with frozen=True for immutability, which is a data modeling pattern.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "data modeling",
-          "description": "Use of @dataclass decorator for data modeling purposes.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "security",
-          "description": "The deserialization of claims from JSON without input validation could expose the system to security risks, such as remote code execution if maliciously crafted JSON is processed.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "critical",
-          "category": "security",
-          "description": "The deserialization of claims from JSON without input validation could expose the system to security risks, such as remote code execution if maliciously crafted JSON is processed.",
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The from_dict method validates required keys and field types, which is good input validation, but could be more comprehensive.",
           "line": null
         },
         {
           "rubric": "nasa-safety",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The `EvidenceRef` class does not enforce type or format validation for the `snippet` field, potentially leading to security risks if untrusted data is processed.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The `EvidenceRef` class does not enforce type or format validation for the `snippet` field, potentially leading to security risks if untrusted data is processed.",
-          "line": null
-        }
-      ]
-    },
-    "adapters\\code.py": {
-      "critical_count": 6,
-      "total_findings": 8,
-      "findings": [
-        {
-          "rubric": "connascence",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "control-flow",
-          "description": "The `CodeAdapter` class uses a regular expression to search for evidence in source files. This could lead to issues if the regex pattern is changed or updated without updating other parts of the codebase that rely on this regex.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "control-flow",
-          "description": "The `CodeAdapter` class also attempts to perform AST inspection for Python files. This could lead to issues if the AST parsing logic is changed or updated without updating other parts of the codebase that rely on this AST inspection.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "control-flow",
-          "description": "The `CodeAdapter` class uses a regular expression to search for evidence in source files. This could lead to issues if the regex pattern is changed or updated without updating other parts of the codebase that rely on this regex.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "control-flow",
-          "description": "The `CodeAdapter` class also attempts to perform AST inspection for Python files. This could lead to issues if the AST parsing logic is changed or updated without updating other parts of the codebase that rely on this AST inspection.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "regex-injection",
-          "description": "The `search` method uses regex without validating or sanitizing the input pattern, which could lead to regex injection vulnerabilities.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "regex-injection",
-          "description": "The `search` method uses regex without validating or sanitizing the input pattern, which could lead to regex injection vulnerabilities.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "naming-convention",
-          "description": "The `CodeAdapter` class uses a variable named `_CODE_EXTENSIONS` which is not defined in the same scope. This could lead to issues if the variable is renamed or updated without updating other parts of the codebase that rely on this variable.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
           "severity": "medium",
           "category": "error-handling",
-          "description": "The `search` method does not handle exceptions raised by `fpath.read_text`, which could lead to unhandled errors.",
-          "line": null
-        }
-      ]
-    },
-    "runner.py": {
-      "critical_count": 6,
-      "total_findings": 7,
-      "findings": [
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by encoding manifest text for processing.",
+          "description": "The ClaimResult class's from_dict method lacks comprehensive error handling for invalid input types, potentially causing the application to crash.",
           "line": null
         },
         {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "vulnerability-detection",
-          "description": "The code dispatches to the appropriate adapter, but lacks specific vulnerability detection logic.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The code encodes the manifest text, which is good for input validation.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by encoding manifest text for processing.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "vulnerability-detection",
-          "description": "The code dispatches to the appropriate adapter, but lacks specific vulnerability detection logic.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The code encodes the manifest text, which is good for input validation.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "error-handling",
-          "description": "Vulnerabilities are identified and addressed through exception handling in adapter dispatch.",
-          "line": null
-        }
-      ]
-    },
-    "adapters\\markdown.py": {
-      "critical_count": 4,
-      "total_findings": 6,
-      "findings": [
-        {
-          "rubric": "connascence",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "control-flow",
-          "description": "The `MarkdownAdapter` class uses a regular expression to search for evidence in markdown files. This could lead to issues if the regex pattern is changed or updated without updating other parts of the codebase that rely on this regex.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "control-flow",
-          "description": "The `MarkdownAdapter` class uses a regular expression to search for evidence in markdown files. This could lead to issues if the regex pattern is changed or updated without updating other parts of the codebase that rely on this regex.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "regex-injection",
-          "description": "The `search` method uses regex without validating or sanitizing the input pattern, which could lead to regex injection vulnerabilities.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "regex-injection",
-          "description": "The `search` method uses regex without validating or sanitizing the input pattern, which could lead to regex injection vulnerabilities.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "naming-convention",
-          "description": "The `MarkdownAdapter` class uses a variable named `_MD_EXTENSIONS` which is not defined in the same scope. This could lead to issues if the variable is renamed or updated without updating other parts of the codebase that rely on this variable.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "error-handling",
-          "description": "The `search` method does not handle exceptions raised by `fpath.read_text`, which could lead to unhandled errors.",
+          "rubric": "six-sigma",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "low",
+          "category": "cryptographic",
+          "description": "The `EvidenceRef` class does not use secure methods for string truncation, which could be a minor security concern.",
           "line": null
         }
       ]
     },
     "code.py": {
-      "critical_count": 4,
-      "total_findings": 6,
+      "critical_count": 10,
+      "total_findings": 11,
       "findings": [
         {
-          "rubric": "soc2-controls",
+          "rubric": "nomotic",
           "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by escaping regex patterns.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The code uses re.escape() to prevent regex injection, which is good for input validation.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by escaping regex patterns.",
-          "line": null
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The code uses re.escape() to prevent regex injection, which is good for input validation.",
+          "severity": "critical",
+          "category": "governance",
+          "description": "Changes to rubrics/policies require multi-party approval and version control.",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "nomotic",
-          "description": "The side effects in _iter_code_files function are not explicitly declared and documented.",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "governance",
+          "description": "Changes to rubrics/policies require multi-party approval and version control.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by escaping patterns and compiling them with a limit to mitigate ReDoS.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by escaping patterns and compiling them with a limit to mitigate ReDoS.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation is missing for the pattern parameter before escaping. The code truncates the pattern but does not validate if the input is malicious.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The regex compilation lacks input validation, potentially allowing malicious patterns to cause ReDoS attacks.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by escaping patterns and compiling them with a limit to mitigate ReDoS.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by escaping patterns and compiling them with a limit to mitigate ReDoS.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation is missing for the pattern parameter before escaping. The code truncates the pattern but does not validate if the input is malicious.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The regex compilation lacks input validation, potentially allowing malicious patterns to cause ReDoS attacks.",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "medium",
           "category": "side-effects",
-          "description": "The _iter_code_files method has side effects (file system access) that are not explicitly declared or documented.",
+          "description": "Side effects must be explicitly declared and documented.",
           "line": null
         }
       ]
     },
     "markdown.py": {
+      "critical_count": 10,
+      "total_findings": 11,
+      "findings": [
+        {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "governance",
+          "description": "Changes to rubrics/policies require multi-party approval and version control.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "governance",
+          "description": "Changes to rubrics/policies require multi-party approval and version control.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by escaping patterns and compiling them with a limit to mitigate ReDoS.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by escaping patterns and compiling them with a limit to mitigate ReDoS.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation is missing for the pattern parameter before escaping. The code truncates the pattern but does not validate if the input is malicious.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The regex compilation lacks input validation, potentially allowing malicious patterns to cause ReDoS attacks.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by escaping patterns and compiling them with a limit to mitigate ReDoS.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by escaping patterns and compiling them with a limit to mitigate ReDoS.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation is missing for the pattern parameter before escaping. The code truncates the pattern but does not validate if the input is malicious.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The regex compilation lacks input validation, potentially allowing malicious patterns to cause ReDoS attacks.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "side-effects",
+          "description": "Side effects must be explicitly declared and documented.",
+          "line": null
+        }
+      ]
+    },
+    "manifest.py": {
+      "critical_count": 10,
+      "total_findings": 10,
+      "findings": [
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "code",
+          "description": "Usage of 'from dataclasses import dataclass, field...' in manifest.py is not directly related to PCI-DSS requirements.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "code",
+          "description": "Usage of 'from dataclasses import dataclass, field...' in manifest.py is not directly related to PCI-DSS requirements.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by loading and validating guardspine.docs.yaml manifest content.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by validating the manifest to ensure it meets expected criteria.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The manifest loading function lacks explicit input validation, which could allow malformed manifests to cause issues.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The validate_manifest function lacks input validation for the manifest content, which could allow malformed input to cause errors.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by loading and validating guardspine.docs.yaml manifest content.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by validating the manifest to ensure it meets expected criteria.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The manifest loading function lacks explicit input validation, which could allow malformed manifests to cause issues.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The validate_manifest function lacks input validation for the manifest content, which could allow malformed input to cause errors.",
+          "line": null
+        }
+      ]
+    },
+    "evidence.py": {
+      "critical_count": 6,
+      "total_findings": 11,
+      "findings": [
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "code",
+          "description": "Usage of 'from dataclasses import dataclass, field...' in evidence.py is not directly related to PCI-DSS requirements.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "code",
+          "description": "Usage of 'from dataclasses import dataclass, field...' in evidence.py is not directly related to PCI-DSS requirements.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by hashing text with SHA-256 to ensure data integrity.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The sha256 function uses input text directly without validation, which could be a risk if the input is malicious.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "Input validation ensures data integrity by hashing text with SHA-256 to ensure data integrity.",
+          "line": null
+        },
+        {
+          "rubric": "soc2-controls",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The sha256 function uses input text directly without validation, which could be a risk if the input is malicious.",
+          "line": null
+        },
+        {
+          "rubric": "nasa-safety",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "The DocEvidencePack's timestamp assignment does not validate the input or handle edge cases, such as when the system time is set incorrectly.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "documentation",
+          "description": "Data structures should be self-describing.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "documentation",
+          "description": "Data structures should be self-describing.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "documentation",
+          "description": "Data structures should be self-describing.",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "medium",
+          "category": "data-validation",
+          "description": "The `DocEvidencePack` class initializes `timestamp` without checking if it's empty, which could lead to inconsistencies if the timestamp is not set properly.",
+          "line": null
+        }
+      ]
+    },
+    "adapters\runcode.py": {
       "critical_count": 4,
-      "total_findings": 6,
+      "total_findings": 5,
+      "findings": [
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The `CodeAdapter` class does not validate user-provided patterns for ReDoS vulnerabilities, potentially leading to denial-of-service attacks.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "The `CodeAdapter` class uses weak encryption methods that do not meet modern security standards, posing a risk to sensitive data.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The `CodeAdapter` class does not validate user-provided patterns for ReDoS vulnerabilities, potentially leading to denial-of-service attacks.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "The `CodeAdapter` class uses weak encryption methods that do not meet modern security standards, posing a risk to sensitive data.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "medium",
+          "category": "error-handling",
+          "description": "The `CodeAdapter` class lacks comprehensive error handling, which could lead to unexpected program behavior when exceptions occur.",
+          "line": null
+        }
+      ]
+    },
+    "adapters\\code.py": {
+      "critical_count": 4,
+      "total_findings": 4,
+      "findings": [
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "input-validation",
+          "description": "The `_MAX_PATTERN_LEN` limit of 1000 characters for regex patterns can be exploited for ReDoS attacks.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "input-validation",
+          "description": "The `_MAX_PATTERN_LEN` limit of 1000 characters for regex patterns can be exploited for ReDoS attacks.",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code checks for file extensions but does not validate the actual content of the files, which could lead to incorrect matches or missed evidence.",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The code checks for file extensions but does not validate the actual content of the files, which could lead to incorrect matches or missed evidence.",
+          "line": null
+        }
+      ]
+    },
+    "runner.py": {
+      "critical_count": 4,
+      "total_findings": 4,
       "findings": [
         {
           "rubric": "soc2-controls",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by escaping regex patterns.",
+          "category": "vulnerability",
+          "description": "The dispatch method lacks vulnerability checks, which could allow unauthorized access or execution of arbitrary code.",
           "line": null
         },
         {
@@ -1138,69 +922,83 @@
           "reviewer": "scanner",
           "severity": "high",
           "category": "input-validation",
-          "description": "The code uses re.escape() to prevent regex injection, which is good for input validation.",
+          "description": "The manifest text is encoded without input validation, which could allow malicious input to cause issues.",
           "line": null
         },
         {
           "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "high",
-          "category": "input-validation",
-          "description": "Input validation ensures data integrity by escaping regex patterns.",
+          "category": "vulnerability",
+          "description": "The dispatch method lacks vulnerability checks, which could allow unauthorized access or execution of arbitrary code.",
           "line": null
         },
         {
           "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "high",
           "category": "input-validation",
-          "description": "The code uses re.escape() to prevent regex injection, which is good for input validation.",
+          "description": "The manifest text is encoded without input validation, which could allow malicious input to cause issues.",
+          "line": null
+        }
+      ]
+    },
+    "adapters\\markdown.py": {
+      "critical_count": 2,
+      "total_findings": 3,
+      "findings": [
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "input-validation",
+          "description": "The `_MAX_PATTERN_LEN` limit of 1000 characters for regex patterns can be exploited for ReDoS attacks.",
           "line": null
         },
         {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "nomotic",
-          "description": "The side effects in _iter_md_files function are not explicitly declared and documented.",
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "input-validation",
+          "description": "The `_MAX_PATTERN_LEN` limit of 1000 characters for regex patterns can be exploited for ReDoS attacks.",
           "line": null
         },
         {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "six-sigma",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
           "severity": "medium",
-          "category": "side-effects",
-          "description": "The _iter_md_files method has side effects (file system access) that are not explicitly declared or documented.",
+          "category": "error-handling",
+          "description": "The function that reads file content does not handle exceptions properly for files that cannot be read, which could cause the program to crash.",
           "line": null
         }
       ]
     },
     "adapters/code.py": {
-      "critical_count": 2,
+      "critical_count": 0,
       "total_findings": 3,
       "findings": [
         {
-          "rubric": "nasa-safety",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "cryptographic",
-          "description": "The `CodeAdapter` class lacks checks for cryptographic functions or libraries that should not be used directly by the code under review.",
+          "rubric": "connascence",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "medium",
+          "category": "regex patterns",
+          "description": "The regex pattern matching in the `CodeAdapter.search` method might not be inclusive of all possible evidence types or formats, potentially missing certain evidence that does not strictly match the predefined patterns.",
           "line": null
         },
         {
           "rubric": "nasa-safety",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "critical",
-          "category": "cryptographic",
-          "description": "The `CodeAdapter` class lacks checks for cryptographic functions or libraries that should not be used directly by the code under review.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-falcon3:7b-8d2484",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
           "severity": "medium",
           "category": "input-validation",
-          "description": "The regex pattern used to match evidence snippets does not account for escape sequences, potentially leading to unexpected behavior or vulnerabilities if the input contains special characters.",
+          "description": "The CodeAdapter's regex pattern length validation does not handle cases where the input is not a string, potentially leading to errors or unexpected behavior.",
+          "line": null
+        },
+        {
+          "rubric": "nasa-safety",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "The CodeAdapter's regex compilation step does not validate the regex pattern's validity, which could lead to performance issues or security vulnerabilities.",
           "line": null
         }
       ]
@@ -1210,11 +1008,11 @@
       "total_findings": 1,
       "findings": [
         {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "low",
-          "category": "input-handling",
-          "description": "The error handling in the MarkdownAdapter's text reading process is basic. Proper exception handling should be implemented to ensure the robustness of the system, especially considering potential encoding issues.",
+          "rubric": "connascence",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "medium",
+          "category": "regex patterns",
+          "description": "Similar to the code adapter, the regex pattern in the `MarkdownAdapter.search` method could be limited, potentially overlooking evidence in markdown files that does not conform to exact pattern matches.",
           "line": null
         }
       ]

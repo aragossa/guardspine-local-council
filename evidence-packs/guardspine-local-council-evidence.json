@@ -3,7 +3,7 @@
     "repo": "guardspine-local-council",
     "description": "Local LLM council for offline artifact review via Ollama",
     "language": "python",
-    "timestamp": "2026-01-31T05:02:47.863560+00:00",
+    "timestamp": "2026-01-31T06:46:34.673720+00:00",
     "models": [
       "qwen2.5-coder:7b",
       "qwen3:8b",
@@ -24,9 +24,9 @@
     ],
     "total_reviews": 33
   },
-  "request_id": "aeb24191eb23",
+  "request_id": "4e5d1b4b03e2",
   "overall_decision": "reject",
-  "summary": "FAIL: hipaa-safeguards, nomotic, safety-violations, theater-detection; NEEDS-REVIEW: connascence, mece, nasa-safety, pci-dss-requirements, soc2-controls",
+  "summary": "FAIL: hipaa-safeguards, nasa-safety, nomotic, pci-dss-requirements; NEEDS-REVIEW: safety-violations, six-sigma, soc2-controls",
   "rubric_verdicts": [
     {
       "rubric": "clarity",
@@ -34,52 +34,52 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The provided code does not contain any obvious cognitive load or readability issues that would negatively impact its clarity. The code structure is straightforward, and the documentation within each file helps to understand the purpose and functionality of each component. The use of comments and doc",
+          "confidence": 0.95,
+          "rationale": "The code appears to be well-structured and follows clear conventions, which helps reduce cognitive load for the reader. The use of docstrings, type hints, and clear variable names contributes to readability.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The codebase adheres to clarity principles with minimal cognitive load. The structure is logical, with clear separation of concerns. The main review function is well-documented and the use of protocols and async functions is handled gracefully. The code is readable, with consistent naming and clear ",
+          "confidence": 0.95,
+          "rationale": "The codebase demonstrates good clarity with consistent naming, clear documentation, and well-structured modules. The scanner found no violations, and the code adheres to readability standards with minimal cognitive load.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
-          "confidence": 0.9,
-          "rationale": "The code under review demonstrates clear structure and logical organization, adhering well to the clarity rubric. Although no scanner violations were found, manual review did not uncover any significant readability or cognitive load issues. The severity and category ratings seem accurate based on st",
+          "confidence": 0.5,
+          "rationale": "The provided code review files and findings are complex, and while the deterministic scanner did not find violations, manual analysis is required to validate the absence of issues. Due to the intricate nature of this system and potential blind spots in the regex scanner, ensuring all logical paths a",
           "findings_count": 0
         }
       ]
     },
     {
       "rubric": "connascence",
-      "decision": "needs-review",
-      "critical_findings_count": 2,
+      "decision": "pass",
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.8,
-          "rationale": "The deterministic scanner did not find any violations, but the codebase contains several potential connascence issues that could lead to security vulnerabilities or other problems. The scanner's regex-based approach might have blind spots for certain types of connascence.",
-          "findings_count": 3
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The codebase appears to have no connascence violations. All dependencies are clearly defined and separated into distinct modules. The use of protocols and interfaces promotes loose coupling. The code structure follows good separation of concerns with clear responsibilities for each class and functio",
+          "confidence": 0.95,
+          "rationale": "The scanner did not find any violations, and no violations were missed based on the provided code content.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
-          "decision": "abstain",
-          "confidence": 0.5,
-          "rationale": "While no scanner findings were noted, given the complexity and potential for regex blind spots in code audit tools, it's challenging to confidently determine the absence of violations. The depth and breadth of analysis required, especially for nuanced issues like connascence coupling, often necessit",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The codebase appears to have minimal connascence coupling based on the analysis. The scanner found no violations, and the code structure shows good separation of concerns with clear interfaces and protocols. The use of protocols and type hints helps manage dependencies and reduce coupling between co",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "approve",
+          "confidence": 0.85,
+          "rationale": "The audit code appears to be well-structured and follows best practices for managing multiple AI providers and their reviews. The `council.py` file effectively coordinates the review process through asynchronous tasks and aggregation of votes. No issues were found by the deterministic scanner, and u",
           "findings_count": 0
         }
       ]
@@ -90,80 +90,80 @@
       "critical_findings_count": 11,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.95,
-          "rationale": "The scanner correctly identified several critical violations related to encryption for ePHI in transit, which is a significant risk under HIPAA. However, the response and reporting section (HIPAA-308.a.6) contains text that could be considered sensitive or inappropriate within a compliance context.",
-          "findings_count": 5
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "reject",
-          "confidence": 0.95,
-          "rationale": "The code has multiple HIPAA compliance violations related to encryption of ePHI in transit. The scanner correctly identified several critical issues in the provider configurations where HTTPS endpoints are used without proper encryption protocols. The council.py file contains a critical finding abou",
-          "findings_count": 5
-        },
-        {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "abstain",
-          "confidence": 0.7,
-          "rationale": "Audit involves multiple layers of review, including code analysis, manual validation, and expert judgment which isn't fully represented by automated scanning tools. The HIPAA-312.e.1 violations found indicate potential issues with code scanning, but the true accuracy of these findings requires human",
+          "confidence": 0.5,
+          "rationale": "The scanner flagged several potential HIPAA violations, but the content provided does not fully contextually validate each as critical for HIPAA compliance. The scanner's regex patterns may have missed some specific instances of ePHI handling or reporting requirements.",
+          "findings_count": 5
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The scanner identified multiple critical HIPAA violations related to encryption of ePHI in transit. The code uses HTTP endpoints for services like Anthropic, OpenAI, and OpenRouter which do not enforce HTTPS. Additionally, the council.py file contains a critical violation related to response and rep",
+          "findings_count": 5
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The scanner identified critical violations related to encryption for ePHI in transit across multiple provider files (anthropic.py, mcp_client.py, providers.py). These violations indicate that the code does not meet the required standards for secure data transmission, which could compromise sensitive",
           "findings_count": 1
         }
       ]
     },
     {
       "rubric": "mece",
-      "decision": "needs-review",
+      "decision": "pass",
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.9,
-          "rationale": "The scanner did not find any violations, but the code contains potential duplication and gaps in coverage that need to be addressed.",
-          "findings_count": 4
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "No violations found by scanner, and the code appears to follow MECE principles with no duplication or gaps in coverage.",
+          "confidence": 0.95,
+          "rationale": "The scanner did not find any violations, and the code appears to be well-structured with clear separation of concerns and adherence to best practices for MECE analysis.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The codebase adheres to MECE principles with no duplication or gaps in code coverage. The scanner did not find any violations, and the analysis confirms this. All components are logically separated and cover their intended functionality without overlap or omissions.",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
-          "confidence": 0.9,
-          "rationale": "Upon review of the provided code and artifacts against the mece rubric, no violations were found by the deterministic scanner. The code demonstrates a clear structure with well-defined modules and classes, indicating good organization. Each module has its specific responsibility, promoting MECE anal",
+          "confidence": 0.5,
+          "rationale": "The audit environment is complex and involves multiple interacting components, making it challenging to confidently assess the MECE analysis for detecting duplication and gaps in code coverage without executing the actual code or having access to execution logs. Additionally, the deterministic scann",
           "findings_count": 0
         }
       ]
     },
     {
       "rubric": "nasa-safety",
-      "decision": "needs-review",
-      "critical_findings_count": 4,
+      "decision": "fail",
+      "critical_findings_count": 3,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "abstain",
-          "confidence": 0.7,
-          "rationale": "The scanner identified several potential issues based on the NASA Power of 10 rules for safety-critical code development. However, without detailed knowledge of the specific codebase and its requirements, it is challenging to definitively validate whether these findings are true positives or false p",
-          "findings_count": 8
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
-          "confidence": 0.85,
-          "rationale": "The code has multiple NASA-004 and NASA-005 violations in the provider init methods, and NASA-002 violations in MCPClient due to infinite loops. These are critical safety issues for safety-critical systems.",
-          "findings_count": 8
+          "confidence": 0.9,
+          "rationale": "The scanner identified several violations that appear to be true positives based on the NASA Power of 10 rules for safety-critical code development. Specifically, it found functions longer than 60 lines and low assertion density in `anthropic.py`, `openai.py`, and `openrouter.py`. These are critical",
+          "findings_count": 3
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The scanner identified multiple violations of NASA-004 and NASA-005 in the provider implementations (anthropic.py, openai.py, openrouter.py). These functions exceed 60 lines and lack sufficient assertions. The code contains complex logic for handling provider-specific behaviors, which increases the ",
+          "findings_count": 3
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n    \"decision\": \"needs-review\",\n    \"findings\": [\n        {\n            \"file\": \"self.py\",\n            \"line\": \"",
+          "rationale": "Failed to parse model output: {\n    \"decision\": \"reject\",\n    \"confidence\": 0.9,\n    \"rationale\": \"The review found multiple violations against NASA's Power of 10 rules for safety-critical code development, specifically in the `an",
           "findings_count": 0
         }
       ]
@@ -171,183 +171,183 @@
     {
       "rubric": "nomotic",
       "decision": "fail",
-      "critical_findings_count": 0,
+      "critical_findings_count": 2,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
-          "confidence": 1.0,
-          "rationale": "The scanner correctly identified violations in the code that were not explicitly documented, which is a violation of NOM-DOC-001. The scanner also correctly rated these findings as 'medium' severity.",
-          "findings_count": 3
+          "confidence": 0.9,
+          "rationale": "The scanner identified several violations that should have been documented according to the NOM-DOC-001 rule, but they were not. Additionally, there is a critical violation in mcp_client.py related to changes to rubrics/policies requiring multi-party approval and version control.",
+          "findings_count": 4
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "reject",
           "confidence": 0.95,
-          "rationale": "The scanner identified three instances where business rules were implemented without explicit documentation. The code in council.py has logic for determining 'fail' and 'pass' decisions based on vote counts, which are critical for the governance rules. The mcp_client.py has a check for content lengt",
-          "findings_count": 3
+          "rationale": "The rubric fails due to critical and medium severity issues related to business rule documentation and governance. The scanner found violations where business rules are implemented without explicit documentation (NOM-DOC-001) and a critical governance rule change without multi-party approval (NOM-GO",
+          "findings_count": 4
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
-          "decision": "reject",
-          "confidence": 0.85,
-          "rationale": "The deterministic scanner identified violations related to business rule documentation in several files, specifically in council.py and mcp_client.py. These findings indicate a lack of explicit documentation for critical decision-making logic, which is a violation of the NOM-DOC-001 rubric. Given th",
-          "findings_count": 1
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "Failed to parse model output: {\n    \"decision\": \"abstain\",\n    \"confidence\": 0.6,\n    \"rationale\": \"While the violations found by the scanner are serious and must be addressed, further review is needed to assess whether the scanne",
+          "findings_count": 0
         }
       ]
     },
     {
       "rubric": "pci-dss-requirements",
-      "decision": "needs-review",
-      "critical_findings_count": 1,
+      "decision": "fail",
+      "critical_findings_count": 8,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
-          "confidence": 0.9,
-          "rationale": "The scanner identified multiple PCI DSS violations, but several of them seem to be false positives or misunderstandings. For example, in 'anthropic.py', the scanner flagged the use of environment variables for API keys as a high-risk issue (PCI-8.6.1), which is typically considered acceptable and se",
-          "findings_count": 3
+          "confidence": 0.95,
+          "rationale": "The scanner found several critical and high severity issues that appear to be false positives, such as PCI-4.2.1 violations related to PAN protection during transmission for various providers (anthropic.py, mcp_client.py, openai.py, openrouter.py). Additionally, there are multiple instances of PCI-8",
+          "findings_count": 6
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "abstain",
-          "confidence": 0.0,
-          "rationale": "Provider error: ",
-          "findings_count": 0
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The code contains multiple critical and high severity PCI DSS violations. The scanner correctly identified most of these as critical (PCI-4.2.1) and high (PCI-8.6.1) severity issues. The main findings include: 1) Use of plain text API keys in multiple providers (Anthropic, OpenAI, OpenRouter) which ",
+          "findings_count": 8
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
-          "decision": "abstain",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "approve",
           "confidence": 0.0,
           "rationale": "",
-          "findings_count": 0
+          "findings_count": 2
         }
       ]
     },
     {
       "rubric": "safety-violations",
-      "decision": "fail",
+      "decision": "needs-review",
       "critical_findings_count": 6,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "approve",
           "confidence": 0.95,
-          "rationale": "The scanner identified two critical violations, but the findings are not entirely accurate. The first finding is a high severity violation for importing too many dependencies, which is technically a code quality issue rather than a security risk. The second finding is a critical severity violation f",
+          "rationale": "The scanner correctly identified the issues in `__init__.py` and missed the issue in `mcp_client.py`. The severity accuracy is good, with a slight misclassification of the issue in `__init__.py` as 'high' instead of 'critical'.",
           "findings_count": 2
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "reject",
           "confidence": 0.95,
-          "rationale": "The scanner identified a critical severity violation in mcp_client.py:20 where user input is used in shell commands without escaping, which is a serious security risk. The high severity finding in __init__.py:11 about excessive dependencies is valid as the module imports many types from the same mod",
-          "findings_count": 2
+          "rationale": "The scanner identified critical and high severity issues. The critical issue in mcp_client.py:38 involves unescaped user input in shell commands which is a serious security vulnerability. The high severity issue in __init__.py:11 shows the module imports too many dependencies, which can lead to main",
+          "findings_count": 4
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
-          "decision": "reject",
-          "confidence": 0.95,
-          "rationale": "The audit revealed critical and high severity violations in multiple files. SAF-014 in mcp_client.py involves unescaped user input in shell commands, which is a severe security risk. Additionally, SAF-003 in __init__.py indicates modules importing too many dependencies, which can lead to maintenance",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 0.6,
+          "rationale": "The audit found some critical and high-severity violations, but further manual inspection is needed to validate these findings and to ensure no other violations were overlooked by the deterministic scanner. This includes checking for patterns such as god objects and parameter bombs, which are not ex",
           "findings_count": 2
         }
       ]
     },
     {
       "rubric": "six-sigma",
-      "decision": "pass",
-      "critical_findings_count": 0,
+      "decision": "needs-review",
+      "critical_findings_count": 2,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "reject",
+          "confidence": 0.9,
+          "rationale": "The scanner missed several potential issues in the code, including lack of input validation, error handling, and security considerations.",
+          "findings_count": 3
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The code appears to follow best practices for software development, including proper structure, naming conventions, and adherence to the six-sigma rubric.",
+          "rationale": "The codebase adheres to Six Sigma quality metrics for software development. All critical areas such as error handling, input validation, and logging are properly implemented. The code demonstrates good design patterns with clear separation of concerns and robust error handling. No critical issues we",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The codebase appears to be well-structured and follows Six Sigma quality principles. The implementation includes proper error handling, logging, and structured data types. The aggregation logic is sound and the code is modular.",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
-          "confidence": 0.7,
-          "rationale": "The audit process and provided files suggest a comprehensive review is needed, especially since the deterministic scanner found no violations. The complexity of integrating multiple AI providers and hooks indicates potential oversight or misconfigurations that could lead to false negatives or missed",
-          "findings_count": 5
+          "confidence": 0.75,
+          "rationale": "The provided code excerpt seems to be part of a complex software system designed for AI-assisted code review and auditing against rubrics, such as the six-sigma standard. Given the intricate nature of the system's architecture, including multiple providers and hooks, the lack of scanner findings cou",
+          "findings_count": 0
         }
       ]
     },
     {
       "rubric": "soc2-controls",
       "decision": "needs-review",
-      "critical_findings_count": 1,
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "abstain",
-          "confidence": 0.0,
-          "rationale": "",
-          "findings_count": 2
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
-          "findings_count": 1
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
+          "decision": "abstain",
+          "confidence": 0.0,
+          "rationale": "",
+          "findings_count": 0
         }
       ]
     },
     {
       "rubric": "theater-detection",
-      "decision": "fail",
-      "critical_findings_count": 2,
+      "decision": "pass",
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.8,
-          "rationale": "The code appears to be a framework for local AI council reviews using multiple providers like Ollama, Anthropic, OpenAI, etc. It includes functionality for aggregating votes and coordinating reviews across these providers. However, the prompt construction within the `_build_rubric_prompt` method see",
-          "findings_count": 1
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "reject",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "approve",
           "confidence": 0.95,
-          "rationale": "The code contains a critical flaw where the rubric review prompt is hardcoded to respond with a specific JSON structure. This creates a fake practice where the system appears to be auditing code but is actually just echoing the prompt. The scanner's output is not being analyzed for true positives or",
-          "findings_count": 1
+          "rationale": "The provided code does not contain any obvious violations of the theater-detection rubric. The code appears to be well-structured and follows good practices for review aggregation and council coordination. However, the scanner did not find any violations, which could indicate that it is either very ",
+          "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The codebase implements a robust local AI council for code review with proper error handling, quorum checks, and structured voting. No critical issues were found in the audit logic or provider interactions. The system correctly handles provider errors and aggregates votes with confidence weighting. ",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.6,
-          "rationale": "The initial review found no violations by the deterministic scanner, but given the complexity of the code base and the potential for overlooked issues, particularly in detecting 'fake practices that appear valuable but aren't', an in-depth manual inspection is necessary to ensure thorough coverage o",
-          "findings_count": 0
+          "rationale": "The audit code appears complex with multiple providers and hooks for different AI services. However, without manual review of each file and line, it's challenging to confidently determine if there are quality theater practices or undetected violations. The scanner found no issues, but the dynamic na",
+          "findings_count": 3
         }
       ]
     }
   ],
   "by_file": {
     "mcp_client.py": {
-      "critical_count": 18,
-      "total_findings": 20,
+      "critical_count": 14,
+      "total_findings": 17,
       "findings": [
         {
           "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "critical",
-          "category": "encryption",
-          "description": "Encryption for ePHI in transit is not implemented.",
+          "category": "encryption-for-ePHI-in-transit",
+          "description": "The protocol version '2024-11-05' requires verification that this connection is encrypted to meet HIPAA standards.",
           "line": null
         },
         {
@@ -355,401 +355,275 @@
           "reviewer": "scanner",
           "severity": "critical",
           "category": "encryption",
-          "description": "The protocol version in MCP client configuration does not enforce encryption for ePHI in transit, violating HIPAA-312.e.1 requirements.",
+          "description": "The protocol version string contains sensitive information that could be used to exploit the system. This should be encrypted or obfuscated to prevent ePHI exposure.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "critical",
-          "category": "encryption",
-          "description": "Encryption for ePHI in transit is not implemented.",
+          "category": "encryption-for-ePHI-in-transit",
+          "description": "The protocol version '2024-11-05' requires verification that this connection is encrypted to meet HIPAA standards.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "critical",
           "category": "encryption",
-          "description": "The protocol version in MCP client configuration does not enforce encryption for ePHI in transit, violating HIPAA-312.e.1 requirements.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "input-validation",
-          "description": "Unescaped user input in shell commands: 'self._process = await asyncio.create_subprocess_ex...'. This is a critical security violation that should be addressed immediately.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "input-validation",
-          "description": "Unescaped user input in shell commands: self._process = await asyncio.create_subprocess_exec(...) should use shlex.quote() or similar to escape user-provided arguments to prevent command injection attacks.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "input-validation",
-          "description": "User input is not properly sanitized before being used in shell commands, leading to potential command injection attacks.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "input-validation",
-          "description": "Unescaped user input in shell commands: 'self._process = await asyncio.create_subprocess_ex...'. This is a critical security violation that should be addressed immediately.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "input-validation",
-          "description": "Unescaped user input in shell commands: self._process = await asyncio.create_subprocess_exec(...) should use shlex.quote() or similar to escape user-provided arguments to prevent command injection attacks.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "critical",
-          "category": "input-validation",
-          "description": "User input is not properly sanitized before being used in shell commands, leading to potential command injection attacks.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "loop-boundary",
-          "description": "Infinite loop detected: 'while True:...' lacks a fixed upper bound.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "loop-boundary",
-          "description": "Infinite loop detected: 'while True:...' lacks a fixed upper bound.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "loop-boundary",
-          "description": "Infinite loop detected; replace with fixed upper bound",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "loop-boundary",
-          "description": "Infinite loop detected; replace with fixed upper bound",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "loop-boundary",
-          "description": "Infinite loop detected: 'while True:...' lacks a fixed upper bound.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "loop-boundary",
-          "description": "Infinite loop detected: 'while True:...' lacks a fixed upper bound.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "loop-boundary",
-          "description": "Infinite loop detected; replace with fixed upper bound",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "loop-boundary",
-          "description": "Infinite loop detected; replace with fixed upper bound",
+          "description": "The protocol version string contains sensitive information that could be used to exploit the system. This should be encrypted or obfuscated to prevent ePHI exposure.",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "policy-adherence",
+          "description": "Changes to rubrics/policies require multi-party approval and version control: '_MAX_READ_ITERATIONS = 10_000...'",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "governance",
+          "description": "Critical governance rule change '_MAX_READ_ITERATIONS = 10_000' requires multi-party approval and version control but is not properly documented or controlled",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "policy-adherence",
+          "description": "Changes to rubrics/policies require multi-party approval and version control: '_MAX_READ_ITERATIONS = 10_000...'",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "governance",
+          "description": "Critical governance rule change '_MAX_READ_ITERATIONS = 10_000' requires multi-party approval and version control but is not properly documented or controlled",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "input-validation",
+          "description": "Unescaped user input in shell commands: 'self._process = await asyncio.create_subprocess_ex...'",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "command-injection",
+          "description": "Unescaped user input in shell commands. This allows for command injection attacks. Use shlex.quote() or similar functions to escape user input before executing shell commands.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "input-handling",
+          "description": "Unescaped user input in shell commands can lead to command injection vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "input-validation",
+          "description": "Unescaped user input in shell commands: 'self._process = await asyncio.create_subprocess_ex...'",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "command-injection",
+          "description": "Unescaped user input in shell commands. This allows for command injection attacks. Use shlex.quote() or similar functions to escape user input before executing shell commands.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "critical",
+          "category": "input-handling",
+          "description": "Unescaped user input in shell commands can lead to command injection vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "medium",
           "category": "documentation",
-          "description": "Business rule 'if content_length == 0:...' is not explicitly documented.",
+          "description": "Business rules must be explicitly documented, not hidden in implementation: 'if content_length == 0:...'",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
-          "category": "business-rules",
-          "description": "Business rule for content length check is implemented without explicit documentation",
-          "line": null
-        }
-      ]
-    },
-    "__init__.py": {
-      "critical_count": 10,
-      "total_findings": 15,
-      "findings": [
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "dependency-management",
-          "description": "The module imports too many dependencies, making it difficult to manage and increasing the risk of bugs and security vulnerabilities.",
+          "category": "input-validation",
+          "description": "Input validation rule for content length check is implemented without explicit documentation",
           "line": null
         },
         {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "critical",
-          "category": "dependency-management",
-          "description": "The module imports too many dependencies, making it difficult to manage and increasing the risk of bugs and security vulnerabilities.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "code-structure",
-          "description": "Circular import issue in __init__.py, as it imports from providers which might also be importing back into this module.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "code-structure",
-          "description": "Circular import issue in __init__.py, as it imports from providers which might also be importing back into this module.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "code-quality",
-          "description": "Modules that import too many dependencies: 'from .types import AuditResult, CouncilResult, Fil...' This is a code quality issue rather than a security risk.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "dependency-management",
-          "description": "Modules that import too many dependencies: 'from .types import AuditResult, CouncilResult, FileFinding, FileReport, ReviewRequest, ReviewVote, RubricContext, RubricVerdict' imports multiple types from the same module, which can increase complexity and maintenance overhead.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "code-quality",
-          "description": "Modules that import too many dependencies: 'from .types import AuditResult, CouncilResult, Fil...' This is a code quality issue rather than a security risk.",
-          "line": null
-        },
-        {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "dependency-management",
-          "description": "Modules that import too many dependencies: 'from .types import AuditResult, CouncilResult, FileFinding, FileReport, ReviewRequest, ReviewVote, RubricContext, RubricVerdict' imports multiple types from the same module, which can increase complexity and maintenance overhead.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "fake-practice",
-          "description": "The code appears to be a fake practice designed to appear valuable but isn't. The prompt construction within the `_build_rubric_prompt` method is suspiciously similar to the content of this question's instructions.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "fake-practice",
-          "description": "The code appears to be a fake practice designed to appear valuable but isn't. The prompt construction within the `_build_rubric_prompt` method is suspiciously similar to the content of this question's instructions.",
-          "line": null
-        },
-        {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "code-coverage",
-          "description": "The aggregator.py file imports from .types, which suggests a potential circular import issue. This can lead to unexpected behavior or errors.",
-          "line": null
-        },
-        {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "code-coverage",
-          "description": "The aggregator.py file imports from .council, which suggests a potential circular import issue. This can lead to unexpected behavior or errors.",
-          "line": null
-        },
-        {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "code-coverage",
-          "description": "The council.py file imports from .aggregator, which suggests a potential circular import issue. This can lead to unexpected behavior or errors.",
-          "line": null
-        },
-        {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "code-coverage",
-          "description": "The providers directory contains multiple provider files, but none of them are imported in __init__.py. This may result in missing functionality or incomplete code coverage.",
-          "line": null
-        },
-        {
-          "rubric": "six-sigma",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "low",
-          "category": "organization",
-          "description": "The `__all__` list in `__init__.py` is extensive and may not be exhaustive. It's essential to verify that all public members are listed here for proper module introspection and import behavior.",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "unknown",
+          "category": "",
+          "description": "",
           "line": null
         }
       ]
     },
     "council.py": {
-      "critical_count": 6,
-      "total_findings": 13,
+      "critical_count": 8,
+      "total_findings": 16,
       "findings": [
         {
           "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "critical",
-          "category": "response-reporting",
-          "description": "The response and reporting section contains text that could be considered sensitive or inappropriate within a compliance context.",
+          "category": "response-and-reporting",
+          "description": "The comment mentions 'A false approval costs a security incident.' which could be related to response and reporting requirements but requires further context to validate as a true positive.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "critical",
-          "category": "response_and_reporting",
-          "description": "The response indicates that a false approval could lead to a security incident, which is a HIPAA-308.a.6 violation requiring proper incident reporting and response procedures.",
+          "category": "response-reporting",
+          "description": "The response contains a false approval statement which could lead to incorrect security decisions. This should be reviewed for accuracy and compliance with HIPAA reporting requirements.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "response-and-reporting",
+          "description": "The comment mentions 'A false approval costs a security incident.' which could be related to response and reporting requirements but requires further context to validate as a true positive.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "critical",
           "category": "response-reporting",
-          "description": "The response and reporting section contains text that could be considered sensitive or inappropriate within a compliance context.",
+          "description": "The response contains a false approval statement which could lead to incorrect security decisions. This should be reviewed for accuracy and compliance with HIPAA reporting requirements.",
           "line": null
         },
         {
-          "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "response_and_reporting",
-          "description": "The response indicates that a false approval could lead to a security incident, which is a HIPAA-308.a.6 violation requiring proper incident reporting and response procedures.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
+          "rubric": "six-sigma",
           "reviewer": "scanner",
-          "severity": "critical",
-          "category": "theater-detection",
-          "description": "The rubric review prompt is hardcoded to return a specific JSON structure, creating a fake practice where the system appears to be auditing code but is actually just echoing the prompt. This is a critical vulnerability in the theater-detection system as it prevents actual analysis of the code being reviewed.",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The `LocalCouncil.review` method does not validate the input `request`. This could lead to unexpected behavior or security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "error-handling",
+          "description": "The `LocalCouncil.review` method catches exceptions but does not log them. This could make it difficult to diagnose issues in production.",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "input-validation",
+          "description": "The `LocalCouncil.review` method does not validate the input `request`. This could lead to unexpected behavior or security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "error-handling",
+          "description": "The `LocalCouncil.review` method catches exceptions but does not log them. This could make it difficult to diagnose issues in production.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "documentation",
+          "description": "Business rules must be explicitly documented, not hidden in implementation: 'if reject_count >= 2:...'",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "documentation",
+          "description": "Business rules must be explicitly documented, not hidden in implementation: 'if approve_count >= 2:...'",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "business-rules",
+          "description": "Business rule for rejecting a rubric with 2+ 'reject' votes is implemented without explicit documentation",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "business-rules",
+          "description": "Business rule for approving a rubric with 2+ 'approve' votes is implemented without explicit documentation",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "Potential for command injection in _build_rubric_prompt. Sanitize user input before using it in shell commands.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "Potential for command injection in _build_rubric_prompt. Sanitize user input before using it in shell commands.",
+          "line": null
+        },
+        {
+          "rubric": "six-sigma",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "security",
+          "description": "The `LocalCouncil.review` method constructs prompts using user input without proper sanitization. This could lead to potential security vulnerabilities such as code injection.",
           "line": null
         },
         {
           "rubric": "theater-detection",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "theater-detection",
-          "description": "The rubric review prompt is hardcoded to return a specific JSON structure, creating a fake practice where the system appears to be auditing code but is actually just echoing the prompt. This is a critical vulnerability in the theater-detection system as it prevents actual analysis of the code being reviewed.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
           "severity": "medium",
-          "category": "documentation",
-          "description": "Business rule 'if reject_count >= 2:...' is not explicitly documented.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "documentation",
-          "description": "Business rule 'if approve_count >= 2:...' is not explicitly documented.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "business-rules",
-          "description": "Business rule for 'fail' decision based on vote count is implemented without explicit documentation",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "business-rules",
-          "description": "Business rule for 'pass' decision based on vote count is implemented without explicit documentation",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "medium",
-          "category": "documentation",
-          "description": "The business rule for `if reject_count >= 2:` is not explicitly documented, violating the requirement for clear business rule documentation.",
-          "line": null
-        },
-        {
-          "rubric": "six-sigma",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "medium",
-          "category": "code-complexity",
-          "description": "The `LocalCouncil` class has a high complexity due to its many parameters and dependencies, which could make it difficult to maintain and understand.",
-          "line": null
-        },
-        {
-          "rubric": "six-sigma",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "low",
-          "category": "code-style",
-          "description": "The docstrings and method naming in this file could be standardized to adhere to a consistent style guide.",
+          "category": "security",
+          "description": "The council's review process may lack adequate sanitization or validation for user inputs, which could lead to injection attacks or other security vulnerabilities.",
           "line": null
         }
       ]
     },
     "anthropic.py": {
-      "critical_count": 6,
-      "total_findings": 11,
+      "critical_count": 8,
+      "total_findings": 10,
       "findings": [
         {
           "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "critical",
-          "category": "encryption",
-          "description": "Encryption for ePHI in transit is not implemented.",
+          "category": "encryption-for-ePHI-in-transit",
+          "description": "The base URL for Anthropic's API is 'https://api.anthropic.com', which requires verification that this connection is encrypted to meet HIPAA standards.",
           "line": null
         },
         {
@@ -757,93 +631,85 @@
           "reviewer": "scanner",
           "severity": "critical",
           "category": "encryption",
-          "description": "The base URL for Anthropic API is using HTTPS but lacks explicit encryption protocol specifications, violating HIPAA-312.e.1 requirements for encrypting ePHI in transit.",
+          "description": "The base URL for Anthropic API uses HTTP instead of HTTPS, which does not encrypt ePHI in transit. This violates HIPAA encryption requirements for protected health information.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "encryption",
-          "description": "Encryption for ePHI in transit is not implemented.",
-          "line": null
-        },
-        {
-          "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "encryption",
-          "description": "The base URL for Anthropic API is using HTTPS but lacks explicit encryption protocol specifications, violating HIPAA-312.e.1 requirements for encrypting ePHI in transit.",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
           "reviewer": "scanner",
-          "severity": "high",
+          "severity": "critical",
+          "category": "?",
+          "description": "Encryption for ePHI in transit is not properly implemented across multiple provider files.",
+          "line": "?"
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "encryption-for-ePHI-in-transit",
+          "description": "The base URL for Anthropic's API is 'https://api.anthropic.com', which requires verification that this connection is encrypted to meet HIPAA standards.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "encryption",
+          "description": "The base URL for Anthropic API uses HTTP instead of HTTPS, which does not encrypt ePHI in transit. This violates HIPAA encryption requirements for protected health information.",
+          "line": null
+        },
+        {
+          "rubric": "hipaa-safeguards",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "critical",
           "category": "",
-          "description": "This finding seems to be a false positive. There is no sensitive personal data being transmitted here, and the use of a secure connection (HTTPS) is implied.",
+          "description": "Encryption for ePHI in transit is not properly implemented across multiple provider files.",
+          "line": "?"
+        },
+        {
+          "rubric": "nasa-safety",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "code-quality",
+          "description": "Function `__init__` in `anthropic.py` is longer than 60 lines and has low assertion density.",
+          "line": null
+        },
+        {
+          "rubric": "nasa-safety",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "code-quality",
+          "description": "Function `__init__` in `anthropic.py` is longer than 60 lines and has low assertion density.",
+          "line": null
+        },
+        {
+          "rubric": "nasa-safety",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "error-handling",
+          "description": "The __init__ function exceeds 60 lines and lacks sufficient assertions. Add at least 2 assertions to validate critical parameters.",
           "line": null
         },
         {
           "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "unknown",
           "category": "",
-          "description": "This finding seems to be a false positive. There is no sensitive personal data being transmitted here, and the use of a secure connection (HTTPS) is implied.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "code-length",
-          "description": "Function 'def __init__(...)' exceeds the recommended length of 60 lines.",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "assertion-density",
-          "description": "Function 'def __init__(...)' lacks sufficient assertions (less than the recommended density of 2 per function).",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "code-complexity",
-          "description": "Function exceeds 60 lines of code; refactor into smaller methods",
-          "line": null
-        },
-        {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "input-validation",
-          "description": "Assertion density too low; add at least 2 assertions",
-          "line": null
-        },
-        {
-          "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "low",
-          "category": "",
-          "description": "The use of environment variables for API keys is a common and secure practice. This does not pose a PCI DSS risk.",
+          "description": "",
           "line": null
         }
       ]
     },
     "openai.py": {
-      "critical_count": 4,
+      "critical_count": 6,
       "total_findings": 8,
       "findings": [
         {
           "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "critical",
-          "category": "encryption",
-          "description": "Encryption for ePHI in transit is not implemented.",
+          "category": "encryption-for-ePHI-in-transit",
+          "description": "The base URL for OpenAI's API is 'https://api.openai.com/v1', which requires verification that this connection is encrypted to meet HIPAA standards.",
           "line": null
         },
         {
@@ -851,69 +717,69 @@
           "reviewer": "scanner",
           "severity": "critical",
           "category": "encryption",
-          "description": "The base URL for OpenAI API uses HTTPS but lacks explicit encryption protocol specifications, violating HIPAA-312.e.1 requirements for encrypting ePHI in transit.",
+          "description": "The base URL for OpenAI API uses HTTP instead of HTTPS, which does not encrypt ePHI in transit. This violates HIPAA encryption requirements for protected health information.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "critical",
-          "category": "encryption",
-          "description": "Encryption for ePHI in transit is not implemented.",
+          "category": "encryption-for-ePHI-in-transit",
+          "description": "The base URL for OpenAI's API is 'https://api.openai.com/v1', which requires verification that this connection is encrypted to meet HIPAA standards.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "critical",
           "category": "encryption",
-          "description": "The base URL for OpenAI API uses HTTPS but lacks explicit encryption protocol specifications, violating HIPAA-312.e.1 requirements for encrypting ePHI in transit.",
+          "description": "The base URL for OpenAI API uses HTTP instead of HTTPS, which does not encrypt ePHI in transit. This violates HIPAA encryption requirements for protected health information.",
           "line": null
         },
         {
           "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "code-length",
-          "description": "Function 'def __init__(...)' exceeds the recommended length of 60 lines.",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "code-quality",
+          "description": "Function `__init__` in `openai.py` is longer than 60 lines and has low assertion density.",
           "line": null
         },
         {
           "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "assertion-density",
-          "description": "Function 'def __init__(...)' lacks sufficient assertions (less than the recommended density of 2 per function).",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "code-quality",
+          "description": "Function `__init__` in `openai.py` is longer than 60 lines and has low assertion density.",
           "line": null
         },
         {
           "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
-          "category": "code-complexity",
-          "description": "Function exceeds 60 lines of code; refactor into smaller methods",
+          "category": "error-handling",
+          "description": "The __init__ function exceeds 60 lines and lacks sufficient assertions. Add at least 2 assertions to validate critical parameters.",
           "line": null
         },
         {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "input-validation",
-          "description": "Assertion density too low; add at least 2 assertions",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "unknown",
+          "category": "",
+          "description": "",
           "line": null
         }
       ]
     },
     "openrouter.py": {
-      "critical_count": 4,
+      "critical_count": 6,
       "total_findings": 8,
       "findings": [
         {
           "rubric": "hipaa-safeguards",
           "reviewer": "scanner",
           "severity": "critical",
-          "category": "encryption",
-          "description": "Encryption for ePHI in transit is not implemented.",
+          "category": "encryption-for-ePHI-in-transit",
+          "description": "The base URL for OpenRouter's API is 'https://openrouter.ai/api/v1/chat/completions', which requires verification that this connection is encrypted to meet HIPAA standards.",
           "line": null
         },
         {
@@ -921,199 +787,333 @@
           "reviewer": "scanner",
           "severity": "critical",
           "category": "encryption",
-          "description": "The OpenRouter API endpoint uses HTTPS but lacks explicit encryption protocol specifications, violating HIPAA-312.e.1 requirements for encrypting ePHI in transit.",
+          "description": "The base URL for OpenRouter API uses HTTP instead of HTTPS, which does not encrypt ePHI in transit. This violates HIPAA encryption requirements for protected health information.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "critical",
-          "category": "encryption",
-          "description": "Encryption for ePHI in transit is not implemented.",
+          "category": "encryption-for-ePHI-in-transit",
+          "description": "The base URL for OpenRouter's API is 'https://openrouter.ai/api/v1/chat/completions', which requires verification that this connection is encrypted to meet HIPAA standards.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "critical",
           "category": "encryption",
-          "description": "The OpenRouter API endpoint uses HTTPS but lacks explicit encryption protocol specifications, violating HIPAA-312.e.1 requirements for encrypting ePHI in transit.",
+          "description": "The base URL for OpenRouter API uses HTTP instead of HTTPS, which does not encrypt ePHI in transit. This violates HIPAA encryption requirements for protected health information.",
           "line": null
         },
         {
           "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "code-length",
-          "description": "Function 'def __init__(...)' exceeds the recommended length of 60 lines.",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "code-quality",
+          "description": "Function `__init__` in `openrouter.py` is longer than 60 lines and has low assertion density.",
           "line": null
         },
         {
           "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "assertion-density",
-          "description": "Function 'def __init__(...)' lacks sufficient assertions (less than the recommended density of 2 per function).",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "critical",
+          "category": "code-quality",
+          "description": "Function `__init__` in `openrouter.py` is longer than 60 lines and has low assertion density.",
           "line": null
         },
         {
           "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
+          "category": "error-handling",
+          "description": "The __init__ function exceeds 60 lines and lacks sufficient assertions. Add at least 2 assertions to validate critical parameters.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "unknown",
+          "category": "",
+          "description": "",
+          "line": null
+        }
+      ]
+    },
+    "__init__.py": {
+      "critical_count": 6,
+      "total_findings": 6,
+      "findings": [
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "critical",
           "category": "code-complexity",
-          "description": "Function exceeds 60 lines of code; refactor into smaller methods",
+          "description": "Modules import too many dependencies, which can hinder code readability and maintenance.",
           "line": null
         },
         {
-          "rubric": "nasa-safety",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "medium",
-          "category": "input-validation",
-          "description": "Assertion density too low; add at least 2 assertions",
+          "rubric": "safety-violations",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "critical",
+          "category": "code-complexity",
+          "description": "Modules import too many dependencies, which can hinder code readability and maintenance.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "module-imports",
+          "description": "Modules that import too many dependencies: 'from .types import AuditResult, CouncilResult, Fil...'",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "dependency-management",
+          "description": "Module imports too many dependencies. This can lead to maintenance issues and potential security risks. Consider refactoring to reduce the number of direct imports and use more modular design.",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "high",
+          "category": "module-imports",
+          "description": "Modules that import too many dependencies: 'from .types import AuditResult, CouncilResult, Fil...'",
+          "line": null
+        },
+        {
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "dependency-management",
+          "description": "Module imports too many dependencies. This can lead to maintenance issues and potential security risks. Consider refactoring to reduce the number of direct imports and use more modular design.",
+          "line": null
+        }
+      ]
+    },
+    "providers/anthropic.py": {
+      "critical_count": 4,
+      "total_findings": 4,
+      "findings": [
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "",
+          "description": "Exposure of PAN data in API endpoint",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "",
+          "description": "Exposure of PAN data in API endpoint",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "",
+          "description": "API key stored in plain text",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "",
+          "description": "API key stored in plain text",
           "line": null
         }
       ]
     },
     "providers/openai.py": {
-      "critical_count": 2,
-      "total_findings": 2,
-      "findings": [
-        {
-          "rubric": "connascence",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "api-keys",
-          "description": "Hardcoded API keys in the provider classes, potentially exposing sensitive information.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "api-keys",
-          "description": "Hardcoded API keys in the provider classes, potentially exposing sensitive information.",
-          "line": null
-        }
-      ]
-    },
-    "<filename>": {
-      "critical_count": 2,
-      "total_findings": 2,
-      "findings": [
-        {
-          "rubric": "hipaa-safeguards",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "HIPAA-312.e.1",
-          "description": "Potential violation of HIPAA standards regarding handling and security of protected health information.",
-          "line": "<line>"
-        },
-        {
-          "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "critical",
-          "category": "",
-          "description": "Potential violation of HIPAA standards regarding handling and security of protected health information.",
-          "line": "<line>"
-        }
-      ]
-    },
-    "app.py": {
-      "critical_count": 2,
-      "total_findings": 2,
-      "findings": [
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "S105",
-          "description": "Potential security vulnerability due to using deprecated function.",
-          "line": 34
-        },
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "",
-          "description": "Potential security vulnerability due to using deprecated function.",
-          "line": 34
-        }
-      ]
-    },
-    "providers/ollama.py": {
-      "critical_count": 0,
-      "total_findings": 1,
-      "findings": [
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "error-handling",
-          "description": "The code does not handle exceptions that might be raised during the review process.",
-          "line": null
-        }
-      ]
-    },
-    "types.pyi": {
-      "critical_count": 0,
-      "total_findings": 1,
+      "critical_count": 4,
+      "total_findings": 4,
       "findings": [
         {
           "rubric": "pci-dss-requirements",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "",
+          "description": "Exposure of PAN data in API endpoint",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "",
+          "description": "Exposure of PAN data in API endpoint",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "",
+          "description": "API key stored in plain text",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "",
+          "description": "API key stored in plain text",
+          "line": null
+        }
+      ]
+    },
+    "providers/openrouter.py": {
+      "critical_count": 4,
+      "total_findings": 4,
+      "findings": [
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "",
+          "description": "Exposure of PAN data in API endpoint",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "",
+          "description": "Exposure of PAN data in API endpoint",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "high",
+          "category": "",
+          "description": "API key stored in plain text",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "",
+          "description": "API key stored in plain text",
+          "line": null
+        }
+      ]
+    },
+    "types.py": {
+      "critical_count": 2,
+      "total_findings": 3,
+      "findings": [
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "",
+          "description": "Improper import statements could introduce security risks",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "",
+          "description": "Improper import statements could introduce security risks",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "unknown",
+          "category": "",
+          "description": "",
+          "line": null
+        }
+      ]
+    },
+    "hooks.py": {
+      "critical_count": 2,
+      "total_findings": 3,
+      "findings": [
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "",
+          "description": "Improper import statements could introduce security risks",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "",
+          "description": "Improper import statements could introduce security risks",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "unknown",
+          "category": "",
+          "description": "",
+          "line": null
+        }
+      ]
+    },
+    "council/__init__.py": {
+      "critical_count": 0,
+      "total_findings": 2,
+      "findings": [
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
+          "severity": "medium",
+          "category": "",
+          "description": "Avoid using magic numbers.",
+          "line": "20"
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
           "severity": "low",
           "category": "",
-          "description": "This appears to be a syntax error or misunderstanding. The code snippet provided does not align with typical Python type hinting practices.",
-          "line": null
+          "description": "Variable name should be descriptive.",
+          "line": "12"
         }
       ]
     },
     "providers/hooks.py": {
       "critical_count": 0,
-      "total_findings": 2,
+      "total_findings": 1,
       "findings": [
         {
-          "rubric": "six-sigma",
-          "reviewer": "ollama-falcon3:7b-8d2484",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
           "severity": "medium",
-          "category": "error-handling",
-          "description": "The hooks in this module could benefit from improved error handling mechanisms to ensure robust operation and logging.",
-          "line": null
-        },
-        {
-          "rubric": "six-sigma",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "low",
-          "category": "code-style",
-          "description": "The naming conventions in this file could be standardized for better consistency and readability.",
+          "category": "security",
+          "description": "Hooks might not have sufficient logging and error handling, which could lead to unnoticed failures or security breaches.",
           "line": null
         }
       ]
     },
-    "utils.py": {
+    "providers/mcp_client.py": {
       "critical_count": 0,
       "total_findings": 1,
       "findings": [
         {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-falcon3:7b-a7c4d4",
           "severity": "medium",
-          "category": "",
-          "description": "Unused variable assigned but not used elsewhere in the code.",
-          "line": 12
-        }
-      ]
-    },
-    "rubric_review.py": {
-      "critical_count": 0,
-      "total_findings": 1,
-      "findings": [
-        {
-          "rubric": "soc2-controls",
-          "reviewer": "ollama-falcon3:7b-8d2484",
-          "severity": "?",
-          "category": "",
-          "description": "Your job:\n1. Validate each finding -- is it a true positive or false positive?\n2. Find violations the scanner MISSED (regex has blind spots).\n3. Rate severity accuracy -- did the scanner get severity right?\n4. Give a pass/fail for this rubric.\n\nRespond with a JSON object containing exactly these keys: '- ",
+          "category": "security",
+          "description": "Client connections might not be properly secured, leaving the system vulnerable to man-in-the-middle attacks.",
           "line": null
         }
       ]

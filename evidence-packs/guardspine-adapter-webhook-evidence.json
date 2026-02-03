@@ -3,7 +3,7 @@
     "repo": "guardspine-adapter-webhook",
     "description": "Webhook adapter for evidence bundle delivery",
     "language": "typescript",
-    "timestamp": "2026-01-31T05:11:10.460065+00:00",
+    "timestamp": "2026-01-31T06:55:55.076937+00:00",
     "models": [
       "qwen2.5-coder:7b",
       "qwen3:8b",
@@ -20,31 +20,31 @@
     ],
     "total_reviews": 33
   },
-  "request_id": "d38ff3c7dfc8",
+  "request_id": "8c43829d6c63",
   "overall_decision": "reject",
-  "summary": "FAIL: hipaa-safeguards, mece, nomotic, theater-detection; NEEDS-REVIEW: clarity, connascence, nasa-safety, pci-dss-requirements, safety-violations, soc2-controls",
+  "summary": "FAIL: hipaa-safeguards; NEEDS-REVIEW: clarity, connascence, mece, nomotic, pci-dss-requirements, safety-violations, soc2-controls, theater-detection",
   "rubric_verdicts": [
     {
       "rubric": "clarity",
       "decision": "needs-review",
-      "critical_findings_count": 7,
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
-          "confidence": 0.95,
-          "rationale": "The scanner missed several violations, such as deeply nested code blocks and lack of docstrings in multiple files.",
+          "confidence": 0.8,
+          "rationale": "The scanner failed to identify a critical issue in the GitHub provider's signature validation function. The `normalizeEventType` function should have a docstring, but it is missing. Additionally, the `collectChangedFiles` and `normalizeEventType` functions are public and should be documented. While ",
           "findings_count": 2
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 0.95,
-          "rationale": "The codebase shows good structure and documentation. The high-severity issues are about nested code blocks which can be refactored for clarity. The low-severity issues are about missing docstrings for public functions. Overall, the code is clear and maintainable.",
-          "findings_count": 8
+          "rationale": "The scanner found low-severity issues with missing docstrings for public functions in github.ts and gitlab.ts. These are valid findings as the functions are public and should have documentation. The codebase generally has good documentation for classes and exported functions, but the specific functi",
+          "findings_count": 4
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -58,24 +58,24 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
           "confidence": 0.8,
-          "rationale": "The scanner did not detect any violations, but based on the code review, there are several potential areas for improvement and possible vulnerabilities that could be missed by a deterministic scanner.",
-          "findings_count": 3
+          "rationale": "The scanner did not find any violations, but the codebase contains several potential connascence coupling issues that could be missed by a simple regex-based scanner. These include parameter name connascence, where function parameters are used inconsistently across different parts of the codebase.",
+          "findings_count": 2
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The scanner did not find any violations, and upon review, there are no connascence coupling issues present. The codebase uses clear interfaces and separation of concerns, with each file handling distinct responsibilities. The BundleEmitter class encapsulates bundle creation logic without relying on ",
+          "rationale": "The codebase demonstrates minimal connascence coupling with a well-defined interface between components. The BundleEmitter class encapsulates evidence bundling logic without relying on specific provider implementations. The providers (GitHub, GitLab, Generic) implement a common WebhookProvider inter",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n    \"code\": 123,\n    \"message\": \"Incomplete input: The provided text snippet includes incomplete code for the GitLabProvider class. To proceed, you need to provide a complete and functional implemen",
+          "rationale": "",
           "findings_count": 0
         }
       ]
@@ -83,52 +83,52 @@
     {
       "rubric": "hipaa-safeguards",
       "decision": "fail",
-      "critical_findings_count": 4,
+      "critical_findings_count": 2,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
           "confidence": 0.9,
-          "rationale": "The scanner identified the need for cryptographic sealing as a critical issue based on HIPAA-312.c.1, but the code does not fully implement this requirement. The current implementation falls back to a basic SHA-256 hash chain when cryptographic sealing is unavailable. While using a cryptographic has",
+          "rationale": "The scanner identified a potential issue related to ePHI integrity mechanisms, but it appears that the code does not fully comply with HIPAA requirements for cryptographic sealing. The current implementation falls back to a basic SHA-256 hash chain when cryptographic sealing is not available, which ",
           "findings_count": 1
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "reject",
           "confidence": 0.95,
-          "rationale": "The scanner found a critical violation in bundle-emitter.ts:13 regarding ePHI integrity mechanisms. The code attempts to use cryptographic sealing with @guardspine/kernel but falls back to SHA-256 hashing. However, the implementation lacks proper cryptographic sealing mechanisms and uses a naive has",
-          "findings_count": 3
+          "rationale": "The scanner identified a critical HIPAA-312.c.1 violation in bundle-emitter.ts:13 related to ePHI integrity mechanisms. The code attempts to use cryptographic sealing with @guardspine/kernel but falls back to SHA-256 hashing. However, the fallback mechanism is not properly implemented with cryptogra",
+          "findings_count": 1
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\n  \"code\": 400,\n  \"message\": \"The request you made couldn't be understood by the server.\",\n  \"input\": {\n    \"assistant_function\": \"assistant\",\n    \"question\": \"",
+          "rationale": "",
           "findings_count": 0
         }
       ]
     },
     {
       "rubric": "mece",
-      "decision": "fail",
-      "critical_findings_count": 2,
+      "decision": "needs-review",
+      "critical_findings_count": 3,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
-          "confidence": 0.8,
-          "rationale": "The scanner missed a violation in providers/gitlab.ts where the switch statement does not handle all enum values. The rubric requires handling all cases, but the code lacks a default case for any unforeseen raw event types.",
+          "confidence": 0.95,
+          "rationale": "The scanner correctly identified a MECE-007 violation in github.ts:129, indicating that the switch statement does not handle all enum values. However, there are several other instances where potential MECE violations could exist but were not caught by the scanner. These include handling of unknown e",
+          "findings_count": 2
+        },
+        {
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The scanner found a single high severity MECE-007 violation in github.ts:129, which is a true positive. The switch statement does not handle all enum values. No other violations were found, and the scanner's severity assessment is accurate. The code adheres to MECE principles with no duplication or ",
           "findings_count": 1
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "reject",
-          "confidence": 0.8,
-          "rationale": "The scanner identified a MECE-007 violation in github.ts:115 regarding a switch statement not handling all enum values. However, upon review, the switch statement in normalizeEventType is properly handling all possible enum values as defined in the WebhookEvent interface. The enum values are 'pull_r",
-          "findings_count": 5
-        },
-        {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -138,53 +138,53 @@
     },
     {
       "rubric": "nasa-safety",
-      "decision": "needs-review",
+      "decision": "pass",
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "abstain",
-          "confidence": 0.5,
-          "rationale": "The scanner did not find any violations, but it's difficult to say without further information about the rules being applied and the content of the codebase.",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The code adheres to NASA Power of 10 safety-critical development rules. All critical safety aspects are addressed: cryptographic sealing (via @guardspine/kernel), input validation, error handling, secure hashing, and secure communication. No critical violations were found, and the scanner's findings",
+          "rationale": "No violations found by the scanner and no manual analysis revealed any issues that would violate the NASA Power of 10 rules for safety-critical code development.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The code adheres to NASA Power of 10 safety-critical rules. All cryptographic operations use secure algorithms (SHA-256, HMAC-SHA256), proper error handling, and input validation. The code includes robust sealing mechanisms, secure hash computation, and proper signature validation for GitHub webhook",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "",
+          "rationale": "Failed to parse model output: {\"assistant\": {\"language\": \"en\", \"name\": \"ChatGPT\", \"response\": \"```json\\n{\\n    \\\"assistant\\\": {\\n        \\\"language\\\": \\\"en\\\",\\n        \\\"name\\\": \\\"ChatGPT\\\",\\n        \\\"response\\\": {\\n            \\",
           "findings_count": 0
         }
       ]
     },
     {
       "rubric": "nomotic",
-      "decision": "fail",
-      "critical_findings_count": 9,
+      "decision": "needs-review",
+      "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.8,
-          "rationale": "The scanner identified several instances of side effects and contract enforcement that are not explicitly declared or documented, which is a critical violation according to the NOM-OBS-002 rubric rule. Additionally, there is no contract enforcement between components, as indicated by the NOM-ARCH-00",
-          "findings_count": 5
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The rubric violations have been validated and addressed appropriately.",
+          "findings_count": 4
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "reject",
-          "confidence": 0.85,
-          "rationale": "The scanner identified multiple issues related to side effects and contract enforcement. The sha256 function in bundle-emitter.ts lacks proper documentation and error handling, which is a medium severity issue. The normalizeEventType and extractString functions in github.ts and gitlab.ts have simila",
-          "findings_count": 5
+          "confidence": 0.9,
+          "rationale": "The scanner identified multiple violations related to side effects and contract enforcement. The sha256 function in bundle-emitter.ts is a pure function with no side effects, but the scanner incorrectly flags it as having side effects. Similarly, the collectChangedFiles, normalizeEventType, and extr",
+          "findings_count": 7
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -195,24 +195,24 @@
     {
       "rubric": "pci-dss-requirements",
       "decision": "needs-review",
-      "critical_findings_count": 0,
+      "critical_findings_count": 2,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "abstain",
-          "confidence": 0.5,
-          "rationale": "The scanner did not find any violations, but the artifact content does not contain any obvious security issues that could impact PCI DSS compliance. The code appears to be handling webhooks and creating evidence bundles, which is within the scope of PCI DSS requirements for secure cardholder data ha",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The code reviewed appears to be following best practices for PCI DSS compliance, including the use of cryptographic sealing and secure validation of webhook signatures. No violations were found by the scanner, and there are no obvious issues that would make the system vulnerable.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
-          "decision": "abstain",
-          "confidence": 0.0,
-          "rationale": "Failed to parse model output: {\"decision\":\"approve\",\"confidence\":1.0,\"rationale\":\"The codebase appears to comply with PCI DSS requirements. The bundle-emitter.ts file implements cryptographic hashing for evidence bundling, and the",
-          "findings_count": 0
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "reject",
+          "confidence": 0.95,
+          "rationale": "The code contains several potential PCI DSS compliance issues. The BundleEmitter class uses SHA-256 hashing for contentHash but doesn't use cryptographic signing for the entire bundle. The GitHubProvider class validates signatures using HMAC-SHA256 but the implementation could be more secure. The co",
+          "findings_count": 10
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -226,24 +226,24 @@
       "critical_findings_count": 1,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "approve",
-          "confidence": 1.0,
-          "rationale": "The scanner correctly identified the issue in `webhook-handler.ts` at line 70, where a catch block is used without specificity, which is considered a high-severity violation.",
-          "findings_count": 0
-        },
-        {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "reject",
           "confidence": 0.95,
-          "rationale": "The scanner identified a high-severity violation in webhook-handler.ts for catching all exceptions without specificity. This is a true positive as it represents a critical error-handling flaw. The code lacks detailed error logging and recovery mechanisms, which could hide security vulnerabilities or",
+          "rationale": "The scanner did not find any violations, but the codebase contains potential security issues that need attention.",
           "findings_count": 1
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The codebase does not contain any god objects, parameter bombs, or critical violations. The BundleEmitter class is focused on its responsibility of creating evidence bundles and does not exhibit signs of being a god object. The providers are well-encapsulated and do not have excessive parameters. Th",
+          "findings_count": 0
+        },
+        {
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "",
+          "rationale": "Failed to parse model output: {\"assistant\": {\"response\": \"",
           "findings_count": 0
         }
       ]
@@ -254,24 +254,24 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The code does not contain any obvious issues that would violate the Six Sigma quality metrics for software development.",
+          "rationale": "The scanner did not find any violations, and there are no issues identified in the code that would warrant rejection.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "approve",
           "confidence": 1.0,
-          "rationale": "The codebase adheres to Six Sigma quality metrics for software development. All critical and high-severity issues identified by the scanner were validated as false positives. No critical issues were found. The code demonstrates robust error handling, cryptographic operations, and input validation. T",
+          "rationale": "The codebase adheres to Six Sigma quality standards with no critical or high-severity issues found. The scanner's findings were accurate and no significant issues were missed. The implementation demonstrates robust error handling, cryptographic sealing, and input validation.",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "",
+          "rationale": "Failed to parse model output: {\n    \"assistant_id\": \"assistant-001\",\n    \"assistant_response\": {\n        \"command\": \"",
           "findings_count": 0
         }
       ]
@@ -282,49 +282,49 @@
       "critical_findings_count": 0,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
           "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
-          "rationale": "",
+          "rationale": "Failed to parse model output: {\"assistant\": {\"response\": \"It appears that the request is asking for an analysis or identification of specific elements or configurations within a given codebase, specifically focusing on cryptograph",
           "findings_count": 0
         }
       ]
     },
     {
       "rubric": "theater-detection",
-      "decision": "fail",
-      "critical_findings_count": 4,
+      "decision": "needs-review",
+      "critical_findings_count": 3,
       "votes": [
         {
-          "reviewer_id": "ollama-qwen2.5-coder:7b-f33ffa",
-          "decision": "reject",
-          "confidence": 0.95,
-          "rationale": "The code does not contain any obvious security vulnerabilities or anti-patterns that would be flagged by a typical static code analysis tool. However, it lacks comprehensive error handling and validation, which could lead to unexpected behavior under certain conditions.",
-          "findings_count": 2
+          "reviewer_id": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "decision": "approve",
+          "confidence": 1.0,
+          "rationale": "The code does not contain any obvious violations of the theater-detection rubric. The code appears to be well-written and follows best practices for security, error handling, and input validation.",
+          "findings_count": 0
         },
         {
-          "reviewer_id": "ollama-qwen3:8b-44436d",
+          "reviewer_id": "ollama-qwen3:8b-a41e79",
           "decision": "reject",
           "confidence": 0.95,
-          "rationale": "The code contains several instances of fake practices that appear valuable but aren't. The GenericProvider class lacks any form of signature validation, which is critical for security. The GitHubProvider and GitLabProvider classes have signature validation, but the GitLabProvider code is cut off and",
-          "findings_count": 4
+          "rationale": "The code contains multiple instances of fake quality theater. The GenericProvider class lacks proper signature validation, which is critical for security. The GitHubProvider has a signature validation but it's not using the correct comparison method. Both providers use unsafe string comparisons for ",
+          "findings_count": 7
         },
         {
-          "reviewer_id": "ollama-falcon3:7b-8d2484",
+          "reviewer_id": "ollama-falcon3:7b-a7c4d4",
           "decision": "abstain",
           "confidence": 0.0,
           "rationale": "",
@@ -334,276 +334,244 @@
     }
   ],
   "by_file": {
-    "github.ts": {
-      "critical_count": 16,
-      "total_findings": 17,
+    "providers\\github.ts": {
+      "critical_count": 6,
+      "total_findings": 14,
       "findings": [
         {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "contract-enforcement",
-          "description": "The normalizeEventType function is used without explicit contract enforcement between components.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "contract-enforcement",
-          "description": "The extractString function is used without explicit contract enforcement between components.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "contract-enforcement",
-          "description": "The normalizeEventType function is used without explicit contract enforcement between components.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "contract-enforcement",
-          "description": "The extractString function is used without explicit contract enforcement between components.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
+          "rubric": "pci-dss-requirements",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested if statement to improve readability.",
+          "category": "cryptographic",
+          "description": "The GitHubProvider class validates signatures using HMAC-SHA256 but the implementation could be more secure. The code doesn't use timing-safe comparisons for the signature validation process.",
           "line": null
         },
         {
-          "rubric": "clarity",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "high",
+          "category": "cryptographic",
+          "description": "The GitHubProvider class validates signatures using HMAC-SHA256 but the implementation could be more secure. The code doesn't use timing-safe comparisons for the signature validation process.",
+          "line": null
+        },
+        {
+          "rubric": "theater-detection",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested if statement to improve readability.",
+          "category": "security",
+          "description": "GitHubProvider's signature validation uses unsafe string comparison. It should use timingSafeEqual for secure comparison of cryptographic hashes.",
           "line": null
         },
         {
-          "rubric": "clarity",
+          "rubric": "theater-detection",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested for loop to improve readability.",
+          "category": "security",
+          "description": "GitHubProvider's signature validation does not properly handle the case where the header might be malformed or missing.",
           "line": null
         },
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested if statement to improve readability.",
+          "category": "security",
+          "description": "GitHubProvider's signature validation uses unsafe string comparison. It should use timingSafeEqual for secure comparison of cryptographic hashes.",
           "line": null
         },
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested if statement to improve readability.",
+          "category": "security",
+          "description": "GitHubProvider's signature validation does not properly handle the case where the header might be malformed or missing.",
           "line": null
         },
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested for loop to improve readability.",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "The GitHubProvider class lacks proper input validation for the signature header and body content, which could allow for injection attacks.",
           "line": null
         },
         {
-          "rubric": "mece",
-          "reviewer": "scanner",
-          "severity": "high",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
           "category": "error-handling",
-          "description": "The switch statement in normalizeEventType is not missing any enum values as it covers all possible cases. This is a false positive.",
+          "description": "The GitHubProvider class doesn't handle errors in the cryptographic operations properly, which could lead to information leakage.",
           "line": null
         },
         {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "cryptographic",
+          "description": "The GitHubProvider class doesn't properly handle cryptographic key management, which could lead to potential security vulnerabilities.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "The GitHubProvider class lacks proper input validation for the payload data, which could allow for injection attacks.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
           "category": "error-handling",
-          "description": "The switch statement in normalizeEventType is not missing any enum values as it covers all possible cases. This is a false positive.",
+          "description": "The GitHubProvider class doesn't handle errors in the parse function properly, which could lead to information leakage.",
           "line": null
         },
         {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The normalizeEventType function should have explicit contracts for input validation and error handling for invalid types. Add type guards and documentation.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The extractString function should have explicit contracts for input validation and error handling for invalid types. Add type guards and documentation.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The normalizeEventType function should have explicit contracts for input validation and error handling for invalid types. Add type guards and documentation.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The extractString function should have explicit contracts for input validation and error handling for invalid types. Add type guards and documentation.",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "error-handling",
+          "description": "The GitHubProvider's parse method does not handle cases where the payload might be malformed or missing required fields, leading to potential errors.",
           "line": null
         },
         {
           "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "low",
-          "category": "documentation",
-          "description": "Public function 'normalizeEventType' should have a docstring explaining its purpose and parameters.",
+          "category": "clarity",
+          "description": "Public function 'normalizeEventType' in 'github.ts' is missing a docstring.",
+          "line": null
+        },
+        {
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "low",
+          "category": "clarity",
+          "description": "Public function 'collectChangedFiles' in 'github.ts' is missing a docstring.",
           "line": null
         }
       ]
     },
-    "gitlab.ts": {
-      "critical_count": 14,
-      "total_findings": 15,
+    "github.ts": {
+      "critical_count": 6,
+      "total_findings": 14,
       "findings": [
         {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "contract-enforcement",
-          "description": "The normalizeEventType function is used without explicit contract enforcement between components.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "contract-enforcement",
-          "description": "The extractString function is used without explicit contract enforcement between components.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "contract-enforcement",
-          "description": "The normalizeEventType function is used without explicit contract enforcement between components.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "contract-enforcement",
-          "description": "The extractString function is used without explicit contract enforcement between components.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
+          "rubric": "mece",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested if statement to improve readability.",
+          "category": "control-flow",
+          "description": "The switch statement at github.ts:129 does not handle all possible values of the rawEventType enum, leading to potential unhandled cases.",
           "line": null
         },
         {
-          "rubric": "clarity",
+          "rubric": "mece",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested if statement to improve readability.",
+          "category": "control-flow",
+          "description": "The parse method in GitHubProvider does not handle unknown event types or malformed payloads, which could lead to unexpected behavior or crashes.",
           "line": null
         },
         {
-          "rubric": "clarity",
+          "rubric": "mece",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested for loop to improve readability.",
+          "category": "error-handling",
+          "description": "The switch statement in github.ts:129 does not handle all enum values. Ensure all enum values are covered in the switch/case statements to avoid missing cases.",
           "line": null
         },
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "mece",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested if statement to improve readability.",
+          "category": "control-flow",
+          "description": "The switch statement at github.ts:129 does not handle all possible values of the rawEventType enum, leading to potential unhandled cases.",
           "line": null
         },
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "mece",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested if statement to improve readability.",
+          "category": "control-flow",
+          "description": "The parse method in GitHubProvider does not handle unknown event types or malformed payloads, which could lead to unexpected behavior or crashes.",
           "line": null
         },
         {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "mece",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "high",
-          "category": "readability",
-          "description": "Avoid deeply nested code blocks. Refactor the nested for loop to improve readability.",
+          "category": "error-handling",
+          "description": "The switch statement in github.ts:129 does not handle all enum values. Ensure all enum values are covered in the switch/case statements to avoid missing cases.",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "high",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "data-manipulation",
+          "description": "Function 'collectChangedFiles' should be documented with a side effects declaration.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "data-manipulation",
+          "description": "Function 'normalizeEventType' should be documented with a side effects declaration.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "data-access",
+          "description": "Function 'extractString' should be documented with a side effects declaration.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
           "category": "input-validation",
-          "description": "The normalizeEventType function should have explicit contracts for input validation and error handling for invalid types. Add type guards and documentation.",
+          "description": "The collectChangedFiles function is a pure function with no side effects. The scanner incorrectly flags it as having side effects.",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "high",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
           "category": "input-validation",
-          "description": "The extractString function should have explicit contracts for input validation and error handling for invalid types. Add type guards and documentation.",
+          "description": "The normalizeEventType function is a pure function with no side effects. The scanner incorrectly flags it as having side effects.",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
           "category": "input-validation",
-          "description": "The normalizeEventType function should have explicit contracts for input validation and error handling for invalid types. Add type guards and documentation.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "input-validation",
-          "description": "The extractString function should have explicit contracts for input validation and error handling for invalid types. Add type guards and documentation.",
+          "description": "The extractString function is a pure function with no side effects. The scanner incorrectly flags it as having side effects.",
           "line": null
         },
         {
           "rubric": "clarity",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "low",
           "category": "documentation",
-          "description": "Public function 'normalizeEventType' should have a docstring explaining its purpose and parameters.",
+          "description": "The public function 'collectChangedFiles' lacks a docstring. Add a docstring describing its purpose, parameters, and return value.",
+          "line": null
+        },
+        {
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "low",
+          "category": "documentation",
+          "description": "The public function 'normalizeEventType' lacks a docstring. Add a docstring explaining its purpose and how it processes the input.",
           "line": null
         }
       ]
     },
     "bundle-emitter.ts": {
-      "critical_count": 8,
+      "critical_count": 6,
       "total_findings": 11,
       "findings": [
         {
@@ -611,7 +579,7 @@
           "reviewer": "scanner",
           "severity": "critical",
           "category": "cryptographic",
-          "description": "The code falls back to a basic SHA-256 hash chain when cryptographic sealing is unavailable, which does not meet the requirement for ePHI integrity as per HIPAA-312.c.1.",
+          "description": "The code falls back to a basic SHA-256 hash chain when cryptographic sealing is not available. This may not provide sufficient protection for ePHI and should be replaced with a stronger cryptographic sealing mechanism as per HIPAA requirements.",
           "line": null
         },
         {
@@ -619,307 +587,209 @@
           "reviewer": "scanner",
           "severity": "critical",
           "category": "cryptographic",
-          "description": "The code attempts to use cryptographic sealing but lacks proper implementation. It falls back to SHA-256 hashing which doesn't provide sufficient integrity guarantees for ePHI. Implement cryptographic sealing using secure algorithms and ensure data integrity through proper cryptographic mechanisms.",
+          "description": "The code attempts to use cryptographic sealing with @guardspine/kernel but falls back to SHA-256 hashing. However, the fallback mechanism is not properly implemented with cryptographic sealing as required by HIPAA. This is a critical violation of HIPAA-312.c.1.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "critical",
           "category": "cryptographic",
-          "description": "The code falls back to a basic SHA-256 hash chain when cryptographic sealing is unavailable, which does not meet the requirement for ePHI integrity as per HIPAA-312.c.1.",
+          "description": "The code falls back to a basic SHA-256 hash chain when cryptographic sealing is not available. This may not provide sufficient protection for ePHI and should be replaced with a stronger cryptographic sealing mechanism as per HIPAA requirements.",
           "line": null
         },
         {
           "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "critical",
           "category": "cryptographic",
-          "description": "The code attempts to use cryptographic sealing but lacks proper implementation. It falls back to SHA-256 hashing which doesn't provide sufficient integrity guarantees for ePHI. Implement cryptographic sealing using secure algorithms and ensure data integrity through proper cryptographic mechanisms.",
+          "description": "The code attempts to use cryptographic sealing with @guardspine/kernel but falls back to SHA-256 hashing. However, the fallback mechanism is not properly implemented with cryptographic sealing as required by HIPAA. This is a critical violation of HIPAA-312.c.1.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "scanner",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The BundleEmitter class uses SHA-256 for contentHash but doesn't use cryptographic signing for the entire bundle. This could allow for tampering with the evidence bundle.",
+          "line": null
+        },
+        {
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "critical",
+          "category": "cryptographic",
+          "description": "The BundleEmitter class uses SHA-256 for contentHash but doesn't use cryptographic signing for the entire bundle. This could allow for tampering with the evidence bundle.",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "side-effects",
-          "description": "The sha256 function has side effects and should be explicitly declared and documented.",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
+          "severity": "medium",
+          "category": "cryptographic",
+          "description": "Function 'sha256' should be documented with a side effects declaration.",
           "line": null
         },
         {
           "rubric": "nomotic",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "critical",
-          "category": "side-effects",
-          "description": "The sha256 function has side effects and should be explicitly declared and documented.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "security",
-          "description": "BundleEmitter uses a naive SHA-256 hash chain without proper cryptographic sealing, which is insufficient for securing evidence bundles.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "security",
-          "description": "BundleEmitter uses a naive SHA-256 hash chain without proper cryptographic sealing, which is insufficient for securing evidence bundles.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "error-handling",
-          "description": "The tryLoadKernel method attempts to load the @guardspine/kernel module synchronously and catches any errors. However, it does not log or handle these errors in a meaningful way, which could make debugging difficult.",
-          "line": null
-        },
-        {
-          "rubric": "nomotic",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
           "category": "cryptographic",
-          "description": "The sha256 function lacks proper documentation and error handling for invalid inputs. Add comments explaining its purpose and handle potential errors.",
+          "description": "The sha256 function is a pure function with no side effects. The scanner incorrectly flags it as having side effects.",
           "line": null
         },
         {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
-          "category": "error-handling",
-          "description": "The `sealBundle` method does not handle the case where `kernel.sealBundle` throws an exception, which could leave the bundle in an inconsistent state.",
-          "line": null
-        }
-      ]
-    },
-    "providers/gitlab.ts": {
-      "critical_count": 4,
-      "total_findings": 6,
-      "findings": [
-        {
-          "rubric": "clarity",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "clarity",
-          "description": "The scanner missed violations of avoiding deeply nested code blocks.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "clarity",
-          "description": "The scanner missed violations of avoiding deeply nested code blocks.",
-          "line": null
-        },
-        {
-          "rubric": "mece",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "logic",
-          "description": "The switch statement in providers/gitlab.ts does not handle all possible values of the enum, missing a default case for any unexpected raw event types.",
-          "line": null
-        },
-        {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "high",
-          "category": "logic",
-          "description": "The switch statement in providers/gitlab.ts does not handle all possible values of the enum, missing a default case for any unexpected raw event types.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "error-handling",
-          "description": "The `GitLabProvider` class is incomplete and lacks implementation for handling events. This could lead to runtime errors if this provider is used.",
-          "line": null
-        },
-        {
-          "rubric": "clarity",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "low",
-          "category": "clarity",
-          "description": "Public function 'normalizeEventType' in 'gitlab.ts' should have a docstring as per the scanner's requirement.",
-          "line": null
-        }
-      ]
-    },
-    "providers\\gitlab.ts": {
-      "critical_count": 4,
-      "total_findings": 6,
-      "findings": [
-        {
-          "rubric": "theater-detection",
-          "reviewer": "scanner",
-          "severity": "critical",
-          "category": "security",
-          "description": "GitLabProvider code is cut off and does not show signature validation logic, which is essential for securing webhooks.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "critical",
-          "category": "security",
-          "description": "GitLabProvider code is cut off and does not show signature validation logic, which is essential for securing webhooks.",
-          "line": null
-        },
-        {
-          "rubric": "hipaa-safeguards",
-          "reviewer": "scanner",
-          "severity": "high",
           "category": "cryptographic",
-          "description": "The GitLabProvider should implement X-Gitlab-Token validation with secure comparison functions. Ensure token validation is implemented to verify the authenticity and integrity of incoming webhook requests.",
+          "description": "The BundleEmitter class doesn't properly handle cryptographic key management for the sealFn function, which could lead to potential security vulnerabilities.",
           "line": null
         },
         {
-          "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "cryptographic",
-          "description": "The GitLabProvider should implement X-Gitlab-Token validation with secure comparison functions. Ensure token validation is implemented to verify the authenticity and integrity of incoming webhook requests.",
-          "line": null
-        },
-        {
-          "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
-          "severity": "medium",
-          "category": "signature-validation",
-          "description": "The GitLabProvider does not validate the X-Gitlab-Token if it is not configured. This could potentially lead to security vulnerabilities.",
-          "line": null
-        },
-        {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
           "category": "input-validation",
-          "description": "The GitLabProvider class has an incomplete implementation, with a typo in the class name (Webhoo instead of WebhookProvider), which could cause runtime errors.",
+          "description": "The BundleEmitter class lacks proper input validation for the event data, which could allow for injection attacks.",
+          "line": null
+        },
+        {
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "security",
+          "description": "The custom sha256 function uses string comparison for hash values, which could be vulnerable to timing attacks if not properly implemented.",
           "line": null
         }
       ]
     },
-    "providers\\github.ts": {
-      "critical_count": 4,
-      "total_findings": 6,
+    "providers/github.ts": {
+      "critical_count": 2,
+      "total_findings": 4,
       "findings": [
         {
-          "rubric": "hipaa-safeguards",
+          "rubric": "safety-violations",
           "reviewer": "scanner",
           "severity": "high",
-          "category": "cryptographic",
-          "description": "The GitHubProvider uses timingSafeEqual for secure comparison but lacks proper HMAC-SHA256 signature validation. Ensure signature validation is implemented to verify the authenticity and integrity of incoming webhook requests.",
+          "category": "signature-validation",
+          "description": "The GitHubProvider does not properly handle cases where the X-Hub-Signature-256 header is missing or invalid, which could lead to bypassing signature validation.",
           "line": null
         },
         {
-          "rubric": "hipaa-safeguards",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "safety-violations",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "high",
-          "category": "cryptographic",
-          "description": "The GitHubProvider uses timingSafeEqual for secure comparison but lacks proper HMAC-SHA256 signature validation. Ensure signature validation is implemented to verify the authenticity and integrity of incoming webhook requests.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "security",
-          "description": "GitHubProvider has signature validation, but it's not comprehensive. It does not handle all possible edge cases and lacks proper error handling for cryptographic operations.",
-          "line": null
-        },
-        {
-          "rubric": "theater-detection",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "security",
-          "description": "GitHubProvider has signature validation, but it's not comprehensive. It does not handle all possible edge cases and lacks proper error handling for cryptographic operations.",
+          "category": "signature-validation",
+          "description": "The GitHubProvider does not properly handle cases where the X-Hub-Signature-256 header is missing or invalid, which could lead to bypassing signature validation.",
           "line": null
         },
         {
           "rubric": "connascence",
-          "reviewer": "ollama-qwen2.5-coder:7b-f33ffa",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "medium",
-          "category": "signature-validation",
-          "description": "The GitHubProvider only validates the X-Hub-Signature-256 header if a secret is configured. If no secret is provided, it does not perform any validation, which could lead to security vulnerabilities.",
+          "category": "parameter-name-connascence",
+          "description": "The `parse` method in `GitHubProvider` and other provider classes uses different parameter names for the same data, which can lead to inconsistencies and bugs.",
           "line": null
         },
         {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "connascence",
+          "reviewer": "ollama-qwen2.5-coder:7b-4e4b9a",
           "severity": "medium",
-          "category": "input-validation",
-          "description": "The GitHubProvider class does not fully validate all required fields in the webhook payload, which could lead to incorrect event parsing.",
+          "category": "parameter-name-connascence",
+          "description": "The `validate` method in `GitHubProvider` and other provider classes uses different parameter names for the same data, which can lead to inconsistencies and bugs.",
           "line": null
         }
       ]
     },
     "providers\\generic.ts": {
       "critical_count": 2,
-      "total_findings": 3,
+      "total_findings": 5,
       "findings": [
         {
           "rubric": "theater-detection",
           "reviewer": "scanner",
           "severity": "critical",
           "category": "security",
-          "description": "GenericProvider lacks any signature validation, making it vulnerable to spoofing attacks.",
+          "description": "GenericProvider lacks signature validation, which is a critical security flaw. This allows unauthorized access to the webhook endpoints.",
           "line": null
         },
         {
           "rubric": "theater-detection",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "critical",
           "category": "security",
-          "description": "GenericProvider lacks any signature validation, making it vulnerable to spoofing attacks.",
+          "description": "GenericProvider lacks signature validation, which is a critical security flaw. This allows unauthorized access to the webhook endpoints.",
           "line": null
         },
         {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "pci-dss-requirements",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
           "category": "input-validation",
-          "description": "The GenericProvider class does not validate required fields in the webhook payload, which could lead to unexpected behavior or errors.",
-          "line": null
-        }
-      ]
-    },
-    "webhook-handler.ts": {
-      "critical_count": 2,
-      "total_findings": 2,
-      "findings": [
-        {
-          "rubric": "safety-violations",
-          "reviewer": "scanner",
-          "severity": "high",
-          "category": "error-handling",
-          "description": "Catching all exceptions without specificity. This can hide security vulnerabilities or operational issues. Add specific error handling and logging for different exception types.",
+          "description": "The GenericProvider class lacks proper input validation for the body content, which could allow for injection attacks.",
           "line": null
         },
         {
-          "rubric": "safety-violations",
-          "reviewer": "ollama-qwen3:8b-44436d",
-          "severity": "high",
-          "category": "error-handling",
-          "description": "Catching all exceptions without specificity. This can hide security vulnerabilities or operational issues. Add specific error handling and logging for different exception types.",
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "GenericProvider's parse method does not validate the structure of the incoming JSON payload, which could lead to potential injection attacks.",
+          "line": null
+        },
+        {
+          "rubric": "theater-detection",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "GenericProvider's parse method does not handle cases where the payload might be malformed or not a JSON object, leading to potential errors.",
           "line": null
         }
       ]
     },
-    "types.ts": {
+    "gitlab.ts": {
       "critical_count": 0,
-      "total_findings": 1,
+      "total_findings": 5,
       "findings": [
         {
-          "rubric": "mece",
-          "reviewer": "ollama-qwen3:8b-44436d",
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-a41e79",
           "severity": "medium",
-          "category": "type-safety",
-          "description": "The WebhookEvent interface is missing required fields such as 'action' and 'timestamp', which are used in the providers but not enforced in the type definition.",
+          "category": "input-validation",
+          "description": "The collectChangedFiles function is a pure function with no side effects. The scanner incorrectly flags it as having side effects.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "The normalizeEventType function is a pure function with no side effects. The scanner incorrectly flags it as having side effects.",
+          "line": null
+        },
+        {
+          "rubric": "nomotic",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "medium",
+          "category": "input-validation",
+          "description": "The extractString function is a pure function with no side effects. The scanner incorrectly flags it as having side effects.",
+          "line": null
+        },
+        {
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "low",
+          "category": "documentation",
+          "description": "The public function 'collectChangedFiles' lacks a docstring. Add a docstring describing its purpose, parameters, and return value.",
+          "line": null
+        },
+        {
+          "rubric": "clarity",
+          "reviewer": "ollama-qwen3:8b-a41e79",
+          "severity": "low",
+          "category": "documentation",
+          "description": "The public function 'normalizeEventType' lacks a docstring. Add a docstring explaining its purpose and how it processes the input.",
           "line": null
         }
       ]
