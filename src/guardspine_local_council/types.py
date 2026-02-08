@@ -66,10 +66,11 @@ class EvidenceBundle:
     """v0.2.0 evidence bundle emitted after council review."""
 
     bundle_id: str
-    version: str  # "0.2.0"
+    version: str  # "0.2.0" | "0.2.1"
     created_at: str  # ISO 8601
     items: list[EvidenceItem]
     immutability_proof: ImmutabilityProof
+    sanitization: dict[str, Any] | None = None
 
 
 @dataclass

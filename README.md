@@ -65,15 +65,18 @@ asyncio.run(main())
 |-----------|---------|-------------|
 | `quorum` | 3 | Minimum non-abstain votes required |
 | `consensus_threshold` | 0.66 | Minimum weighted confidence for a decision |
+| `sanitizer` | `None` | Optional external sanitizer (e.g. PII-Shield client) |
+| `sanitization_salt_fingerprint` | `sha256:00000000` | Non-secret salt fingerprint for sanitization attestations |
 | `model` | llama3.1 | Ollama model name |
 | `base_url` | http://localhost:11434 | Ollama API endpoint |
 
 ## Evidence Bundle Output
 
-Council reviews produce v0.2.0 evidence bundles containing:
+Council reviews produce v0.2.x evidence bundles containing:
 - Individual reviewer votes with confidence scores
 - Consensus decision and rationale
 - Hash chain with immutability proof
+- Optional `sanitization` attestation metadata when a sanitizer is configured
 
 ```python
 result = await council.review(request)
