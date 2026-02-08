@@ -25,6 +25,18 @@ class FakeProvider:
         )
 
 
+class CapturingProvider(FakeProvider):
+    """Fake provider that records the prompt passed to review()."""
+
+    def __init__(self, reviewer_id: str, decision: str, confidence: float):
+        super().__init__(reviewer_id, decision, confidence)
+        self.last_prompt = ""
+
+    async def review(self, prompt: str) -> ReviewVote:
+        self.last_prompt = prompt
+        return await super().review(prompt)
+
+
 class ErrorProvider:
     """A provider that always raises."""
 
@@ -33,6 +45,36 @@ class ErrorProvider:
 
     async def review(self, prompt: str) -> ReviewVote:
         raise RuntimeError("connection failed")
+
+
+class FakeSanitizer:
+    """Simple sanitizer stub compatible with LocalCouncil sanitizer protocol."""
+
+    async def sanitize_text(self, text: str, request: dict):
+        purpose = request.get("purpose")
+        if purpose == "council_prompt":
+            changed = "supersecret" in text
+            sanitized = text.replace("supersecret", "[HIDDEN:abc123]")
+            return {
+                "sanitized_text": sanitized,
+                "changed": changed,
+                "redaction_count": 1 if changed else 0,
+                "redactions_by_type": {"api_key": 1} if changed else {},
+                "engine_name": "pii-shield",
+                "engine_version": "1.1.0",
+                "method": "deterministic_hmac",
+                "status": "sanitized" if changed else "none",
+            }
+        return {
+            "sanitized_text": text,
+            "changed": False,
+            "redaction_count": 0,
+            "redactions_by_type": {},
+            "engine_name": "pii-shield",
+            "engine_version": "1.1.0",
+            "method": "deterministic_hmac",
+            "status": "none",
+        }
 
 
 class TestLocalCouncil(unittest.TestCase):
@@ -103,6 +145,26 @@ class TestLocalCouncil(unittest.TestCase):
         self.assertIn("key: value", prompt)
         self.assertIn("prod", prompt)
         self.assertIn("high", prompt)
+
+    def test_sanitizer_applied_to_prompt_and_bundle_attestation(self):
+        provider = CapturingProvider("r1", "approve", 0.9)
+        council = LocalCouncil(
+            [provider],
+            sanitizer=FakeSanitizer(),
+            quorum=1,
+            sanitization_salt_fingerprint="sha256:1a2b3c4d",
+        )
+        req = ReviewRequest("art-6", "code", "api_key = 'supersecret'")
+        result = self._run(council.review(req))
+
+        self.assertIn("[HIDDEN:abc123]", provider.last_prompt)
+        self.assertNotIn("supersecret", provider.last_prompt)
+        self.assertIsNotNone(result.evidence_bundle)
+        self.assertIsNotNone(result.evidence_bundle.sanitization)
+        self.assertEqual(result.evidence_bundle.version, "0.2.1")
+        self.assertEqual(result.evidence_bundle.sanitization["engine_name"], "pii-shield")
+        self.assertIn("council_prompt", result.evidence_bundle.sanitization["applied_to"])
+        self.assertIn("evidence_bundle", result.evidence_bundle.sanitization["applied_to"])
 
 
 if __name__ == "__main__":

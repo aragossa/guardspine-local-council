@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import asyncio
 import hashlib
+import inspect
 import json
 import logging
 import uuid
 from datetime import datetime, timezone
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, Any, Protocol
 
 from .aggregator import SimpleAggregator
 from .types import (
@@ -47,6 +48,16 @@ class ReviewProvider(Protocol):
     async def review(self, prompt: str) -> ReviewVote: ...
 
 
+class SanitizationProvider(Protocol):
+    """Protocol for external sanitization engines (e.g. PII-Shield)."""
+
+    async def sanitize_text(
+        self,
+        text: str,
+        request: dict[str, Any],
+    ) -> dict[str, Any] | Any: ...
+
+
 class LocalCouncil:
     """Coordinates multiple local model providers to review artifacts."""
 
@@ -54,18 +65,34 @@ class LocalCouncil:
         self,
         providers: list[ReviewProvider],
         hooks: list[ReviewHook] | None = None,
+        sanitizer: SanitizationProvider | None = None,
         quorum: int = 3,
         consensus_threshold: float = 0.66,
+        sanitization_salt_fingerprint: str = "sha256:00000000",
     ) -> None:
         self.providers = providers
         self.hooks = hooks or []
+        self.sanitizer = sanitizer
         self.quorum = quorum
         self.consensus_threshold = consensus_threshold
+        self.sanitization_salt_fingerprint = sanitization_salt_fingerprint
         self.aggregator = SimpleAggregator()
 
     async def review(self, request: ReviewRequest) -> CouncilResult:
         """Send request to each provider in parallel, aggregate votes."""
         prompt = self._build_prompt(request)
+        sanitization: dict[str, Any] | None = None
+        if self.sanitizer:
+            prompt, stage_result = await self._sanitize_text(
+                prompt,
+                purpose="council_prompt",
+                input_format="text",
+            )
+            sanitization = self._record_sanitization_stage(
+                sanitization,
+                "council_prompt",
+                stage_result,
+            )
 
         tasks = [provider.review(prompt) for provider in self.providers]
         results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -96,7 +123,20 @@ class LocalCouncil:
                 "confidence": 0.0,
                 "quorum_met": False,
             }
-            bundle = self._build_evidence_bundle(votes, consensus)
+            bundle_votes, bundle_consensus, stage_result = await self._sanitize_bundle_payload(
+                votes,
+                consensus,
+            )
+            sanitization = self._record_sanitization_stage(
+                sanitization,
+                "evidence_bundle",
+                stage_result,
+            )
+            bundle = self._build_evidence_bundle(
+                bundle_votes,
+                bundle_consensus,
+                sanitization=sanitization,
+            )
             return CouncilResult(
                 request_id=request.request_id,
                 votes=votes,
@@ -122,7 +162,20 @@ class LocalCouncil:
             "confidence": confidence,
             "quorum_met": quorum_met,
         }
-        bundle = self._build_evidence_bundle(votes, consensus)
+        bundle_votes, bundle_consensus, stage_result = await self._sanitize_bundle_payload(
+            votes,
+            consensus,
+        )
+        sanitization = self._record_sanitization_stage(
+            sanitization,
+            "evidence_bundle",
+            stage_result,
+        )
+        bundle = self._build_evidence_bundle(
+            bundle_votes,
+            bundle_consensus,
+            sanitization=sanitization,
+        )
 
         return CouncilResult(
             request_id=request.request_id,
@@ -323,6 +376,214 @@ class LocalCouncil:
             f"\n--- ARTIFACT CONTENT ---\n{safe_content}\n--- END ---\n"
         )
 
+    async def _sanitize_text(
+        self,
+        text: str,
+        purpose: str,
+        input_format: str,
+    ) -> tuple[str, dict[str, Any] | None]:
+        if not self.sanitizer:
+            return text, None
+
+        request = {
+            "purpose": purpose,
+            "input_format": input_format,
+            "include_findings": input_format in {"diff", "json"},
+        }
+        try:
+            raw_result = self.sanitizer.sanitize_text(text, request)
+            if inspect.isawaitable(raw_result):
+                raw_result = await raw_result
+            result = self._normalize_sanitization_result(text, raw_result)
+            return result["sanitized_text"], result
+        except Exception as exc:
+            logger.warning("Sanitization failed for %s: %s", purpose, exc)
+            return text, {
+                "sanitized_text": text,
+                "changed": False,
+                "redaction_count": 0,
+                "redactions_by_type": {},
+                "engine_name": "pii-shield",
+                "engine_version": "unknown",
+                "method": "provider_native",
+                "input_hash": self._sha256(text),
+                "output_hash": self._sha256(text),
+                "status": "error",
+            }
+
+    async def _sanitize_bundle_payload(
+        self,
+        votes: list[ReviewVote],
+        consensus: dict[str, Any],
+    ) -> tuple[list[ReviewVote], dict[str, Any], dict[str, Any] | None]:
+        if not self.sanitizer:
+            return votes, consensus, None
+
+        payload = {
+            "votes": [self._vote_to_dict(vote) for vote in votes],
+            "consensus": consensus,
+        }
+        serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+        sanitized_text, stage_result = await self._sanitize_text(
+            serialized,
+            purpose="evidence_bundle",
+            input_format="json",
+        )
+        if not stage_result:
+            return votes, consensus, None
+
+        try:
+            sanitized_payload = json.loads(sanitized_text)
+        except json.JSONDecodeError:
+            stage_result["status"] = "partial"
+            return votes, consensus, stage_result
+
+        raw_votes = sanitized_payload.get("votes")
+        raw_consensus = sanitized_payload.get("consensus")
+        if not isinstance(raw_votes, list) or not isinstance(raw_consensus, dict):
+            stage_result["status"] = "partial"
+            return votes, consensus, stage_result
+
+        sanitized_votes = [self._vote_from_dict(vote) for vote in raw_votes]
+        return sanitized_votes, raw_consensus, stage_result
+
+    def _record_sanitization_stage(
+        self,
+        summary: dict[str, Any] | None,
+        stage: str,
+        stage_result: dict[str, Any] | None,
+    ) -> dict[str, Any] | None:
+        if stage_result is None:
+            return summary
+
+        if summary is None:
+            summary = {
+                "engine_name": str(stage_result.get("engine_name", "pii-shield")),
+                "engine_version": str(stage_result.get("engine_version", "unknown")),
+                "method": str(stage_result.get("method", "provider_native")),
+                "token_format": "[HIDDEN:<id>]",
+                "salt_fingerprint": self.sanitization_salt_fingerprint,
+                "redaction_count": 0,
+                "redactions_by_type": {},
+                "input_hash": stage_result.get("input_hash"),
+                "output_hash": stage_result.get("output_hash"),
+                "applied_to": [],
+                "status": "none",
+            }
+
+        if stage not in summary["applied_to"]:
+            summary["applied_to"].append(stage)
+
+        summary["redaction_count"] += int(max(stage_result.get("redaction_count", 0), 0))
+        summary["redactions_by_type"] = self._merge_count_map(
+            summary.get("redactions_by_type", {}),
+            stage_result.get("redactions_by_type", {}),
+        )
+        if stage_result.get("changed"):
+            summary["status"] = "sanitized"
+        elif stage_result.get("status") == "error" and summary["status"] != "sanitized":
+            summary["status"] = "error"
+        elif stage_result.get("status") == "partial" and summary["status"] == "none":
+            summary["status"] = "partial"
+        return summary
+
+    @staticmethod
+    def _normalize_sanitization_result(text: str, result: Any) -> dict[str, Any]:
+        if isinstance(result, dict):
+            data = result
+        else:
+            data = {
+                "sanitized_text": getattr(result, "sanitized_text", text),
+                "changed": getattr(result, "changed", False),
+                "redaction_count": getattr(result, "redaction_count", 0),
+                "redactions_by_type": getattr(result, "redactions_by_type", {}),
+                "engine_name": getattr(result, "engine_name", "pii-shield"),
+                "engine_version": getattr(result, "engine_version", "unknown"),
+                "method": getattr(result, "method", "provider_native"),
+                "input_hash": getattr(result, "input_hash", None),
+                "output_hash": getattr(result, "output_hash", None),
+                "status": getattr(result, "status", None),
+            }
+
+        sanitized_text = (
+            data.get("sanitized_text")
+            or data.get("sanitizedText")
+            or data.get("output")
+            or text
+        )
+        changed = bool(data.get("changed", sanitized_text != text))
+        redaction_count = data.get("redaction_count", data.get("redactionCount", 0))
+        try:
+            redaction_count = int(redaction_count)
+        except Exception:
+            redaction_count = 0
+
+        redactions_by_type = data.get("redactions_by_type", data.get("redactionsByType", {}))
+        if not isinstance(redactions_by_type, dict):
+            redactions_by_type = {}
+        clean_counts = LocalCouncil._merge_count_map({}, redactions_by_type)
+
+        return {
+            "sanitized_text": str(sanitized_text),
+            "changed": changed,
+            "redaction_count": max(redaction_count, 0),
+            "redactions_by_type": clean_counts,
+            "engine_name": str(data.get("engine_name", data.get("engineName", "pii-shield"))),
+            "engine_version": str(data.get("engine_version", data.get("engineVersion", "unknown"))),
+            "method": str(data.get("method", "provider_native")),
+            "input_hash": data.get("input_hash", data.get("inputHash")) or LocalCouncil._sha256(text),
+            "output_hash": data.get("output_hash", data.get("outputHash")) or LocalCouncil._sha256(str(sanitized_text)),
+            "status": str(data.get("status", "sanitized" if changed else "none")),
+        }
+
+    @staticmethod
+    def _merge_count_map(base: dict[str, Any], extra: dict[str, Any]) -> dict[str, int]:
+        merged: dict[str, int] = {}
+        for source in (base or {}, extra or {}):
+            for key, value in source.items():
+                try:
+                    numeric = int(value)
+                except Exception:
+                    numeric = 0
+                merged[str(key)] = merged.get(str(key), 0) + max(numeric, 0)
+        return merged
+
+    @staticmethod
+    def _sha256(text: str) -> str:
+        return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+    @staticmethod
+    def _vote_to_dict(vote: ReviewVote) -> dict[str, Any]:
+        return {
+            "reviewer_id": vote.reviewer_id,
+            "decision": vote.decision,
+            "confidence": vote.confidence,
+            "rationale": vote.rationale,
+            "findings": vote.findings,
+        }
+
+    @staticmethod
+    def _vote_from_dict(data: Any) -> ReviewVote:
+        if not isinstance(data, dict):
+            return ReviewVote(
+                reviewer_id="sanitizer",
+                decision="abstain",
+                confidence=0.0,
+                rationale="Invalid vote payload after sanitization",
+                findings=[],
+            )
+        try:
+            confidence = float(data.get("confidence", 0.0))
+        except Exception:
+            confidence = 0.0
+        return ReviewVote(
+            reviewer_id=str(data.get("reviewer_id", "unknown")),
+            decision=str(data.get("decision", "abstain")),
+            confidence=confidence,
+            rationale=str(data.get("rationale", "")),
+            findings=list(data.get("findings", [])) if isinstance(data.get("findings"), list) else [],
+        )
+
     @staticmethod
     def _content_hash(obj: dict) -> str:
         """SHA-256 hash of canonicalized JSON (RFC 8785-compatible subset).
@@ -374,8 +635,9 @@ class LocalCouncil:
     def _build_evidence_bundle(
         votes: list[ReviewVote],
         consensus: dict,
+        sanitization: dict[str, Any] | None = None,
     ) -> EvidenceBundle:
-        """Build a v0.2.0 evidence bundle from votes and consensus."""
+        """Build a v0.2.x evidence bundle from votes and consensus."""
         items: list[EvidenceItem] = []
 
         for i, vote in enumerate(votes):
@@ -429,13 +691,14 @@ class LocalCouncil:
 
         return EvidenceBundle(
             bundle_id=str(uuid.uuid4()),
-            version="0.2.0",
+            version="0.2.1" if sanitization else "0.2.0",
             created_at=datetime.now(timezone.utc).isoformat(),
             items=items,
             immutability_proof=ImmutabilityProof(
                 hash_chain=chain,
                 root_hash=root_hash,
             ),
+            sanitization=sanitization,
         )
 
     def _check_quorum(self, votes: list[ReviewVote]) -> bool:
