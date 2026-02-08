@@ -208,6 +208,13 @@ class LocalCouncil:
         """Review code focused on a single rubric. Returns one vote per provider."""
         prompt = self._build_rubric_prompt(request, rubric)
 
+        if self.sanitizer:
+            prompt, _ = await self._sanitize_text(
+                prompt,
+                purpose="council_prompt",
+                input_format="text",
+            )
+
         # Run pre-hooks once per rubric to enrich the shared prompt
         if self.hooks:
             from .providers.hooks import HookContext
@@ -750,7 +757,8 @@ class LocalCouncil:
         """
         context_block = ""
         if request.context:
-            context_block = f"\nContext:\n{json.dumps(request.context, indent=2)}\n"
+            safe_context = self._sanitize_for_prompt(json.dumps(request.context, indent=2))
+            context_block = f"\nContext:\n{safe_context}\n"
 
         risk_block = ""
         if request.risk_tier_hint:

@@ -96,6 +96,37 @@ with open("council-evidence.json", "w") as f:
 **Note**: Bundles are unsigned by default. For signed bundles, use GuardSpine Enterprise
 or provide a signing key via configuration.
 
+## PII-Shield Integration
+
+guardspine-local-council supports [PII-Shield](https://github.com/aragossa/pii-shield) sanitization to remove secrets and PII from prompts before they reach local AI models.
+
+### Why
+
+Even with local Ollama models, code submitted for review may contain API keys, credentials, or PII. Sanitizing before prompt assembly ensures sensitive data never enters model context, regardless of whether the model is local or cloud-hosted. This is defense-in-depth: if someone later switches to a cloud provider, the sanitization is already in place.
+
+### Where
+
+Sanitization runs in `src/guardspine_local_council/council.py`. Both `review()` and `rubric_review()` (which also covers `full_audit()`) pass artifact content and context through the configured sanitizer before assembling prompts for Ollama models.
+
+### How
+
+```python
+from guardspine_local_council import LocalCouncil, OllamaProvider
+
+# Provide any callable that sanitizes text
+def my_sanitizer(text: str) -> str:
+    # Call PII-Shield API or local entropy detector
+    return sanitized_text
+
+council = LocalCouncil(
+    providers=[OllamaProvider(model="llama3.1", reviewer_id="r1")],
+    sanitizer=my_sanitizer,
+    sanitization_salt_fingerprint="sha256:your-org-fingerprint",
+)
+```
+
+When a sanitizer is configured, evidence bundles produced by council reviews include a `sanitization` attestation block (v0.2.1 format).
+
 ## Ollama Requirements
 
 Before running, ensure Ollama is accessible:
