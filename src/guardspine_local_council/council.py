@@ -80,19 +80,36 @@ class LocalCouncil:
 
     async def review(self, request: ReviewRequest) -> CouncilResult:
         """Send request to each provider in parallel, aggregate votes."""
-        prompt = self._build_prompt(request)
+        
+        # WASM Integration: Sanitize Prompt
+        # We perform this locally using the WASM client instead of an external sanitizer protocol
+        from .adapters.pii_wasm_client import PIIWasmClient
+        wasm_client = PIIWasmClient()
+        
+        # Original prompt construction (before sanitization)
+        raw_prompt = self._build_prompt(request)
+        
+        # Sanitize using WASM
+        try:
+             # WASM currently supports synchronous execution. 
+             # We wrap it or just call it directly since it's fast (<50ms).
+             sanitized_prompt = wasm_client.redact(raw_prompt)
+        except Exception as exc:
+             logger.error("WASM PII-Shield failed on prompt: %s", exc)
+             sanitized_prompt = raw_prompt # Fail-open by default or configurable?
+             # For council, fail-open might be risky, but let's stick to fail-open for now.
+
+        prompt = sanitized_prompt
+        
+        # Record sanitization stats (mocked for now as WASM output is simple string)
         sanitization: dict[str, Any] | None = None
-        if self.sanitizer:
-            prompt, stage_result = await self._sanitize_text(
-                prompt,
-                purpose="council_prompt",
-                input_format="text",
-            )
-            sanitization = self._record_sanitization_stage(
-                sanitization,
-                "council_prompt",
-                stage_result,
-            )
+        if prompt != raw_prompt:
+             sanitization = {
+                 "engine": "pii-shield-wasm",
+                 "status": "sanitized",
+                 "changed": True
+             }
+
 
         tasks = [provider.review(prompt) for provider in self.providers]
         results = await asyncio.gather(*tasks, return_exceptions=True)

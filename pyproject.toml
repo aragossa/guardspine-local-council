@@ -11,6 +11,7 @@ license = "Apache-2.0"
 requires-python = ">=3.10"
 dependencies = [
     "httpx>=0.24.0",
+    "wasmtime>=16.0.0",
 ]
 
 [project.urls]
