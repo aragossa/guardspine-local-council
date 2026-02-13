@@ -105,9 +105,18 @@ class LocalCouncil:
         sanitization: dict[str, Any] | None = None
         if prompt != raw_prompt:
              sanitization = {
-                 "engine": "pii-shield-wasm",
+                 "engine_name": "pii-shield-wasm",
+                 "engine_version": "unknown",
+                 "method": "wasm_direct",
+                 "token_format": "[HIDDEN]",
+                 "salt_fingerprint": self.sanitization_salt_fingerprint,
+                 "redaction_count": 0,
+                 "redactions_by_type": {},
+                 "input_hash": self._sha256(raw_prompt),
+                 "output_hash": self._sha256(prompt),
+                 "applied_to": ["council_prompt"],
                  "status": "sanitized",
-                 "changed": True
+                 "changed": True,
              }
 
 
