@@ -1,7 +1,5 @@
 """Local council that coordinates multiple Ollama reviewers."""
 
-from __future__ import annotations
-
 import asyncio
 import hashlib
 import inspect

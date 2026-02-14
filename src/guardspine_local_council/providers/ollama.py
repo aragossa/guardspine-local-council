@@ -1,7 +1,5 @@
 """Ollama provider for local model inference."""
 
-from __future__ import annotations
-
 import json
 import uuid
 

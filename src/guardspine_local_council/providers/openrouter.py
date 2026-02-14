@@ -1,7 +1,5 @@
 """OpenRouter provider -- access 500+ models via OpenAI-compatible API."""
 
-from __future__ import annotations
-
 import json
 import os
 import uuid

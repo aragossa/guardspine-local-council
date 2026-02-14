@@ -1,7 +1,5 @@
 """Vote aggregation for council decisions."""
 
-from __future__ import annotations
-
 from .types import ReviewVote
 
 

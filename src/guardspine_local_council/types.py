@@ -1,7 +1,5 @@
 """Core data types for guardspine-local-council."""
 
-from __future__ import annotations
-
 import uuid
 from dataclasses import dataclass, field
 from typing import Optional, Any
