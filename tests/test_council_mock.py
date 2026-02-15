@@ -62,8 +62,8 @@ class TestCouncilSanitization(unittest.IsolatedAsyncioTestCase):
         self.assertIn("def send_mail():", prompt_sent)
 
     @patch("guardspine_local_council.adapters.pii_wasm_client.PIIWasmClient")
-    async def test_council_handles_wasm_failure_gracefully(self, MockWasmClass):
-        """Verify fallback (fail-open) if WASM client crashes."""
+    async def test_council_fails_closed_on_wasm_failure(self, MockWasmClass):
+        """Verify fail-closed (raise error) if WASM client crashes."""
         # Setup Mock WASM to raise error
         mock_wasm_instance = MockWasmClass.return_value
         mock_wasm_instance.redact.side_effect = RuntimeError("WASM Crash")
@@ -78,19 +78,47 @@ class TestCouncilSanitization(unittest.IsolatedAsyncioTestCase):
         
         mock_provider = AsyncMock()
         mock_provider.reviewer_id = "mock-ollama"
-        mock_provider.review.return_value = ReviewVote(
-            reviewer_id="mock-ollama",
-            decision="abstain",
-            confidence=0.0,
-            rationale="Abstain",
-            findings=[]
-        )
 
         # Initialize Council (will use the patched WASM client)
         council = LocalCouncil(providers=[mock_provider])
+        
+        # Should raise RuntimeError (fail-closed)
+        with self.assertRaises(RuntimeError):
+            await council.review(request)
+        
+        # Provider should NOT be called
+        self.assertFalse(mock_provider.review.called)
+
+    @patch.dict("os.environ", {"GUARDSPINE_PII_FAIL_OPEN": "1"})
+    @patch("guardspine_local_council.adapters.pii_wasm_client.PIIWasmClient")
+    async def test_council_fails_open_with_env_var(self, MockWasmClass):
+        """Verify fallback (fail-open) if WASM client crashes AND env var is set."""
+        # Setup Mock WASM to raise error
+        mock_wasm_instance = MockWasmClass.return_value
+        mock_wasm_instance.redact.side_effect = RuntimeError("WASM Crash")
+
+        sensitive_code = "pass"
+        request = ReviewRequest(
+            request_id="req-fail-open",
+            artifact_id="art-fail-open",
+            artifact_type="source_code",
+            content=sensitive_code,
+        )
+        
+        mock_provider = AsyncMock()
+        mock_provider.reviewer_id = "mock-ollama"
+        mock_provider.review.return_value = ReviewVote(
+             reviewer_id="mock-ollama",
+             decision="abstain",
+             confidence=0.0,
+             rationale="Abstain",
+             findings=[]
+        )
+
+        council = LocalCouncil(providers=[mock_provider])
         await council.review(request)
         
-        # Should still call provider with original prompt (fail-open)
+        # Should call provider with original prompt (fail-open)
         self.assertTrue(mock_provider.review.called)
         args, _ = mock_provider.review.call_args
         prompt_sent = args[0]

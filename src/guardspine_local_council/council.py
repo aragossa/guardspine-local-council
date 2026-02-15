@@ -96,8 +96,13 @@ class LocalCouncil:
              sanitized_prompt = wasm_client.redact(raw_prompt)
         except Exception as exc:
              logger.error("WASM PII-Shield failed on prompt: %s", exc)
-             sanitized_prompt = raw_prompt # Fail-open by default or configurable?
-             # For council, fail-open might be risky, but let's stick to fail-open for now.
+             # Fail-closed by default to prevent PII leaks
+             import os
+             if os.environ.get("GUARDSPINE_PII_FAIL_OPEN") == "1":
+                 logger.warning("GUARDSPINE_PII_FAIL_OPEN=1 set; proceeding with UNSANITIZED prompt.")
+                 sanitized_prompt = raw_prompt
+             else:
+                 raise RuntimeError(f"WASM PII-Shield failed: {exc}") from exc
 
         prompt = sanitized_prompt
         
