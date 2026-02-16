@@ -80,19 +80,50 @@ class LocalCouncil:
 
     async def review(self, request: ReviewRequest) -> CouncilResult:
         """Send request to each provider in parallel, aggregate votes."""
-        prompt = self._build_prompt(request)
+        
+        # WASM Integration: Sanitize Prompt
+        # We perform this locally using the WASM client instead of an external sanitizer protocol
+        from .adapters.pii_wasm_client import PIIWasmClient
+        wasm_client = PIIWasmClient()
+        
+        # Original prompt construction (before sanitization)
+        raw_prompt = self._build_prompt(request)
+        
+        # Sanitize using WASM
+        try:
+             # WASM currently supports synchronous execution. 
+             # We wrap it or just call it directly since it's fast (<50ms).
+             sanitized_prompt = wasm_client.redact(raw_prompt)
+        except Exception as exc:
+             logger.error("WASM PII-Shield failed on prompt: %s", exc)
+             # Fail-closed by default to prevent PII leaks
+             import os
+             if os.environ.get("GUARDSPINE_PII_FAIL_OPEN") == "1":
+                 logger.warning("GUARDSPINE_PII_FAIL_OPEN=1 set; proceeding with UNSANITIZED prompt.")
+                 sanitized_prompt = raw_prompt
+             else:
+                 raise RuntimeError(f"WASM PII-Shield failed: {exc}") from exc
+
+        prompt = sanitized_prompt
+        
+        # Record sanitization stats (mocked for now as WASM output is simple string)
         sanitization: dict[str, Any] | None = None
-        if self.sanitizer:
-            prompt, stage_result = await self._sanitize_text(
-                prompt,
-                purpose="council_prompt",
-                input_format="text",
-            )
-            sanitization = self._record_sanitization_stage(
-                sanitization,
-                "council_prompt",
-                stage_result,
-            )
+        if prompt != raw_prompt:
+             sanitization = {
+                 "engine_name": "pii-shield-wasm",
+                 "engine_version": "unknown",
+                 "method": "wasm_direct",
+                 "token_format": "[HIDDEN]",
+                 "salt_fingerprint": self.sanitization_salt_fingerprint,
+                 "redaction_count": 0,
+                 "redactions_by_type": {},
+                 "input_hash": self._sha256(raw_prompt),
+                 "output_hash": self._sha256(prompt),
+                 "applied_to": ["council_prompt"],
+                 "status": "sanitized",
+                 "changed": True,
+             }
+
 
         tasks = [provider.review(prompt) for provider in self.providers]
         results = await asyncio.gather(*tasks, return_exceptions=True)

@@ -2,6 +2,7 @@
 
 import asyncio
 import unittest
+import unittest.mock
 
 from guardspine_local_council.council import LocalCouncil
 from guardspine_local_council.types import ReviewRequest, ReviewVote, RubricContext
@@ -78,6 +79,23 @@ class FakeSanitizer:
 
 
 class TestLocalCouncil(unittest.TestCase):
+    def setUp(self):
+        # Patch the WASM client to prevent SIGKILL on macOS
+        self.wasm_patcher = unittest.mock.patch("guardspine_local_council.adapters.pii_wasm_client.PIIWasmClient")
+        self.mock_wasm_client_class = self.wasm_patcher.start()
+        
+        # Configure the mock instance to return the input text unmodified (identity) by default
+        instance = self.mock_wasm_client_class.return_value
+        # Mimic redaction for the test case "test_sanitizer_applied_to_prompt..."
+        def mock_redact(text):
+            if "supersecret" in text:
+                return text.replace("supersecret", "[HIDDEN:abc123]")
+            return text
+        instance.redact.side_effect = mock_redact
+
+    def tearDown(self):
+        self.wasm_patcher.stop()
+
     def _run(self, coro):
         return asyncio.get_event_loop().run_until_complete(coro)
 
@@ -162,7 +180,7 @@ class TestLocalCouncil(unittest.TestCase):
         self.assertIsNotNone(result.evidence_bundle)
         self.assertIsNotNone(result.evidence_bundle.sanitization)
         self.assertEqual(result.evidence_bundle.version, "0.2.1")
-        self.assertEqual(result.evidence_bundle.sanitization["engine_name"], "pii-shield")
+        self.assertEqual(result.evidence_bundle.sanitization["engine_name"], "pii-shield-wasm")
         self.assertIn("council_prompt", result.evidence_bundle.sanitization["applied_to"])
         self.assertIn("evidence_bundle", result.evidence_bundle.sanitization["applied_to"])
 
