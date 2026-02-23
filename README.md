@@ -98,7 +98,7 @@ or provide a signing key via configuration.
 
 ## PII-Shield Integration
 
-guardspine-local-council supports [PII-Shield](https://github.com/aragossa/pii-shield) sanitization to remove secrets and PII from prompts before they reach local AI models.
+guardspine-local-council supports [PII-Shield](https://github.com/DNYoussef/codeguard-action#pii-shield-integration) sanitization to remove secrets and PII from prompts before they reach local AI models. See the [PII-Shield canonical reference](https://github.com/DNYoussef/codeguard-action#pii-shield-integration) for full architecture and deployment options.
 
 ### Why
 
