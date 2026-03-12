@@ -103,7 +103,13 @@ class PIIWasmClient:
             except ExitTrap as e:
                 # WASI proc_exit raises ExitTrap. code 0 means success.
                 if e.code != 0:
-                    raise
+                    import logging
+                    logging.getLogger(__name__).error(f"PII-Shield WASM Module failed: {str(e)}")
+                    raise RuntimeError("WASM processing failed") from e
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).error(f"PII-Shield WASM Module failed: {str(e)}")
+                raise RuntimeError("WASM processing failed") from e
                 
             # Read output
             with open(f_out_path, 'r', encoding='utf-8') as f:
@@ -111,6 +117,10 @@ class PIIWasmClient:
                 
             return output.strip()
             
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).error(f"PII-Shield WASM Module failed: {str(e)}")
+            raise RuntimeError("WASM processing failed") from e
         finally:
             # Cleanup
             if os.path.exists(f_in_path):

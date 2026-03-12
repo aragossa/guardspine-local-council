@@ -435,19 +435,8 @@ class LocalCouncil:
             result = self._normalize_sanitization_result(text, raw_result)
             return result["sanitized_text"], result
         except Exception as exc:
-            logger.warning("Sanitization failed for %s: %s", purpose, exc)
-            return text, {
-                "sanitized_text": text,
-                "changed": False,
-                "redaction_count": 0,
-                "redactions_by_type": {},
-                "engine_name": "pii-shield",
-                "engine_version": "unknown",
-                "method": "provider_native",
-                "input_hash": self._sha256(text),
-                "output_hash": self._sha256(text),
-                "status": "error",
-            }
+            logger.error("Sanitization failed for %s: %s", purpose, exc)
+            raise RuntimeError(f"Sanitization failed (fail-closed): {exc}") from exc
 
     async def _sanitize_bundle_payload(
         self,
