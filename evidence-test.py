@@ -7,8 +7,13 @@ import sys
 from pathlib import Path
 
 # Add local packages to path
-sys.path.insert(0, str(Path(__file__).parent / "src"))
-sys.path.insert(0, r"D:\Projects\GuardSpine")
+import os
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECTS_ROOT = Path(os.environ.get("GUARDSPINE_PROJECTS_ROOT", str(SCRIPT_DIR.parent)))
+GUARDSPINE_ROOT = PROJECTS_ROOT / "GuardSpine"
+
+sys.path.insert(0, str(SCRIPT_DIR / "src"))
+sys.path.insert(0, str(GUARDSPINE_ROOT))
 
 from guardspine_local_council.council import LocalCouncil
 from guardspine_local_council.providers.ollama import OllamaProvider
@@ -18,8 +23,8 @@ from guardspine_local_council.types import ReviewRequest, RubricContext
 from codeguard.rubrics.loader import load_rubric
 from codeguard.rubrics.evaluator import RubricEvaluator
 
-RUBRICS_DIR = Path(r"D:\Projects\GuardSpine\rubrics")
-KERNEL_SRC = Path(r"D:\Projects\guardspine-kernel\src")
+RUBRICS_DIR = GUARDSPINE_ROOT / "rubrics"
+KERNEL_SRC = PROJECTS_ROOT / "guardspine-kernel" / "src"
 
 CODE_QUALITY_RUBRICS = {
     "clarity", "connascence", "mece", "nasa-safety",

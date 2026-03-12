@@ -2,12 +2,17 @@
 
 import asyncio
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent / "src"))
-sys.path.insert(0, r"D:\Projects\GuardSpine")
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECTS_ROOT = Path(os.environ.get("GUARDSPINE_PROJECTS_ROOT", str(SCRIPT_DIR.parent)))
+GUARDSPINE_ROOT = PROJECTS_ROOT / "GuardSpine"
+
+sys.path.insert(0, str(SCRIPT_DIR / "src"))
+sys.path.insert(0, str(GUARDSPINE_ROOT))
 
 from guardspine_local_council.council import LocalCouncil
 from guardspine_local_council.providers.ollama import OllamaProvider
@@ -19,49 +24,49 @@ from codeguard.rubrics.evaluator import RubricEvaluator
 
 import subprocess
 
-RUBRICS_DIR = Path(r"D:\Projects\GuardSpine\rubrics")
-OUTPUT_DIR = Path(__file__).parent / "evidence-packs"
+RUBRICS_DIR = GUARDSPINE_ROOT / "rubrics"
+OUTPUT_DIR = SCRIPT_DIR / "evidence-packs"
 
 # All repos to audit (name -> source dir + file extensions)
 REPOS = {
     "guardspine-kernel": {
-        "src": Path(r"D:\Projects\guardspine-kernel\src"),
+        "src": PROJECTS_ROOT / "guardspine-kernel" / "src",
         "exts": {".ts"},
         "description": "Offline evidence bundle verification with timing-safe comparisons",
         "language": "typescript",
     },
     "guardspine-verify": {
-        "src": Path(r"D:\Projects\guardspine-verify\guardspine_verify"),
+        "src": PROJECTS_ROOT / "guardspine-verify" / "guardspine_verify",
         "exts": {".py"},
         "description": "Offline evidence bundle verification CLI",
         "language": "python",
     },
     "guardspine-spec": {
-        "src": Path(r"D:\Projects\guardspine-spec\schemas"),
+        "src": PROJECTS_ROOT / "guardspine-spec" / "schemas",
         "exts": {".json"},
         "description": "Evidence bundle specification and JSON schemas",
         "language": "json-schema",
     },
     "guardspine-local-council": {
-        "src": Path(r"D:\Projects\guardspine-local-council\src\guardspine_local_council"),
+        "src": SCRIPT_DIR / "src" / "guardspine_local_council",
         "exts": {".py"},
         "description": "Local LLM council for offline artifact review via Ollama",
         "language": "python",
     },
     "guardspine-adapter-webhook": {
-        "src": Path(r"D:\Projects\guardspine-adapter-webhook\src"),
+        "src": PROJECTS_ROOT / "guardspine-adapter-webhook" / "src",
         "exts": {".ts"},
         "description": "Webhook adapter for evidence bundle delivery",
         "language": "typescript",
     },
     "rlm-docsync": {
-        "src": Path(r"D:\Projects\rlm-docsync\src\rlm_docsync"),
+        "src": PROJECTS_ROOT / "rlm-docsync" / "src" / "rlm_docsync",
         "exts": {".py"},
         "description": "Self-updating documentation with evidence proofs",
         "language": "python",
     },
     "n8n-nodes-guardspine": {
-        "src": Path(r"D:\Projects\n8n-nodes-guardspine\nodes"),
+        "src": PROJECTS_ROOT / "n8n-nodes-guardspine" / "nodes",
         "exts": {".ts"},
         "description": "n8n community nodes for AI governance workflows",
         "language": "typescript",
